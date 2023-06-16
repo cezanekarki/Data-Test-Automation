@@ -19,20 +19,20 @@ class dataTestAutomation:
 
 
         self.dataframe = self.readData()
-        print(self.dataframe)
-        print(self.dataframe.schema)
+        #print(self.dataframe)
+        #print(self.dataframe.schema)
         if self.expected_schema is not None:
             self.schemaResult = self.validateSchema()
-            print(self.schemaResult)
+            #print(self.schemaResult)
 
             if self.changeDataType is True:
                 self.dataframe = self.changeSchema()
-                print(self.dataframe.schema)
+                #print(self.dataframe.schema)
 
         
         
         self.dataprofiling = self.dataProfiling()
-        print(self.dataprofiling)
+        #print(self.dataprofiling)
 
 
     def readData(self):
@@ -121,6 +121,29 @@ class dataTestAutomation:
 
         return resultOutcome
     
+    def generateReport(self):
+        report = f"Data Report:\n\n"
+        report += f"Total Number of Rows: {self.dataprofiling['Total Number of rows']}\n\n"
+        report += f"Null Counts:\n"
+        for column, count in self.dataprofiling['nullCounts'].items():
+            report += f"  - {column}: {count}\n"
+        report += "\n"
+        report += f"Null Count Percentage:\n"
+        for column, percentage in self.dataprofiling['null count percentage'].items():
+            report += f"  - {column}: {percentage}\n"
+        report += "\n"
+        report += f"Empty String Counts:\n"
+        for column, count in self.dataprofiling['empty_string'].items():
+            report += f"  - {column}: {count}\n"
+        report += "\n"
+        report += f"Statistics:\n"
+        for column, stats in self.dataprofiling['stats'].items():
+            report += f"  - {column}:\n"
+            for stat, value in stats.items():
+                report += f"    - {stat}: {value}\n"
+        
+        return report
+    
 
 
 
@@ -151,11 +174,7 @@ a = dataTestAutomation(source_type="csv",source_path=file_path, options=options,
 
 # COMMAND ----------
 
-df = spark.read.format("csv").options(**options).load(file_path)
-
-# COMMAND ----------
-
-df.show()
+print(a.generateReport())
 
 # COMMAND ----------
 
