@@ -20,7 +20,7 @@ class dataTestAutomation:
         self.expected_schema = expected_schema
         self.changeDataType = changeDataType
         self.report = self.main()
-        print(self.report)
+
 
     def readData(self):
 
@@ -130,7 +130,7 @@ class dataTestAutomation:
                     distinctValues = self.dataframe.select(col(columnNames)).distinct()
                     distinctValuesCount = distinctValues.count()
                     if distinctValuesCount <= 12:
-                        distinctValue[columnNames] = {'Distinct Values':distinctValues, 'Count':distinctValuesCount}    #Distinct values and it's count
+                        distinctValue[columnNames] = distinctValues   #Distinct values and it's count
 
             resultOutcome = {'Total Number of rows':recordCounts,'nullCounts':nullCounts,'null count percentage':nullCountsPercentage,'empty_string':emptyString,'stats':stasticalDescription, 'Distinct Values':distinctValue}
             return resultOutcome
@@ -180,8 +180,8 @@ class dataTestAutomation:
         duplicate_rows = duplicates.collect()
         return duplicate_rows
         
-
-    def generateReport(self):
+    
+    def tabularReport(self):
 
         """
         Generate a report summarizing the data validation results.
@@ -191,52 +191,54 @@ class dataTestAutomation:
 
         """
         try:
-            report = f"Data Report:\n\n"
-            report += f"Total Number of Rows: {self.dataprofiling['Total Number of rows']}\n\n"
+            row = Row('Total Number of rows')(self.dataprofiling['Total Number of rows'])
+            self.totalCount = spark.createDataFrame([row])
+            self.totalCount.display()
 
             if self.expected_schema is None:
-                pass
+                    pass
             else:
-                report += f"Schema Validation Report:\n"
-                for key,value in self.schemaResult.items():
-                    report += f"    - {key}:{value}\n"
-            report += "\n"
-            report += "\n"
-            report += f"Null Counts:\n"
-            for column, count in self.dataprofiling['nullCounts'].items():
-                report += f"  - {column}: {count}\n"
-            report += "\n"
-            report += f"Null Count Percentage:\n"
-            for column, percentage in self.dataprofiling['null count percentage'].items():
-                report += f"  - {column}: {percentage}\n"
-            report += "\n"
-            report += f"Empty String Counts:\n"
-            for column, count in self.dataprofiling['empty_string'].items():
-                report += f"  - {column}: {count}\n"
-            report += "\n"
-            report += f"Statistics:\n\n"
-            for column, stats in self.dataprofiling['stats'].items():
-                report += f"  - {column}:\n"
-                for stat, value in stats.items():
-                    report += f"    - {stat}: {value}\n"
-            report += "\n"
-            report += "\n"
-            report += f"Distinct Values:\n"
-            for column, data in self.dataprofiling['Distinct Values'].items():
-                report += f"  - Column : "
-                report += f" {data['Distinct Values'].toPandas().to_string(index=False)}\n"
-                report += f"     -Count:\n  "
-                report += f"        {data['Count']}\n"
+                print("\n\n Schema Validation:\n\n")
+                schemaValidationData = [(key,value) for key,value in self.schemaResult.items()]
+                self.schemaValidationReport = spark.createDataFrame(schemaValidationData,['Validation Name','Result'])
+                self.schemaValidationReport.display()
+            print("\n\n Null Counts:\n\n")
+            nullCountsData = [(column, count )for column, count in self.dataprofiling['nullCounts'].items()]
+            self.nullCounts = spark.createDataFrame(nullCountsData,schema=['Column','Count'])
+            self.nullCounts.display()
+            print("\n\n Null Counts Percentage:\n\n")
+            nullCountsPercentageData = [(column, count )for column, count in self.dataprofiling['null count percentage'].items()]
+            self.nullCountsPercentage = spark.createDataFrame(nullCountsPercentageData,schema=['Column','Percentage'])
+            self.nullCountsPercentage.display()
+            print("\n\n Empty String:\n\n")
+            emptyStringData = [(column, count) for column, count in self.dataprofiling['empty_string'].items()]
+            self.emptyStringData = spark.createDataFrame(emptyStringData,schema=['Column','Count'])
+            self.emptyStringData.display()
 
-            if len(self.duplicates)>0:
-                report += f"{self.duplicates}"
+            print("\n\n Statistics:\n\n")
+            data = [(k, v['count'], v['mean'], v['stddev'], v['min'], v['max']) for k, v in self.dataprofiling['stats'].items()]
+            schema = StructType([
+                StructField("column", StringType(), nullable=False),
+                StructField("count", StringType(), nullable=False),
+                StructField("mean", StringType(), nullable=False),
+                StructField("stddev", StringType(), nullable=False),
+                StructField("min", StringType(), nullable=False),
+                StructField("max", StringType(), nullable=False)
+            ])
+            self.statistics = spark.createDataFrame(data,schema)
+            self.statistics.display()
+
+            print("\n\n Distinct Values:\n\n")
+            self.distinctValueData = [data.display() for column, data in self.dataprofiling['Distinct Values'].items()]
             
+            dataframes = [self.totalCount, self.schemaValidationReport, self.statistics,self.emptyStringData,self.nullCounts,self.nullCountsPercentage,self.distinctValueData]
 
-            return report
+            return dataframes
         
         except Exception as e:
             raise Exception(f"Error occured while generating report, error: {str(e)}")
-    
+
+
 
     def generatePDF(self,output_file="DataReport.pdf", range_validation = None):
 
@@ -269,7 +271,7 @@ class dataTestAutomation:
                     self.dataframe = self.changeSchema()
             self.dataprofiling = self.dataProfiling()
             self.duplicates = self.duplicateValues()
-            self.report = self.generateReport()
+            self.report = self.tabularReport()
             return self.report
         
         except Exception as e:
@@ -330,10 +332,6 @@ a.run_range_validations(range_validation_format)
 
 # COMMAND ----------
 
-from pyspark.sql.types import NumericType
-
-# COMMAND ----------
-
 a.generatePDF("DOCS.pdf")
 
 # COMMAND ----------
@@ -342,30 +340,3 @@ file_path = "/FileStore/tables/titanic.csv"
 #options = {'header':'true','inferSchema':'false','multiline':'true'}
 options = {'header':'true','inferSchema':'false'}
 df = spark.read.format("csv").options(**options).load(file_path)
-
-# COMMAND ----------
-
-file_path = "/FileStore/tables/titanic.csv"
-#options = {'header':'true','inferSchema':'false','multiline':'true'}
-options = {'header':'true','inferSchema':'false'}
-df = spark.read.format("csv").options(**options).load(file_path)
-
-# COMMAND ----------
-
-df.show()
-
-# COMMAND ----------
-
-
-duplicate_rows = df.groupBy(df.columns).count().filter(col("count") > 1)
-
-# Show the duplicate rows
-c = duplicate_rows.collect()
-
-# COMMAND ----------
-
-duplicate_rows.show()
-
-# COMMAND ----------
-
-
