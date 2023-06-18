@@ -174,6 +174,12 @@ class dataTestAutomation:
         except Exception as e:
             raise Exception(f"Error occured while validating range, error: {str(e)}")
 
+    def duplicateValues(self):
+
+        duplicates = self.dataframe.groupBy(self.dataframe.columns).count().filter(col('count')>1)
+        duplicate_rows = duplicates.collect()
+        return duplicate_rows
+        
 
     def generateReport(self):
 
@@ -221,7 +227,11 @@ class dataTestAutomation:
                 report += f" {data['Distinct Values'].toPandas().to_string(index=False)}\n"
                 report += f"     -Count:\n  "
                 report += f"        {data['Count']}\n"
-        
+
+            if len(self.duplicates)>0:
+                report += f"{self.duplicates}"
+            
+
             return report
         
         except Exception as e:
@@ -258,6 +268,7 @@ class dataTestAutomation:
                 if self.changeDataType is True:
                     self.dataframe = self.changeSchema()
             self.dataprofiling = self.dataProfiling()
+            self.duplicates = self.duplicateValues()
             self.report = self.generateReport()
             return self.report
         
@@ -324,6 +335,36 @@ from pyspark.sql.types import NumericType
 # COMMAND ----------
 
 a.generatePDF("DOCS.pdf")
+
+# COMMAND ----------
+
+file_path = "/FileStore/tables/titanic.csv"
+#options = {'header':'true','inferSchema':'false','multiline':'true'}
+options = {'header':'true','inferSchema':'false'}
+df = spark.read.format("csv").options(**options).load(file_path)
+
+# COMMAND ----------
+
+file_path = "/FileStore/tables/titanic.csv"
+#options = {'header':'true','inferSchema':'false','multiline':'true'}
+options = {'header':'true','inferSchema':'false'}
+df = spark.read.format("csv").options(**options).load(file_path)
+
+# COMMAND ----------
+
+df.show()
+
+# COMMAND ----------
+
+
+duplicate_rows = df.groupBy(df.columns).count().filter(col("count") > 1)
+
+# Show the duplicate rows
+c = duplicate_rows.collect()
+
+# COMMAND ----------
+
+duplicate_rows.show()
 
 # COMMAND ----------
 
