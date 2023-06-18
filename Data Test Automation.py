@@ -97,17 +97,21 @@ class dataTestAutomation:
             
 
     def dataProfiling(self):
+
+        '''
+            Checks the null counts, empty strings, stastical description and counts of the number of rows.
+
+            Returns:
+                dict: Data profiling results including total row count, null counts, null count percentage,
+                  empty string counts, and statistical descriptions for each column.
+
+        '''
         
         recordCounts  = self.dataframe.count()
-
         nullCountsPercentage = {}
-
         nullCounts = {}
-
         emptyString = {}
-
         stasticalDescription = {}
-
         for columnNames in self.dataframe.columns:
             nullCounts[columnNames] = self.dataframe.select(col(columnNames)).filter(col(columnNames).isNull()).count()
             nullCountsPercentage[columnNames] = f'{((nullCounts[columnNames])/recordCounts)*100}%'
@@ -121,7 +125,49 @@ class dataTestAutomation:
 
         return resultOutcome
     
+
+    def run_range_validations(self, range_validations):
+
+        '''
+        range_validations(dict): Validation rules passed in dictionary.
+        Format for the parameter range_validation = {
+            'col1':(min_value,max_value),
+            'col2':(None,max_value),
+            'col3':(min_value,None),
+            'col4':(None,None)
+        }
+        Returns:
+            dict: Validation results indicating if the range validations passed or failed for each column.
+        '''
+        validation_results = {}
+
+        for column, (min_value, max_value) in range_validations.items():
+            if min_value is None and max_value is None:
+                validation_results[column] = True
+            elif min_value is None:
+                validation_result = self.dataframe.filter(col(column) <= max_value).count() == self.dataframe.count()
+                validation_results[column] = validation_result
+            elif max_value is None:
+                validation_result = self.dataframe.filter(col(column) >= min_value).count() == self.dataframe.count()
+                validation_results[column] = validation_result
+            else:
+                validation_result = self.dataframe.filter((col(column) >= min_value) & (col(column) <= max_value)).count() == self.dataframe.count()
+                validation_results[column] = validation_result
+        print(validation_results)
+        return validation_results
+
+
     def generateReport(self):
+
+        """
+        Generate a report summarizing the data validation results.
+
+        Returns:
+            str: Report containing information about the total row count, null counts, null count percentage,
+                 empty string counts, and statistical descriptions for each column.
+
+        """
+
         report = f"Data Report:\n\n"
         report += f"Total Number of Rows: {self.dataprofiling['Total Number of rows']}\n\n"
         report += f"Null Counts:\n"
@@ -143,6 +189,8 @@ class dataTestAutomation:
                 report += f"    - {stat}: {value}\n"
         
         return report
+    
+
     
 
 
@@ -171,10 +219,6 @@ exp_schema = StructType()\
 
 a = dataTestAutomation(source_type="csv",source_path=file_path, options=options,expected_schema=exp_schema,changeDataType=True)
 
-
-# COMMAND ----------
-
-print(a.generateReport())
 
 # COMMAND ----------
 
