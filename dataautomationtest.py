@@ -1,6 +1,7 @@
 # Databricks notebook source
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
+from pyspark.sql.types import NumericType
 
 class dataTestAutomation:
 
@@ -19,7 +20,7 @@ class dataTestAutomation:
         self.options = options
         self.expected_schema = expected_schema
         self.changeDataType = changeDataType
-        self.report = self.main()
+        self.main()
 
 
     def readData(self):
@@ -123,7 +124,7 @@ class dataTestAutomation:
                 nullCountsPercentage[columnNames] = f'{((nullCounts[columnNames])/recordCounts)*100}%'    #percentage of null values
                 emptyString[columnNames] = self.dataframe.filter(col(columnNames) == "").count()    #count of empty strings
                 column_data_type = self.dataframe.schema[columnNames].dataType
-                if isinstance(column_data_type, (IntegerType, DoubleType, FloatType, LongType, DecimalType,NumericType,ShortType,ByteType)):
+                if isinstance(column_data_type, (IntegerType, DoubleType, FloatType, LongType, DecimalType, NumericType, ShortType,ByteType)):
                     statistics = self.dataframe.select(col(columnNames)).describe().toPandas().set_index('summary').to_dict()[columnNames]
                     stasticalDescription[columnNames] = statistics  #Statistical Summary of the data
                 else:
@@ -231,9 +232,8 @@ class dataTestAutomation:
             print("\n\n Distinct Values:\n\n")
             self.distinctValueData = [data.display() for column, data in self.dataprofiling['Distinct Values'].items()]
             
-            dataframes = [self.totalCount, self.schemaValidationReport, self.statistics,self.emptyStringData,self.nullCounts,self.nullCountsPercentage,self.distinctValueData]
+            self.dfList = [self.totalCount, self.schemaValidationReport, self.statistics,self.emptyStringData,self.nullCounts,self.nullCountsPercentage,self.distinctValueData]
 
-            return dataframes
         
         except Exception as e:
             raise Exception(f"Error occured while generating report, error: {str(e)}")
@@ -250,16 +250,31 @@ class dataTestAutomation:
         
         '''
         try:
-            from fpdf import FPDF
+            from PyPDF2 import PdfMerger
+            import os
+            pdf_merger = PdfMerger()
+        except Exception as e:
+            raise Exception(f"Error while loading the library, error: {str(e)}")
+            
+        try:
 
-            pdf = FPDF()
-            pdf.add_page()
-            pdf.set_font("Arial", size=12)
-            pdf.multi_cell(0, 10, txt=self.report)
-            pdf.output(output_file)
+            for i, df in enumerate(self.dfList):
+                pdf_filename = f"temp_{i+1}.pdf"
+                df.write.csv(pdf_filename)
+                pdf_merger.append(pdf_filename)
+            
+            pdf_merger.write(output_file)
+            pdf_merger.close()
 
         except Exception as e:
             raise Exception(f"Error occured while generating pdf, error: {str(e)}")
+        
+        try:
+            for i in range(len(dfToSave)):
+                temp_filename = f"temp_{i+1}.pdf"
+                os.remove(temp_filename)
+        except Exception as e:
+            raise Exception(f"Could not remove the files from os, error: {str(e)}")
         
     def main(self):
         try:
@@ -272,7 +287,7 @@ class dataTestAutomation:
             self.dataprofiling = self.dataProfiling()
             self.duplicates = self.duplicateValues()
             self.report = self.tabularReport()
-            return self.report
+
         
         except Exception as e:
             raise Exception(f"Error occured, error: {str(e)}")
@@ -340,3 +355,11 @@ file_path = "/FileStore/tables/titanic.csv"
 #options = {'header':'true','inferSchema':'false','multiline':'true'}
 options = {'header':'true','inferSchema':'false'}
 df = spark.read.format("csv").options(**options).load(file_path)
+
+# COMMAND ----------
+
+a.generatePDF()
+
+# COMMAND ----------
+
+
