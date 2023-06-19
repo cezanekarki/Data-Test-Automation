@@ -174,12 +174,49 @@ class dataTestAutomation:
         
         except Exception as e:
             raise Exception(f"Error occured while validating range, error: {str(e)}")
+    
+
+    def validateColumnFormat(self, column_rules, display_rows = 20):
+
+        '''
+        args:
+            column_rules(dict): Dictionary with column name and format as regex for the validation.
+            eg : {
+                "Ticket": r'^\d{6}$',
+                "Embarked":r'S'
+            }
+            Ticket and Embarked, the two keys are the column names, other two, values are the regular expression validation rules.
+            display_rows(int): Limit for number of invalid rows to be displayed. Default value is 20.
+        
+        Returns:
+            The two dataframes are printed as well.
+            Dictionary containing the dataframe for invalid count and invalid record of specific column.
+        '''
+
+        columnValidationFormat = {}
+        for column, rule in column_rules.items():
+            df = self.dataframe.withColumn("validation_result", regexp_extract(col(column), rule, 0))
+            invalid_records = df.filter(col("validation_result") == "")
+            invalid_count = invalid_records.count()
+            
+            if invalid_count > 0:
+                invalid_count_DF = spark.createDataFrame([invalid_count],schema=[f'Invalid Data Count - {column}'])
+                invalid_records.display(20)
+            columnValidationFormat[column] = [invalid_count_DF, invalid_records]
+        return columnValidationFormat
 
     def duplicateValues(self):
-
+        
+        duplicatesCount = {}
         duplicates = self.dataframe.groupBy(self.dataframe.columns).count().filter(col('count')>1)
-        duplicate_rows = duplicates.collect()
-        return duplicate_rows
+        duplicatesValuesCount = spark.createDataFrame([Row(count=duplicates.count())], schema=['Duplicates Count'])
+        if duplicates.count() > 1:
+            duplicatesValues = duplicates.drop('count')
+            duplicatesCount = {'values': duplicatesValues, 'count': duplicatesValuesCount}
+        else:
+            duplicatesCount = {'count': duplicatesValuesCount}
+
+        return duplicatesCount
         
     
     def tabularReport(self):
@@ -231,6 +268,13 @@ class dataTestAutomation:
 
             print("\n\n Distinct Values:\n\n")
             self.distinctValueData = [data.display() for column, data in self.dataprofiling['Distinct Values'].items()]
+
+            print("\n\n Duplicates:\n\n")
+            duplicates = self.duplicates
+            self.duplicateValues = []
+            for key, value in duplicates.items():
+                self.duplicateValues.append(value)
+                value.display()
             
             self.dfList = [self.totalCount, self.schemaValidationReport, self.statistics,self.emptyStringData,self.nullCounts,self.nullCountsPercentage,self.distinctValueData]
 
@@ -340,25 +384,29 @@ a = dataTestAutomation(source_type="snowflake",source_path=file_path, options=op
 
 # COMMAND ----------
 
-range_validation_format = {
-    "weight":(1800,5500)
-}
-a.run_range_validations(range_validation_format)
-
-# COMMAND ----------
-
-a.generatePDF("DOCS.pdf")
-
-# COMMAND ----------
-
 file_path = "/FileStore/tables/titanic.csv"
 #options = {'header':'true','inferSchema':'false','multiline':'true'}
 options = {'header':'true','inferSchema':'false'}
-df = spark.read.format("csv").options(**options).load(file_path)
+df1 = spark.read.format("csv").options(**options).load(file_path)
 
 # COMMAND ----------
 
-a.generatePDF()
+from pyspark.sql.functions import col, regexp_extract
+column_rules = {
+    "Ticket": r'^\d{6}$',
+    "Embarked":r'S'
+}
+
+
+for column, rule in column_rules.items():
+    df = df1.withColumn("validation_result", regexp_extract(col(column), rule, 0))
+    invalid_records = df.filter(col("validation_result") == "")
+    invalid_count = invalid_records.count()
+    
+    if invalid_count > 0:
+        print(f"Invalid records in column '{column}': {invalid_count}")
+        invalid_records.display()
+    
 
 # COMMAND ----------
 
