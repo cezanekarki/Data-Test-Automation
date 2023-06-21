@@ -3,6 +3,8 @@ from pyspark.sql.functions import *
 from pyspark.sql.types import *
 from pyspark.sql.types import NumericType
 
+
+
 class dataTestAutomation:
 
     def __init__(self, source_type,  source_path = None, options=None, expected_schema = None, changeDataType = False):
@@ -101,6 +103,23 @@ class dataTestAutomation:
         except Exception as e:
             raise Exception(f"Error occured while changing the data type, error: {str(e)}")
 
+    
+    def getCategoricalNumerical(self):
+        categorical = []
+        numerical_datatype = []
+
+
+        for i in self.dataframe.columns:
+            column_data_type = self.dataframe.schema[i].dataType
+            if isinstance(column_data_type, (IntegerType, DoubleType, FloatType, LongType, DecimalType, NumericType, ShortType,ByteType)):
+                numerical_datatype.append(i)
+            else:
+                distinct_values = self.dataframe.agg(countDistinct(i)).collect()[0][0]
+                if distinct_values < 12:
+                    categorical.append(i)
+        
+        return categorical, numerical_datatype
+
 
     def dataProfiling(self):
 
@@ -123,15 +142,20 @@ class dataTestAutomation:
                 nullCounts[columnNames] = self.dataframe.select(col(columnNames)).filter(col(columnNames).isNull()).count() #count of null value
                 nullCountsPercentage[columnNames] = f'{((nullCounts[columnNames])/recordCounts)*100}%'    #percentage of null values
                 emptyString[columnNames] = self.dataframe.filter(col(columnNames) == "").count()    #count of empty strings
-                column_data_type = self.dataframe.schema[columnNames].dataType
-                if isinstance(column_data_type, (IntegerType, DoubleType, FloatType, LongType, DecimalType, NumericType, ShortType,ByteType)):
-                    statistics = self.dataframe.select(col(columnNames)).describe().toPandas().set_index('summary').to_dict()[columnNames]
-                    stasticalDescription[columnNames] = statistics  #Statistical Summary of the data
-                else:
-                    distinctValues = self.dataframe.select(col(columnNames)).distinct()
-                    distinctValuesCount = distinctValues.count()
-                    if distinctValuesCount <= 12:
-                        distinctValue[columnNames] = distinctValues   #Distinct values and it's count
+                #column_data_type = self.dataframe.schema[columnNames].dataType
+                # if isinstance(column_data_type, (IntegerType, DoubleType, FloatType, LongType, DecimalType, NumericType, ShortType,ByteType)):
+                #     statistics = self.dataframe.select(col(columnNames)).describe().toPandas().set_index('summary').to_dict()[columnNames]
+                #     stasticalDescription[columnNames] = statistics  #Statistical Summary of the data
+                # else:
+                #     distinctValues = self.dataframe.select(col(columnNames)).distinct()
+                #     distinctValuesCount = distinctValues.count()
+                #     if distinctValuesCount <= 12:
+                #         distinctValue[columnNames] = distinctValues   #Distinct values and it's count
+            
+            stasticalDescription = {colName: self.dataframe.select(col(colName)).describe().toPandas().set_index('summary').to_dict()[colName] for colName in self.numerical}
+
+            distinctValue = {colName: self.dataframe.select(col(colName)).distinct() for colName in self.categorical}
+
 
             resultOutcome = {'Total Number of rows':recordCounts,'nullCounts':nullCounts,'null count percentage':nullCountsPercentage,'empty_string':emptyString,'stats':stasticalDescription, 'Distinct Values':distinctValue}
             return resultOutcome
@@ -294,9 +318,8 @@ class dataTestAutomation:
         
         '''
         try:
-            from PyPDF2 import PdfMerger
-            import os
-            pdf_merger = PdfMerger()
+            from reportlab.lib.pagesizes import letter
+            from reportlab.platypus import SimpleDocTemplate, Table
         except Exception as e:
             raise Exception(f"Error while loading the library, error: {str(e)}")
             
@@ -319,6 +342,7 @@ class dataTestAutomation:
                 os.remove(temp_filename)
         except Exception as e:
             raise Exception(f"Could not remove the files from os, error: {str(e)}")
+          
         
     def main(self):
         try:
@@ -328,6 +352,7 @@ class dataTestAutomation:
                 self.schemaResult = self.validateSchema()
                 if self.changeDataType is True:
                     self.dataframe = self.changeSchema()
+            self.categorical, self.numerical = self.getCategoricalNumerical() 
             self.dataprofiling = self.dataProfiling()
             self.duplicates = self.duplicateValues()
             self.report = self.tabularReport()
@@ -384,10 +409,24 @@ a = dataTestAutomation(source_type="snowflake",source_path=file_path, options=op
 
 # COMMAND ----------
 
+exp_schema = StructType()\
+            .add('PassengerId',StringType(),True)\
+            .add('Survived',IntegerType(),True)\
+            .add('Pclass',IntegerType(),True)\
+            .add('Name',StringType(),True)\
+            .add('Sex',StringType(),True)\
+            .add('Age',IntegerType(),True)\
+            .add('SibSp',IntegerType(),True)\
+            .add('Parch',IntegerType(),True)\
+            .add('Ticket',StringType(),True)\
+            .add('Fare',FloatType(),True)\
+            .add('Cabin',StringType(),True)\
+            .add('Embarked',StringType(),True)
+
 file_path = "/FileStore/tables/titanic.csv"
 #options = {'header':'true','inferSchema':'false','multiline':'true'}
 options = {'header':'true','inferSchema':'false'}
-df1 = spark.read.format("csv").options(**options).load(file_path)
+df1 = spark.read.format("csv").options(**options).schema(exp_schema).load(file_path)
 
 # COMMAND ----------
 
@@ -407,6 +446,165 @@ for column, rule in column_rules.items():
         print(f"Invalid records in column '{column}': {invalid_count}")
         invalid_records.display()
     
+
+# COMMAND ----------
+
+def get_anomalies(data, maxDepth, contamination):
+    """
+    Get data anomalies using machine learning PySpark.
+
+    Args:
+        spark: A Spark session.
+        data: The data to be analyzed.
+        maxDepth: The maximum depth of the Isolation Forest model.
+        contamination: The percentage of data points that are expected to be anomalies.
+
+    Returns:
+        A list of the anomalies.
+    """
+
+    scaler = StandardScaler(inputCol=['Survived','Pclass','Age'], outputCol="scaledFeatures")
+    scaledData = scaler.fit(data).transform(data)
+
+    iForest = IsolationForest(maxDepth=maxDepth, contamination=contamination)
+    model = iForest.fit(scaledData)
+
+    predictions = model.predict(scaledData)
+
+    anomalies = predictions.where(predictions == -1).collect()
+
+    return anomalies
+
+# COMMAND ----------
+
+from pyspark.ml.feature import StandardScaler
+from sklearn.ensemble import IsolationForest
+anamolies = get_anomalies(df1,10,0.1)
+
+# COMMAND ----------
+
+def anamolyDetection():
+    
+    
+    
+
+# COMMAND ----------
+
+anamolyDetection()
+
+# COMMAND ----------
+
+categorical = []
+numerical_datatype = []
+
+
+for i in df1.columns:
+    column_data_type = df1.schema[i].dataType
+    if isinstance(column_data_type, (IntegerType, DoubleType, FloatType, LongType, DecimalType, NumericType, ShortType,ByteType)):
+        numerical_datatype.append(i)
+    else:
+        distinct_values = df1.select(col(i)).distinct().count()
+        if distinct_values < 12:
+            categorical.append(i)
+print(numerical_datatype)
+
+# COMMAND ----------
+
+def get_anomalies(data, maxDepth, contamination):
+    """
+    Get data anomalies using machine learning PySpark.
+
+    Args:
+        spark: A Spark session.
+        data: The data to be analyzed.
+        maxDepth: The maximum depth of the Isolation Forest model.
+        contamination: The percentage of data points that are expected to be anomalies.
+
+    Returns:
+        A list of the anomalies.
+    """
+
+    scaler = StandardScaler(inputCol=numerical_datatype, outputCol="scaledFeatures")
+    scaledData = scaler.fit(data).transform(data)
+
+    iForest = IsolationForest(maxDepth=maxDepth, contamination=contamination)
+    model = iForest.fit(scaledData)
+
+    predictions = model.predict(scaledData)
+
+    anomalies = predictions.where(predictions == -1).collect()
+
+    return anomalies
+
+# COMMAND ----------
+
+def getCategoricalNumerical():
+    categorical = []
+    numerical_datatype = []
+
+
+    for i in df1.columns:
+        column_data_type = df1.schema[i].dataType
+        if isinstance(column_data_type, (IntegerType, DoubleType, FloatType, LongType, DecimalType, NumericType, ShortType,ByteType)):
+            numerical_datatype.append(i)
+        else:
+            distinct_values = df1.agg(countDistinct(i)).collect()[0][0]
+            if distinct_values < 12:
+                categorical.append(i)
+
+
+
+# COMMAND ----------
+
+statistics = {}
+statistics = {colName: df1.select(col(colName)).describe().toPandas().set_index('summary').to_dict()[colName] for colName in numerical_datatype}
+
+
+# COMMAND ----------
+
+statistics
+
+# COMMAND ----------
+
+
+import pandas as pd
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Table
+
+
+
+# Define a function to generate PDF content for a single DataFrame
+def generate_pdf_content(df):
+    # Convert PySpark DataFrame to Pandas DataFrame
+    pandas_df = df.toPandas()
+
+    # Create a ReportLab table from the Pandas DataFrame
+    table = Table(pandas_df.values.tolist())
+    
+    return [table]
+
+# Define a function to generate a single PDF for multiple DataFrames
+def generate_multi_dataframe_pdf(dataframes, pdf_filename):
+    # Create a list to hold all the PDF content
+    pdf_content = []
+
+    # Generate PDF content for each DataFrame
+    for df in dataframes:
+        pdf_content.extend(generate_pdf_content(df))
+
+    # Create the PDF file and add the content
+    doc = SimpleDocTemplate(pdf_filename, pagesize=letter)
+    doc.build(pdf_content)
+
+    print("PDF created successfully.")
+
+# Example usage
+# Assuming you have multiple PySpark DataFrames named 'df1', 'df2', 'df3', ...
+dataframes = [df1, invalid_records]  # List of PySpark DataFrames
+
+# Generate the PDF for the DataFrames
+generate_multi_dataframe_pdf(dataframes, "output.pdf")
+
 
 # COMMAND ----------
 
