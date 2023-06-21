@@ -608,4 +608,61 @@ generate_multi_dataframe_pdf(dataframes, "output.pdf")
 
 # COMMAND ----------
 
+from pyspark.sql import SparkSession
+import pandas as pd
+from reportlab.lib.pagesizes import letter, landscape
+from reportlab.lib import colors
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+
+# Assuming you already have a SparkSession instance
+spark = SparkSession.builder.getOrCreate()
+
+# Define a function to generate PDF content for a single DataFrame
+def generate_pdf_content(df):
+    # Convert PySpark DataFrame to Pandas DataFrame
+    pandas_df = df.toPandas()
+
+    # Create a ReportLab table from the Pandas DataFrame
+    table = Table(pandas_df.values.tolist())
+
+    # Apply table styles
+    table.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), colors.grey),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
+        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, 0), 12),
+        ("BOTTOMPADDING", (0, 0), (-1, 0), 12),
+        ("BACKGROUND", (0, 1), (-1, -1), colors.beige),
+        ("BOX", (0, 0), (-1, -1), 1, colors.black),
+        ("GRID", (0, 0), (-1, -1), 1, colors.black),
+    ]))
+
+    return [table]
+
+# Define a function to generate a single PDF for multiple DataFrames
+def generate_multi_dataframe_pdf(dataframes, pdf_filename):
+    # Create a list to hold all the PDF content
+    pdf_content = []
+
+    # Generate PDF content for each DataFrame
+    for df in dataframes:
+        pdf_content.extend(generate_pdf_content(df))
+
+    # Create the PDF file and add the content
+    doc = SimpleDocTemplate(pdf_filename, pagesize=landscape(letter))
+    doc.build(pdf_content)
+
+    print("PDF created successfully.")
+
+# Example usage
+# Assuming you have multiple PySpark DataFrames named 'df1', 'df2', 'df3', ...
+dataframes = [df1, invalid_records]  # List of PySpark DataFrames
+
+# Generate the PDF for the DataFrames
+generate_multi_dataframe_pdf(dataframes, "output1.pdf")
+
+
+# COMMAND ----------
+
 
