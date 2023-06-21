@@ -142,15 +142,6 @@ class dataTestAutomation:
                 nullCounts[columnNames] = self.dataframe.select(col(columnNames)).filter(col(columnNames).isNull()).count() #count of null value
                 nullCountsPercentage[columnNames] = f'{((nullCounts[columnNames])/recordCounts)*100}%'    #percentage of null values
                 emptyString[columnNames] = self.dataframe.filter(col(columnNames) == "").count()    #count of empty strings
-                #column_data_type = self.dataframe.schema[columnNames].dataType
-                # if isinstance(column_data_type, (IntegerType, DoubleType, FloatType, LongType, DecimalType, NumericType, ShortType,ByteType)):
-                #     statistics = self.dataframe.select(col(columnNames)).describe().toPandas().set_index('summary').to_dict()[columnNames]
-                #     stasticalDescription[columnNames] = statistics  #Statistical Summary of the data
-                # else:
-                #     distinctValues = self.dataframe.select(col(columnNames)).distinct()
-                #     distinctValuesCount = distinctValues.count()
-                #     if distinctValuesCount <= 12:
-                #         distinctValue[columnNames] = distinctValues   #Distinct values and it's count
             
             stasticalDescription = {colName: self.dataframe.select(col(colName)).describe().toPandas().set_index('summary').to_dict()[colName] for colName in self.numerical}
 
@@ -200,7 +191,7 @@ class dataTestAutomation:
             raise Exception(f"Error occured while validating range, error: {str(e)}")
     
 
-    def validateColumnFormat(self, column_rules, display_rows = 20):
+    def validateColumnFormat(self, column_rules, display_rows = 20, showData = False):
 
         '''
         args:
@@ -224,9 +215,20 @@ class dataTestAutomation:
             invalid_count = invalid_records.count()
             
             if invalid_count > 0:
-                invalid_count_DF = spark.createDataFrame([invalid_count],schema=[f'Invalid Data Count - {column}'])
-                invalid_records.display(20)
-            columnValidationFormat[column] = [invalid_count_DF, invalid_records]
+                schema = StructType([StructField(f'Invalid Data Count - {column}', IntegerType(), nullable=False)])
+                invalid_count_DF = spark.createDataFrame([(invalid_count,)],schema=schema)
+                invalid_record_data = invalid_records
+                if showData == True:
+                    print(f'Invalid count for {column}')
+                    invalid_count_DF.display(display_rows)
+                    print(f'Invalid data for {column}')
+                    invalid_record_data.display(display_rows)
+                elif showData == False:
+                    print(f'Invalid count for {column}')
+                    invalid_count_DF.display(display_rows)
+
+            columnValidationFormat[column] = {invalid_count_DF, invalid_record_data}
+
         return columnValidationFormat
 
     def duplicateValues(self):
@@ -252,6 +254,7 @@ class dataTestAutomation:
             str: Report containing information about overall evaluation of data.
 
         """
+
         try:
             row = Row('Total Number of rows')(self.dataprofiling['Total Number of rows'])
             self.totalCount = spark.createDataFrame([row])
@@ -305,6 +308,9 @@ class dataTestAutomation:
         
         except Exception as e:
             raise Exception(f"Error occured while generating report, error: {str(e)}")
+
+
+
 
 
 
@@ -391,6 +397,11 @@ range_validation_format = {
     "Age":(20,60)
 }
 a.run_range_validations(range_validation_format)
+column_rules = {
+    "Ticket": r'^\d{6}$',
+    "Embarked":r'S'
+}
+invalid_data = a.validateColumnFormat(column_rules=column_rules)
 
 # COMMAND ----------
 
@@ -427,245 +438,3 @@ file_path = "/FileStore/tables/titanic.csv"
 #options = {'header':'true','inferSchema':'false','multiline':'true'}
 options = {'header':'true','inferSchema':'false'}
 df1 = spark.read.format("csv").options(**options).schema(exp_schema).load(file_path)
-
-# COMMAND ----------
-
-from pyspark.sql.functions import col, regexp_extract
-column_rules = {
-    "Ticket": r'^\d{6}$',
-    "Embarked":r'S'
-}
-
-
-for column, rule in column_rules.items():
-    df = df1.withColumn("validation_result", regexp_extract(col(column), rule, 0))
-    invalid_records = df.filter(col("validation_result") == "")
-    invalid_count = invalid_records.count()
-    
-    if invalid_count > 0:
-        print(f"Invalid records in column '{column}': {invalid_count}")
-        invalid_records.display()
-    
-
-# COMMAND ----------
-
-def get_anomalies(data, maxDepth, contamination):
-    """
-    Get data anomalies using machine learning PySpark.
-
-    Args:
-        spark: A Spark session.
-        data: The data to be analyzed.
-        maxDepth: The maximum depth of the Isolation Forest model.
-        contamination: The percentage of data points that are expected to be anomalies.
-
-    Returns:
-        A list of the anomalies.
-    """
-
-    scaler = StandardScaler(inputCol=['Survived','Pclass','Age'], outputCol="scaledFeatures")
-    scaledData = scaler.fit(data).transform(data)
-
-    iForest = IsolationForest(maxDepth=maxDepth, contamination=contamination)
-    model = iForest.fit(scaledData)
-
-    predictions = model.predict(scaledData)
-
-    anomalies = predictions.where(predictions == -1).collect()
-
-    return anomalies
-
-# COMMAND ----------
-
-from pyspark.ml.feature import StandardScaler
-from sklearn.ensemble import IsolationForest
-anamolies = get_anomalies(df1,10,0.1)
-
-# COMMAND ----------
-
-def anamolyDetection():
-    
-    
-    
-
-# COMMAND ----------
-
-anamolyDetection()
-
-# COMMAND ----------
-
-categorical = []
-numerical_datatype = []
-
-
-for i in df1.columns:
-    column_data_type = df1.schema[i].dataType
-    if isinstance(column_data_type, (IntegerType, DoubleType, FloatType, LongType, DecimalType, NumericType, ShortType,ByteType)):
-        numerical_datatype.append(i)
-    else:
-        distinct_values = df1.select(col(i)).distinct().count()
-        if distinct_values < 12:
-            categorical.append(i)
-print(numerical_datatype)
-
-# COMMAND ----------
-
-def get_anomalies(data, maxDepth, contamination):
-    """
-    Get data anomalies using machine learning PySpark.
-
-    Args:
-        spark: A Spark session.
-        data: The data to be analyzed.
-        maxDepth: The maximum depth of the Isolation Forest model.
-        contamination: The percentage of data points that are expected to be anomalies.
-
-    Returns:
-        A list of the anomalies.
-    """
-
-    scaler = StandardScaler(inputCol=numerical_datatype, outputCol="scaledFeatures")
-    scaledData = scaler.fit(data).transform(data)
-
-    iForest = IsolationForest(maxDepth=maxDepth, contamination=contamination)
-    model = iForest.fit(scaledData)
-
-    predictions = model.predict(scaledData)
-
-    anomalies = predictions.where(predictions == -1).collect()
-
-    return anomalies
-
-# COMMAND ----------
-
-def getCategoricalNumerical():
-    categorical = []
-    numerical_datatype = []
-
-
-    for i in df1.columns:
-        column_data_type = df1.schema[i].dataType
-        if isinstance(column_data_type, (IntegerType, DoubleType, FloatType, LongType, DecimalType, NumericType, ShortType,ByteType)):
-            numerical_datatype.append(i)
-        else:
-            distinct_values = df1.agg(countDistinct(i)).collect()[0][0]
-            if distinct_values < 12:
-                categorical.append(i)
-
-
-
-# COMMAND ----------
-
-statistics = {}
-statistics = {colName: df1.select(col(colName)).describe().toPandas().set_index('summary').to_dict()[colName] for colName in numerical_datatype}
-
-
-# COMMAND ----------
-
-statistics
-
-# COMMAND ----------
-
-
-import pandas as pd
-from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Table
-
-
-
-# Define a function to generate PDF content for a single DataFrame
-def generate_pdf_content(df):
-    # Convert PySpark DataFrame to Pandas DataFrame
-    pandas_df = df.toPandas()
-
-    # Create a ReportLab table from the Pandas DataFrame
-    table = Table(pandas_df.values.tolist())
-    
-    return [table]
-
-# Define a function to generate a single PDF for multiple DataFrames
-def generate_multi_dataframe_pdf(dataframes, pdf_filename):
-    # Create a list to hold all the PDF content
-    pdf_content = []
-
-    # Generate PDF content for each DataFrame
-    for df in dataframes:
-        pdf_content.extend(generate_pdf_content(df))
-
-    # Create the PDF file and add the content
-    doc = SimpleDocTemplate(pdf_filename, pagesize=letter)
-    doc.build(pdf_content)
-
-    print("PDF created successfully.")
-
-# Example usage
-# Assuming you have multiple PySpark DataFrames named 'df1', 'df2', 'df3', ...
-dataframes = [df1, invalid_records]  # List of PySpark DataFrames
-
-# Generate the PDF for the DataFrames
-generate_multi_dataframe_pdf(dataframes, "output.pdf")
-
-
-# COMMAND ----------
-
-from pyspark.sql import SparkSession
-import pandas as pd
-from reportlab.lib.pagesizes import letter, landscape
-from reportlab.lib import colors
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, KeepTogether
-
-# Assuming you already have a SparkSession instance
-spark = SparkSession.builder.getOrCreate()
-
-# Define a function to generate PDF content for a single DataFrame
-def generate_pdf_content(df):
-    # Convert PySpark DataFrame to Pandas DataFrame
-    pandas_df = df.toPandas()
-
-    # Create a ReportLab table from the Pandas DataFrame
-    table = Table(pandas_df.values.tolist())
-
-    # Apply table styles
-    table.setStyle(TableStyle([
-        ("BACKGROUND", (0, 0), (-1, 0), colors.grey),
-        ("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
-        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
-        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-        ("FONTSIZE", (0, 0), (-1, 0), 12),
-        ("BOTTOMPADDING", (0, 0), (-1, 0), 12),
-        ("BACKGROUND", (0, 1), (-1, -1), colors.beige),
-        ("BOX", (0, 0), (-1, -1), 1, colors.black),
-        ("GRID", (0, 0), (-1, -1), 1, colors.black),
-    ]))
-
-    # Wrap the table in a KeepTogether object to prevent splitting within a table
-    content = KeepTogether([table])
-    
-    return content
-
-# Define a function to generate a single PDF for multiple DataFrames
-def generate_multi_dataframe_pdf(dataframes, pdf_filename):
-    # Create a list to hold all the PDF content
-    pdf_content = []
-
-    # Generate PDF content for each DataFrame
-    for df in dataframes:
-        pdf_content.append(generate_pdf_content(df))
-
-    # Create the PDF file and add the content
-    doc = SimpleDocTemplate(pdf_filename, pagesize=landscape(letter))
-    doc.build(pdf_content)
-
-    print("PDF created successfully.")
-
-# Example usage
-# Assuming you have multiple PySpark DataFrames named 'df1', 'df2', 'df3', ...
-dataframes = [df1, invalid_records]  # List of PySpark DataFrames
-
-# Generate the PDF for the DataFrames
-generate_multi_dataframe_pdf(dataframes, "output3.pdf")
-
-
-# COMMAND ----------
-
-
