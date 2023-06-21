@@ -2,7 +2,7 @@
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
 from pyspark.sql.types import NumericType
-
+import re
 
 
 class dataTestAutomation:
@@ -23,7 +23,6 @@ class dataTestAutomation:
         self.expected_schema = expected_schema
         self.changeDataType = changeDataType
         self.main()
-
 
     def readData(self):
 
@@ -46,11 +45,22 @@ class dataTestAutomation:
                 reader = reader.load()
 
             df = reader
+            
             return df
         except Exception as e:
             raise Exception(f"Error occured while loading the file, error: {str(e)}")
 
+    def handleInvalidColumns(self):
+
+        validName = self.dataframe
+        for column in self.dataframe.columns:
+            if not re.match(r'^[A-Za-z0-9_]+$', column):
+                valid_column_name = re.sub(r'[^A-Za-z0-9_]+', '_', column)
+                validName = validName.withColumnRenamed(column, valid_column_name)
+
+        return validName
     
+
     def validateSchema(self):
 
         """
@@ -255,7 +265,8 @@ class dataTestAutomation:
 
         """
 
-        try:
+        try:  
+            print("\n\n Total Number of Records\n\n")
             row = Row('Total Number of rows')(self.dataprofiling['Total Number of rows'])
             self.totalCount = spark.createDataFrame([row])
             self.totalCount.display()
@@ -303,7 +314,10 @@ class dataTestAutomation:
                 self.duplicateValues.append(value)
                 value.display()
             
-            self.dfList = [self.totalCount, self.schemaValidationReport, self.statistics,self.emptyStringData,self.nullCounts,self.nullCountsPercentage,self.distinctValueData]
+            if self.expected_schema is None:
+                self.dfList = [self.totalCount, self.statistics,self.emptyStringData,self.nullCounts,self.nullCountsPercentage,self.distinctValueData]
+            else:
+                self.dfList = [self.totalCount, self.schemaValidationReport, self.statistics,self.emptyStringData,self.nullCounts,self.nullCountsPercentage,self.distinctValueData]
 
         
         except Exception as e:
@@ -354,6 +368,7 @@ class dataTestAutomation:
         try:
 
             self.dataframe = self.readData()
+            self.dataframe = self.handleInvalidColumns()
             if self.expected_schema is not None:
                 self.schemaResult = self.validateSchema()
                 if self.changeDataType is True:
@@ -416,7 +431,7 @@ options = {
   "sfWarehouse": "WAREHOUSE01",
   "dbtable":"CARDETAILS"
 }
-a = dataTestAutomation(source_type="snowflake",source_path=file_path, options=options)
+a = dataTestAutomation(source_type="snowflake", options=options)
 
 # COMMAND ----------
 
@@ -438,3 +453,23 @@ file_path = "/FileStore/tables/titanic.csv"
 #options = {'header':'true','inferSchema':'false','multiline':'true'}
 options = {'header':'true','inferSchema':'false'}
 df1 = spark.read.format("csv").options(**options).schema(exp_schema).load(file_path)
+
+# COMMAND ----------
+
+#Using snowflakes 
+options = {
+  "sfUrl": "zu11856.central-india.azure.snowflakecomputing.com",
+  "sfUser": "AIRBYTE_USER",
+  "sfPassword": "password",
+  "sfDatabase": "AIRBYTE_DATABASE",
+  "sfSchema": "AIRBYTE_SCHEMA",
+  "sfWarehouse": "COMPUTE_WH",
+  "dbtable":"AIR_QUALITY_DATA___2015_2020_"
+}
+
+#df2 = spark.read.format("snowflake").options(**options).load()
+a = dataTestAutomation(source_type="snowflake", options=options)
+
+# COMMAND ----------
+
+
