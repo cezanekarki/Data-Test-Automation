@@ -612,7 +612,7 @@ from pyspark.sql import SparkSession
 import pandas as pd
 from reportlab.lib.pagesizes import letter, landscape
 from reportlab.lib import colors
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, KeepTogether
 
 # Assuming you already have a SparkSession instance
 spark = SparkSession.builder.getOrCreate()
@@ -638,7 +638,10 @@ def generate_pdf_content(df):
         ("GRID", (0, 0), (-1, -1), 1, colors.black),
     ]))
 
-    return [table]
+    # Wrap the table in a KeepTogether object to prevent splitting within a table
+    content = KeepTogether([table])
+    
+    return content
 
 # Define a function to generate a single PDF for multiple DataFrames
 def generate_multi_dataframe_pdf(dataframes, pdf_filename):
@@ -647,7 +650,7 @@ def generate_multi_dataframe_pdf(dataframes, pdf_filename):
 
     # Generate PDF content for each DataFrame
     for df in dataframes:
-        pdf_content.extend(generate_pdf_content(df))
+        pdf_content.append(generate_pdf_content(df))
 
     # Create the PDF file and add the content
     doc = SimpleDocTemplate(pdf_filename, pagesize=landscape(letter))
@@ -660,7 +663,7 @@ def generate_multi_dataframe_pdf(dataframes, pdf_filename):
 dataframes = [df1, invalid_records]  # List of PySpark DataFrames
 
 # Generate the PDF for the DataFrames
-generate_multi_dataframe_pdf(dataframes, "output1.pdf")
+generate_multi_dataframe_pdf(dataframes, "output3.pdf")
 
 
 # COMMAND ----------
