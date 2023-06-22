@@ -26,12 +26,12 @@ class dataTestAutomation:
 
     def readData(self):
 
-        """
+        '''
         Read data from different sources with configurable parameters.
         
         Returns:
             pyspark.sql.DataFrame: DataFrame containing the data from the specified source.
-        """    
+        ''' 
         try:
             # Read data based on the source type
             reader = spark.read.format(self.source_type)
@@ -51,6 +51,13 @@ class dataTestAutomation:
             raise Exception(f"Error occured while loading the file, error: {str(e)}")
 
     def handleInvalidColumns(self):
+
+        '''
+        Validate the column names by removing "",'.' and invalid characters from the columns.
+
+        Returns:
+            pyspark.sql.DataFrame: Dataframe containing the validated column names.
+        '''
 
         validName = self.dataframe
         for column in self.dataframe.columns:
@@ -115,6 +122,13 @@ class dataTestAutomation:
 
     
     def getCategoricalNumerical(self):
+
+        '''
+        Distinguish the categorical and numerical column, saves the column names in the list.
+        Returns:
+            List: Two different list containing the names of column classified into numerical and categorical columns
+        '''
+
         categorical = []
         numerical_datatype = []
 
@@ -242,6 +256,13 @@ class dataTestAutomation:
         return columnValidationFormat
 
     def duplicateValues(self):
+
+        '''
+        Counts the number of duplicate values in the dataframe.
+
+        Returns:
+            Dict: Dictionary containing the dataframes for the duplicate values and duplicate values count.
+        '''
         
         duplicatesCount = {}
         duplicates = self.dataframe.groupBy(self.dataframe.columns).count().filter(col('count')>1)
@@ -365,22 +386,18 @@ class dataTestAutomation:
           
         
     def main(self):
-        try:
 
-            self.dataframe = self.readData()
-            self.dataframe = self.handleInvalidColumns()
-            if self.expected_schema is not None:
-                self.schemaResult = self.validateSchema()
-                if self.changeDataType is True:
-                    self.dataframe = self.changeSchema()
-            self.categorical, self.numerical = self.getCategoricalNumerical() 
-            self.dataprofiling = self.dataProfiling()
-            self.duplicates = self.duplicateValues()
-            self.report = self.tabularReport()
+        self.dataframe = self.readData()
+        self.dataframe = self.handleInvalidColumns()
+        if self.expected_schema is not None:
+            self.schemaResult = self.validateSchema()
+            if self.changeDataType is True:
+                self.dataframe = self.changeSchema()
+        self.categorical, self.numerical = self.getCategoricalNumerical() 
+        self.dataprofiling = self.dataProfiling()
+        self.duplicates = self.duplicateValues()
+        self.report = self.tabularReport()
 
-        
-        except Exception as e:
-            raise Exception(f"Error occured, error: {str(e)}")
 
 
     
