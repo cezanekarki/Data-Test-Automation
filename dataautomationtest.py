@@ -1,8 +1,11 @@
 # Databricks notebook source
-from pyspark.sql.functions import *
-from pyspark.sql.types import *
-from pyspark.sql.types import NumericType
-import re
+try:
+    from pyspark.sql.functions import *
+    from pyspark.sql.types import *
+    from pyspark.sql.types import NumericType
+    import re
+except Exception as e:
+    raise Exception(f'Error while importing libraries, error {e}')
 
 
 class dataTestAutomation:
@@ -287,6 +290,8 @@ class dataTestAutomation:
         """
 
         try:  
+            print("Raw Data:\n\n")
+            self.dataframe.display(5)
             print("\n\n Total Number of Records\n\n")
             row = Row('Total Number of rows')(self.dataprofiling['Total Number of rows'])
             self.totalCount = spark.createDataFrame([row])
@@ -349,40 +354,40 @@ class dataTestAutomation:
 
 
 
-    def generatePDF(self,output_file="DataReport.pdf", range_validation = None):
+    # def generatePDF(self,output_file="DataReport.pdf", range_validation = None):
 
-        '''
-        Generates the report in the PDF format
-        args:
-            range_validation: Add range validation in report if the parameter is not None. Default value is None.
-            output_file(str): Name for the output file. Default value if DataReport.pdf
+    #     '''
+    #     Generates the report in the PDF format
+    #     args:
+    #         range_validation: Add range validation in report if the parameter is not None. Default value is None.
+    #         output_file(str): Name for the output file. Default value if DataReport.pdf
         
-        '''
-        try:
-            from reportlab.lib.pagesizes import letter
-            from reportlab.platypus import SimpleDocTemplate, Table
-        except Exception as e:
-            raise Exception(f"Error while loading the library, error: {str(e)}")
+    #     '''
+    #     try:
+    #         from reportlab.lib.pagesizes import letter
+    #         from reportlab.platypus import SimpleDocTemplate, Table
+    #     except Exception as e:
+    #         raise Exception(f"Error while loading the library, error: {str(e)}")
             
-        try:
+    #     try:
 
-            for i, df in enumerate(self.dfList):
-                pdf_filename = f"temp_{i+1}.pdf"
-                df.write.csv(pdf_filename)
-                pdf_merger.append(pdf_filename)
+    #         for i, df in enumerate(self.dfList):
+    #             pdf_filename = f"temp_{i+1}.pdf"
+    #             df.write.csv(pdf_filename)
+    #             pdf_merger.append(pdf_filename)
             
-            pdf_merger.write(output_file)
-            pdf_merger.close()
+    #         pdf_merger.write(output_file)
+    #         pdf_merger.close()
 
-        except Exception as e:
-            raise Exception(f"Error occured while generating pdf, error: {str(e)}")
+    #     except Exception as e:
+    #         raise Exception(f"Error occured while generating pdf, error: {str(e)}")
         
-        try:
-            for i in range(len(dfToSave)):
-                temp_filename = f"temp_{i+1}.pdf"
-                os.remove(temp_filename)
-        except Exception as e:
-            raise Exception(f"Could not remove the files from os, error: {str(e)}")
+    #     try:
+    #         for i in range(len(dfToSave)):
+    #             temp_filename = f"temp_{i+1}.pdf"
+    #             os.remove(temp_filename)
+    #     except Exception as e:
+    #         raise Exception(f"Could not remove the files from os, error: {str(e)}")
           
         
     def main(self):
@@ -486,6 +491,18 @@ options = {
 
 #df2 = spark.read.format("snowflake").options(**options).load()
 a = dataTestAutomation(source_type="snowflake", options=options)
+
+# COMMAND ----------
+
+file_path = "/FileStore/tables/titanic.csv"
+#options = {'header':'true','inferSchema':'false','multiline':'true'}
+options = {'header':'true','inferSchema':'false'}
+
+df = spark.read.format("csv").options(**options).load(file_path)
+
+# COMMAND ----------
+
+df.show(10)
 
 # COMMAND ----------
 
