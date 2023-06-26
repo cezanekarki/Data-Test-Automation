@@ -426,8 +426,7 @@ exp_schema = StructType()\
             .add('Age',IntegerType(),True)\
             .add('SibSp',IntegerType(),True)\
             .add('Parch',IntegerType(),True)\
-            .add('Ticket',StringType(),True)\
-            .add('SKJDGAH', FloatType(),True)
+            .add('Ticket',StringType(),True)
 
 a = dataTestAutomation(source_type="csv",source_path=file_path, options=options,expected_schema=exp_schema,changeDataType=True)
 range_validation_format = {
