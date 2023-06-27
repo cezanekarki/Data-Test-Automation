@@ -414,22 +414,30 @@ class readSchema:
         Raises:
             ValueError: If the file format is unsupported.
         """
+        try:
+            file_extension = self.file_path.split('.')[-1].lower()
+            if file_extension.lower() == 'json':
+        
+                    df = pd.read_json(self.file_path)
 
-        file_extension = self.file_path.split('.')[-1].lower()
-        if file_extension.lower() == 'json':
-            df = pd.read_json(self.file_path)
 
-        elif file_extension.lower() == 'csv':
-            df = pd.read_csv(self.file_path)
-        elif file_extension.lower() == 'xlsx':
-            df = pd.ExcelFile(self.file_path, engine = 'openpyxl')
-            if self.sheet is not None:
-                df = df.parse(self.sheet)
+            elif file_extension.lower() == 'csv':
+                df = pd.read_csv(self.file_path)
+            elif file_extension.lower() == 'xlsx':
+                df = pd.ExcelFile(self.file_path, engine = 'openpyxl')
+                if self.sheet is not None:
+                    df = df.parse(self.sheet)
 
-        else:
-            raise ValueError(f"Unsupported file format: {file_extension}")
-
-        self.spark_df = spark.createDataFrame(df)
+            else:
+                raise ValueError(f"Unsupported file format: {file_extension}")
+        
+        except Exception as e:
+            raise Exception(f'Error loading {file_extension} file, error {str(e)}')
+        
+        try:
+            self.spark_df = spark.createDataFrame(df)
+        except Exception as e:
+            raise Exception(f'Error creating Spark Dataframe, error {str(e)}')
 
     def convertDFtoList(self):
     
@@ -444,9 +452,11 @@ class readSchema:
         Returns:
             None
         """
-
-        data = self.spark_df.select(*self.spark_df.columns).collect()
-        self.dict_list = [row.asDict() for row in data]
+        try:
+            data = self.spark_df.select(*self.spark_df.columns).collect()
+            self.dict_list = [row.asDict() for row in data]
+        except Exception as e:
+            raise Exception(f'Error occurred while converting DataFrame to list of dictionaries: {str(e)}')
 
 
     def strctureFormat(self):
@@ -476,7 +486,7 @@ class readSchema:
                             result[key] = value
                         items[self.relatedDataTypeColumn] = result
         except Exception as e:
-            raise Exception(f'Error occured: {str(e)}')
+            raise Exception(f'Error occurred while processing related data for item: {str(e)}')
 
     def get_data_type(self,type_string):
         """
@@ -490,19 +500,23 @@ class readSchema:
         Returns:
             DataType: The corresponding Spark data type.
 
+
         """
-        self.type_mapping = {
-            'string': StringType(),
-            'boolean': BooleanType(),
-            'integer': IntegerType(),
-            'int': IntegerType(),
-            'long': LongType(),
-            'float': FloatType(),
-            'double': DoubleType(),
-            'timestamp': TimestampType(),
-            'date': DateType()
-        }
-        return self.type_mapping.get(type_string, StringType())
+        try:
+            self.type_mapping = {
+                'string': StringType(),
+                'boolean': BooleanType(),
+                'integer': IntegerType(),
+                'int': IntegerType(),
+                'long': LongType(),
+                'float': FloatType(),
+                'double': DoubleType(),
+                'timestamp': TimestampType(),
+                'date': DateType()
+            }
+            return self.type_mapping.get(type_string, StringType())
+        except Exception as e:
+            raise Exception(f'Error occurred while getting data type for {type_string}: {str(e)}')
 
     def get_field_data_type(self):
         """
@@ -518,47 +532,51 @@ class readSchema:
 
         """
         fields = []
-        for item in self.dict_list:
-            field_name = item[self.fieldNameColumn]
-            field_type = item[self.dataTypeColumn]
-            if self.descriptionColumn is not None:
-                field_description = item[self.descriptionColumn]
+        try:
+            for item in self.dict_list:
+                field_name = item[self.fieldNameColumn]
+                field_type = item[self.dataTypeColumn]
+                if self.descriptionColumn is not None:
+                    field_description = item[self.descriptionColumn]
 
-            if field_type in ['array', 'object']:
-                if self.relatedDataTypeColumn is not None:
-                    related_data = item[self.relatedDataTypeColumn]
-                    if isinstance(related_data, dict):
-                        array_fields = []
-                        for subfield_name, subfield_type in related_data.items():
-                            subfield_data_type = self.get_data_type(subfield_type)
-                            array_fields.append(StructField(subfield_name, subfield_data_type, True))
-                        field_data_type = ArrayType(StructType(array_fields))
+                if field_type in ['array', 'object']:
+                    if self.relatedDataTypeColumn is not None:
+                        related_data = item[self.relatedDataTypeColumn]
+                        if isinstance(related_data, dict):
+                            array_fields = []
+                            for subfield_name, subfield_type in related_data.items():
+                                subfield_data_type = self.get_data_type(subfield_type)
+                                array_fields.append(StructField(subfield_name, subfield_data_type, True))
+                            field_data_type = ArrayType(StructType(array_fields))
+                        else:
+                            field_data_type = StringType()
                     else:
                         field_data_type = StringType()
-                else:
-                    field_data_type = StringType()
-            elif field_type in ['map']:
-                if self.relatedDataTypeColumn is not None:
-                    related_data = item[self.relatedDataTypeColumn]
-                    if isinstance(related_data, dict):
-                        array_fields = []
-                        for subfield_name, subfield_type in related_data.items():
-                            subfield_data_type = self.get_data_type(subfield_type)
-                            array_fields.append(StructField(subfield_name, subfield_data_type, True))
-                        field_data_type = MapType(StructType(array_fields))
+                elif field_type in ['map']:
+                    if self.relatedDataTypeColumn is not None:
+                        related_data = item[self.relatedDataTypeColumn]
+                        if isinstance(related_data, dict):
+                            array_fields = []
+                            for subfield_name, subfield_type in related_data.items():
+                                subfield_data_type = self.get_data_type(subfield_type)
+                                array_fields.append(StructField(subfield_name, subfield_data_type, True))
+                            field_data_type = MapType(StructType(array_fields))
+                        else:
+                            field_data_type = MapType(StringType(),StringType())
                     else:
                         field_data_type = MapType(StringType(),StringType())
+
                 else:
-                    field_data_type = MapType(StringType(),StringType())
+                    field_data_type = self.get_data_type(field_type)
+                if self.descriptionColumn is not None:
+                    field = StructField(field_name, field_data_type, nullable=True, metadata={'description': field_description})
+                else:
+                    field = StructField(field_name, field_data_type, nullable=True, metadata={'description': ''})
 
-            else:
-                field_data_type = self.get_data_type(field_type)
-            if self.descriptionColumn is not None:
-                field = StructField(field_name, field_data_type, nullable=True, metadata={'description': field_description})
-            else:
-                field = StructField(field_name, field_data_type, nullable=True, metadata={'description': ''})
-
-            fields.append(field)
+                fields.append(field)
+        except Exception as e:
+            raise Exception(f'Error occurred while getting field data types: {str(e)}')
+        
         return fields
 
 
