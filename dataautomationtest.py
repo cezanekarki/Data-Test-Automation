@@ -348,46 +348,6 @@ class dataTestAutomation:
         
         except Exception as e:
             raise Exception(f"Error occured while generating report, error: {str(e)}")
-
-
-
-
-
-
-    # def generatePDF(self,output_file="DataReport.pdf", range_validation = None):
-
-    #     '''
-    #     Generates the report in the PDF format
-    #     args:
-    #         range_validation: Add range validation in report if the parameter is not None. Default value is None.
-    #         output_file(str): Name for the output file. Default value if DataReport.pdf
-        
-    #     '''
-    #     try:
-    #         from reportlab.lib.pagesizes import letter
-    #         from reportlab.platypus import SimpleDocTemplate, Table
-    #     except Exception as e:
-    #         raise Exception(f"Error while loading the library, error: {str(e)}")
-            
-    #     try:
-
-    #         for i, df in enumerate(self.dfList):
-    #             pdf_filename = f"temp_{i+1}.pdf"
-    #             df.write.csv(pdf_filename)
-    #             pdf_merger.append(pdf_filename)
-            
-    #         pdf_merger.write(output_file)
-    #         pdf_merger.close()
-
-    #     except Exception as e:
-    #         raise Exception(f"Error occured while generating pdf, error: {str(e)}")
-        
-    #     try:
-    #         for i in range(len(dfToSave)):
-    #             temp_filename = f"temp_{i+1}.pdf"
-    #             os.remove(temp_filename)
-    #     except Exception as e:
-    #         raise Exception(f"Could not remove the files from os, error: {str(e)}")
           
         
     def main(self):
@@ -404,9 +364,243 @@ class dataTestAutomation:
         self.report = self.tabularReport()
 
 
+   
 
+
+
+# COMMAND ----------
+
+try:
+    import pandas as pd
+    from pandas import ExcelFile
+    from pyspark.sql import SparkSession
+    from pyspark.sql.types import *
+except Exception as e:
+    raise Exception(f'Error import libraries, error {str(e)}')
+
+class readSchema:
+
+    def __init__(self,file_path,sheet = None, fieldNameColumn = None, dataTypeColumn = None, relatedDataTypeColumn = None ,descriptionColumn = None):
+      
+        """
+        Initialize the class instance.
+
+        Args:
+            file_path (str): The path to the file.
+            sheet (str, optional): The name of the sheet (if using an Excel file). Defaults to None.
+            fieldNameColumn (str, optional): The column name for the field names. Defaults to None.
+            dataTypeColumn (str, optional): The column name for the data types. Defaults to None.
+            relatedDataTypeColumn (str, optional): The column name for the related data types. Defaults to None.
+            descriptionColumn (str, optional): The column name for the descriptions. Defaults to None.
+        """
+
+        self.spark_df = None
+        self.dict_list = None
+        self.schema = None
+        self.sheet = sheet
+        self.file_path = file_path
+        self.fieldNameColumn = fieldNameColumn
+        self.dataTypeColumn = dataTypeColumn
+        self.relatedDataTypeColumn = relatedDataTypeColumn
+        self.descriptionColumn = descriptionColumn
+
+
+
+    def readFile(self):
+      
+        """
+        Read the file and create a Spark DataFrame.
+
+        Raises:
+            ValueError: If the file format is unsupported.
+        """
+
+        file_extension = self.file_path.split('.')[-1].lower()
+        if file_extension.lower() == 'json':
+            df = pd.read_json(self.file_path)
+
+        elif file_extension.lower() == 'csv':
+            df = pd.read_csv(self.file_path)
+        elif file_extension.lower() == 'xlsx':
+            df = pd.ExcelFile(self.file_path, engine = 'openpyxl')
+            if self.sheet is not None:
+                df = df.parse(self.sheet)
+
+        else:
+            raise ValueError(f"Unsupported file format: {file_extension}")
+
+        self.spark_df = spark.createDataFrame(df)
+
+    def convertDFtoList(self):
     
+        """
+        Convert the Spark DataFrame to a list of dictionaries.
 
+        This method collects the data from the Spark DataFrame and converts each row into a dictionary.
+
+        Note:
+            This method assumes that the `spark_df` attribute is already set with a valid Spark DataFrame.
+
+        Returns:
+            None
+        """
+
+        data = self.spark_df.select(*self.spark_df.columns).collect()
+        self.dict_list = [row.asDict() for row in data]
+
+
+    def strctureFormat(self):
+    
+        """
+        Modify the structure format of related data types in the dictionary list.
+
+        This method checks for specific characters and formats the related data types accordingly.
+
+        Note:
+            This method assumes that the `dict_list` attribute is already set with a list of dictionaries. The dict_list is created by convertDFtoList() method.
+            It also assumes that the `relatedDataTypeColumn` attribute is set with the column name for related data types which is defined by the user during the initialization of the class.
+
+        Raises:
+            Exception: If an error occurs during the modification process.
+        """
+        try:
+            for items in self.dict_list:
+                if '{' in items[self.relatedDataTypeColumn] or '}' in items[self.relatedDataTypeColumn]:
+                    if '"' not in items[self.relatedDataTypeColumn]:
+                        string = items[self.relatedDataTypeColumn].strip().replace('\n', '').replace(' ', '')
+                        string = string.strip('{}')
+                        pairs = string.split(',')
+                        result = {}
+                        for pair in pairs:
+                            key, value = pair.split(':')
+                            result[key] = value
+                        items[self.relatedDataTypeColumn] = result
+        except Exception as e:
+            raise Exception(f'Error occured: {str(e)}')
+
+    def get_data_type(self,type_string):
+        """
+        Get the corresponding Spark data type based on the input type string.
+
+        This method uses a mapping dictionary to associate the input type string with the appropriate Spark data type.
+
+        Args:
+            type_string (str): The input type string.
+
+        Returns:
+            DataType: The corresponding Spark data type.
+
+        """
+        self.type_mapping = {
+            'string': StringType(),
+            'boolean': BooleanType(),
+            'integer': IntegerType(),
+            'int': IntegerType(),
+            'long': LongType(),
+            'float': FloatType(),
+            'double': DoubleType(),
+            'timestamp': TimestampType(),
+            'date': DateType()
+        }
+        return self.type_mapping.get(type_string, StringType())
+
+    def get_field_data_type(self):
+        """
+        Get the field data types based on the provided column information.
+
+        This method iterates over the `dict_list` attribute and retrieves the field name, field type, and related data type (if applicable) for each column. It uses the `get_data_type` method to get the corresponding Spark data type.
+
+        Returns:
+            list: A list of StructField objects representing the fields with their data types.
+
+        Note:
+            This method assumes that the necessary attributes (`dict_list`, `fieldNameColumn`, `dataTypeColumn`, `descriptionColumn`, and `relatedDataTypeColumn`) are properly set.
+
+        """
+        fields = []
+        for item in self.dict_list:
+            field_name = item[self.fieldNameColumn]
+            field_type = item[self.dataTypeColumn]
+            if self.descriptionColumn is not None:
+                field_description = item[self.descriptionColumn]
+
+            if field_type in ['array', 'object']:
+                if self.relatedDataTypeColumn is not None:
+                    related_data = item[self.relatedDataTypeColumn]
+                    if isinstance(related_data, dict):
+                        array_fields = []
+                        for subfield_name, subfield_type in related_data.items():
+                            subfield_data_type = self.get_data_type(subfield_type)
+                            array_fields.append(StructField(subfield_name, subfield_data_type, True))
+                        field_data_type = ArrayType(StructType(array_fields))
+                    else:
+                        field_data_type = StringType()
+                else:
+                    field_data_type = StringType()
+            elif field_type in ['map']:
+                if self.relatedDataTypeColumn is not None:
+                    related_data = item[self.relatedDataTypeColumn]
+                    if isinstance(related_data, dict):
+                        array_fields = []
+                        for subfield_name, subfield_type in related_data.items():
+                            subfield_data_type = self.get_data_type(subfield_type)
+                            array_fields.append(StructField(subfield_name, subfield_data_type, True))
+                        field_data_type = MapType(StructType(array_fields))
+                    else:
+                        field_data_type = MapType(StringType(),StringType())
+                else:
+                    field_data_type = MapType(StringType(),StringType())
+
+            else:
+                field_data_type = self.get_data_type(field_type)
+            if self.descriptionColumn is not None:
+                field = StructField(field_name, field_data_type, nullable=True, metadata={'description': field_description})
+            else:
+                field = StructField(field_name, field_data_type, nullable=True, metadata={'description': ''})
+
+            fields.append(field)
+        return fields
+
+
+    def spark_schema(self):
+        """
+        Generate the Spark schema based on the field data types.
+
+        This method calls the `get_field_data_type` method to retrieve the field data types and constructs the Spark schema using the `StructType` class.
+
+        Returns:
+            StructType: The Spark schema generated from the field data types.
+
+        Note:
+            This method assumes that the `get_field_data_type` method has been properly implemented.
+
+        """
+        fields = self.get_field_data_type()
+        self.schema = StructType(fields)
+        return self.schema
+
+    def createSchema(self):
+        """
+        Create the schema for the Spark DataFrame.
+
+        This method performs the following steps:
+        1. Converts the Spark DataFrame to a list of dictionaries using the `convertDFtoList` method.
+        2. If the `relatedDataTypeColumn` is provided, it formats the related data types using the `strctureFormat` method.
+        3. Generates the Spark schema using the `spark_schema` method.
+        4. Returns the generated schema.
+
+        Returns:
+            StructType: The schema generated for the Spark DataFrame.
+
+        Note:
+            This method assumes that the `convertDFtoList` and `spark_schema` methods have been properly implemented.
+
+        """
+        self.convertDFtoList()
+        if self.relatedDataTypeColumn is not None:
+            self.strctureFormat()
+        self.schema = self.spark_schema()
+        return self.schema
 
 
 # COMMAND ----------
