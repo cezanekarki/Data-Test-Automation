@@ -85,7 +85,8 @@ class dataTestAutomation:
             validation_result = {"DataType Mismatched": [], "Missing Columns": [], "Extra Columns": []}
             actual_schema = self.dataframe.schema
             for field in self.expected_schema.fields:
-                if field.name in actual_schema.fieldNames():
+                actual_schema_fields = [data.lower() for data in actual_schema.fieldNames()]
+                if field.name.lower() in actual_schema_fields:
                     actual_field = actual_schema[field.name]
                     if actual_field.dataType != field.dataType:     #Check for mismatch datatype
                         validation_result["DataType Mismatched"].append(field.name)     
@@ -291,7 +292,7 @@ class dataTestAutomation:
 
         try:  
             print("Raw Data:\n\n")
-            self.dataframe.display(5)
+            display(self.dataframe.limit(5))
             print("\n\n Total Number of Records\n\n")
             row = Row('Total Number of rows')(self.dataprofiling['Total Number of rows'])
             self.totalCount = spark.createDataFrame([row])
@@ -304,14 +305,16 @@ class dataTestAutomation:
                 schemaValidationData = [(key,value) for key,value in self.schemaResult.items()]
                 self.schemaValidationReport = spark.createDataFrame(schemaValidationData,['Validation Name','Result'])
                 self.schemaValidationReport.display()
-            print("\n\n Null Counts:\n\n")
+            print("\n\n Null Counts and Percentage:\n\n")
             nullCountsData = [(column, count )for column, count in self.dataprofiling['nullCounts'].items()]
             self.nullCounts = spark.createDataFrame(nullCountsData,schema=['Column','Count'])
-            self.nullCounts.display()
-            print("\n\n Null Counts Percentage:\n\n")
+            #self.nullCounts.display()
+            # print("\n\n Null Counts Percentage:\n\n")
             nullCountsPercentageData = [(column, count )for column, count in self.dataprofiling['null count percentage'].items()]
             self.nullCountsPercentage = spark.createDataFrame(nullCountsPercentageData,schema=['Column','Percentage'])
-            self.nullCountsPercentage.display()
+            #self.nullCountsPercentage.display()
+            self.nullCountJoin = self.nullCounts.join(self.nullCountsPercentage,'Column','inner')
+            self.nullCountJoin.display()
             print("\n\n Empty String:\n\n")
             emptyStringData = [(column, count) for column, count in self.dataprofiling['empty_string'].items()]
             self.emptyStringData = spark.createDataFrame(emptyStringData,schema=['Column','Count'])
@@ -380,7 +383,7 @@ except Exception as e:
 
 class readSchema:
 
-    def __init__(self,file_path,sheet = None, fieldNameColumn = None, dataTypeColumn = None, relatedDataTypeColumn = None ,descriptionColumn = None):
+    def __init__(self,file_path,fieldNameColumn, dataTypeColumn,sheet = None, relatedDataTypeColumn = None ,descriptionColumn = None):
       
         """
         Initialize the class instance.
@@ -388,8 +391,8 @@ class readSchema:
         Args:
             file_path (str): The path to the file.
             sheet (str, optional): The name of the sheet (if using an Excel file). Defaults to None.
-            fieldNameColumn (str, optional): The column name for the field names. Defaults to None.
-            dataTypeColumn (str, optional): The column name for the data types. Defaults to None.
+            fieldNameColumn (str, optional): The column name for the field names.
+            dataTypeColumn (str, optional): The column name for the data types. 
             relatedDataTypeColumn (str, optional): The column name for the related data types. Defaults to None.
             descriptionColumn (str, optional): The column name for the descriptions. Defaults to None.
         """
@@ -459,7 +462,7 @@ class readSchema:
             raise Exception(f'Error occurred while converting DataFrame to list of dictionaries: {str(e)}')
 
 
-    def strctureFormat(self):
+    def structureFormat(self):
     
         """
         Modify the structure format of related data types in the dictionary list.
@@ -505,6 +508,7 @@ class readSchema:
         try:
             self.type_mapping = {
                 'string': StringType(),
+                'str':StringType(),
                 'boolean': BooleanType(),
                 'integer': IntegerType(),
                 'int': IntegerType(),
@@ -545,7 +549,7 @@ class readSchema:
                         if isinstance(related_data, dict):
                             array_fields = []
                             for subfield_name, subfield_type in related_data.items():
-                                subfield_data_type = self.get_data_type(subfield_type)
+                                subfield_data_type = self.get_data_type(subfield_type.lower())
                                 array_fields.append(StructField(subfield_name, subfield_data_type, True))
                             field_data_type = ArrayType(StructType(array_fields))
                         else:
@@ -558,7 +562,7 @@ class readSchema:
                         if isinstance(related_data, dict):
                             array_fields = []
                             for subfield_name, subfield_type in related_data.items():
-                                subfield_data_type = self.get_data_type(subfield_type)
+                                subfield_data_type = self.get_data_type(subfield_type.lower)
                                 array_fields.append(StructField(subfield_name, subfield_data_type, True))
                             field_data_type = MapType(StructType(array_fields))
                         else:
@@ -567,7 +571,7 @@ class readSchema:
                         field_data_type = MapType(StringType(),StringType())
 
                 else:
-                    field_data_type = self.get_data_type(field_type)
+                    field_data_type = self.get_data_type(field_type.lower())
                 if self.descriptionColumn is not None:
                     field = StructField(field_name, field_data_type, nullable=True, metadata={'description': field_description})
                 else:
@@ -616,10 +620,18 @@ class readSchema:
         """
         self.convertDFtoList()
         if self.relatedDataTypeColumn is not None:
-            self.strctureFormat()
+            self.structureFormat()
         self.schema = self.spark_schema()
         return self.schema
 
+
+# COMMAND ----------
+
+filePathSchema = '/dbfs/FileStore/tables/schema.csv'
+schema_reader = readSchema(filePathSchema, fieldNameColumn = 'Field',dataTypeColumn='Type')
+schema_reader.readFile()
+loaded_schema = schema_reader.createSchema()
+loaded_schema
 
 # COMMAND ----------
 
@@ -629,42 +641,27 @@ from pyspark.sql.types import *
 file_path = "/FileStore/tables/titanic.csv"
 #options = {'header':'true','inferSchema':'false','multiline':'true'}
 options = {'header':'true','inferSchema':'false'}
-exp_schema = StructType()\
-            .add('PassengerId',IntegerType(),True)\
-            .add('Survived',IntegerType(),True)\
-            .add('Pclass',IntegerType(),True)\
-            .add('Name',StringType(),True)\
-            .add('Sex',StringType(),True)\
-            .add('Age',IntegerType(),True)\
-            .add('SibSp',IntegerType(),True)\
-            .add('Parch',IntegerType(),True)\
-            .add('Ticket',StringType(),True)
+# exp_schema = StructType()\
+#             .add('PassengerId',IntegerType(),True)\
+#             .add('Survived',IntegerType(),True)\
+#             .add('Pclass',IntegerType(),True)\
+#             .add('Name',StringType(),True)\
+#             .add('Sex',StringType(),True)\
+#             .add('Age',IntegerType(),True)\
+#             .add('SibSp',IntegerType(),True)\
+#             .add('Parch',IntegerType(),True)\
+#             .add('Ticket',StringType(),True)
 
-a = dataTestAutomation(source_type="csv",source_path=file_path, options=options,expected_schema=exp_schema,changeDataType=True)
-range_validation_format = {
-    "Age":(20,60)
-}
-a.run_range_validations(range_validation_format)
-column_rules = {
-    "Ticket": r'^\d{6}$',
-    "Embarked":r'S'
-}
-invalid_data = a.validateColumnFormat(column_rules=column_rules)
-
-# COMMAND ----------
-
-#Using snowflakes 
-
-options = {
-  "sfUrl": "ac30669.ap-south-1.aws.snowflakecomputing.com",
-  "sfUser": "rabin",
-  "sfPassword": "Admin123",
-  "sfDatabase": "NEWDB",
-  "sfSchema": "NEWSCHEMA",
-  "sfWarehouse": "WAREHOUSE01",
-  "dbtable":"CARDETAILS"
-}
-a = dataTestAutomation(source_type="snowflake", options=options)
+a = dataTestAutomation(source_type="csv",source_path=file_path, options=options,expected_schema=loaded_schema,changeDataType=True)
+# range_validation_format = {
+#     "Age":(20,60)
+# }
+# a.run_range_validations(range_validation_format)
+# column_rules = {
+#     "Ticket": r'^\d{6}$',
+#     "Embarked":r'S'
+# }
+# invalid_data = a.validateColumnFormat(column_rules=column_rules)
 
 # COMMAND ----------
 
@@ -702,18 +699,6 @@ options = {
 
 #df2 = spark.read.format("snowflake").options(**options).load()
 a = dataTestAutomation(source_type="snowflake", options=options)
-
-# COMMAND ----------
-
-file_path = "/FileStore/tables/titanic.csv"
-#options = {'header':'true','inferSchema':'false','multiline':'true'}
-options = {'header':'true','inferSchema':'false'}
-
-df = spark.read.format("csv").options(**options).load(file_path)
-
-# COMMAND ----------
-
-df.show(10)
 
 # COMMAND ----------
 
