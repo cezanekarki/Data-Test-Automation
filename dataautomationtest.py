@@ -104,25 +104,62 @@ class dataTestAutomation:
             raise Exception(f"Error occured while validating schema, error: {str(e)}")
 
     
-    def changeSchema(self):
 
+    def changeSchema(self):
         """
         Change the current schema to the expected schema provided.
         
         Returns:
             pyspark.sql.DataFrame: DataFrame containing the datatype of the expected schema.
-
         """
         try:
             actual_schema = self.dataframe.schema
-            schemaValidatedDF = self.dataframe
+            schema_validated_df = self.dataframe
             for field in self.expected_schema.fields:
                 if field.name in actual_schema.fieldNames():
-                    schemaValidatedDF = schemaValidatedDF.withColumn(field.name,col(field.name).cast(field.dataType)) #cast the data type of the schema
-            return schemaValidatedDF 
-        
+                    actual_field = actual_schema[field.name]
+                    expected_field = field.dataType
+                    if isinstance(expected_field, ArrayType):
+                        schema_validated_df = self.convert_array_type(schema_validated_df, field.name, actual_field, expected_field)
+                    elif isinstance(expected_field, MapType):
+                        schema_validated_df = self.convert_map_type(schema_validated_df, field.name, actual_field, expected_field)
+                    else:
+                        schema_validated_df = schema_validated_df.withColumn(field.name, col(field.name).cast(expected_field))
+            return schema_validated_df
         except Exception as e:
-            raise Exception(f"Error occured while changing the data type, error: {str(e)}")
+            raise Exception(f"Error occurred while changing the data type: {str(e)}")
+
+    def convert_array_type(self,dataframe, column_name, actual_field, expected_field):
+        if isinstance(actual_field.dataType, StringType):
+            dataframe = dataframe.withColumn(column_name, from_json(col(column_name), expected_field))
+        elif isinstance(actual_field.dataType, ArrayType) and isinstance(actual_field.elementType, StructType):
+            dataframe = self.convert_struct_type(dataframe, column_name, actual_field.elementType, expected_field.elementType)
+        else:
+            raise Exception(f"Invalid data type for column {column_name}")
+        return dataframe
+
+    def convert_map_type(self,dataframe, column_name, actual_field, expected_field):
+        if isinstance(actual_field.dataType, StringType):
+            dataframe = dataframe.withColumn(column_name, from_json(col(column_name), expected_field))
+        elif isinstance(actual_field.dataType, MapType) and isinstance(actual_field.valueType, StructType):
+            dataframe = self.convert_struct_type(dataframe, column_name, actual_field.valueType, expected_field.valueType)
+        else:
+            raise Exception(f"Invalid data type for column {column_name}")
+        return dataframe
+
+    def convert_struct_type(self,dataframe, column_name, actual_field, expected_field):
+        for field in expected_field.fields:
+            if field.name in actual_field.fieldNames():
+                actual_nested_field = actual_field[field.name]
+                expected_nested_field = field.dataType
+                if isinstance(expected_nested_field, ArrayType):
+                    dataframe = convert_array_type(dataframe, f"{column_name}.{field.name}", actual_nested_field, expected_nested_field)
+                elif isinstance(expected_nested_field, MapType):
+                    dataframe = convert_map_type(dataframe, f"{column_name}.{field.name}", actual_nested_field, expected_nested_field)
+                else:
+                    dataframe = dataframe.withColumn(f"{column_name}.{field.name}", col(f"{column_name}.{field.name}").cast(expected_nested_field))
+        return dataframe
+
 
     
     def getCategoricalNumerical(self):
@@ -141,10 +178,12 @@ class dataTestAutomation:
             column_data_type = self.dataframe.schema[i].dataType
             if isinstance(column_data_type, (IntegerType, DoubleType, FloatType, LongType, DecimalType, NumericType, ShortType,ByteType)):
                 numerical_datatype.append(i)
-            else:
+            elif isinstance(column_data_type,StringType):
                 distinct_values = self.dataframe.agg(countDistinct(i)).collect()[0][0]
                 if distinct_values < 12:
                     categorical.append(i)
+        
+
         
         return categorical, numerical_datatype
 
@@ -167,11 +206,14 @@ class dataTestAutomation:
             stasticalDescription = {}
             distinctValue = {}
             for columnNames in self.dataframe.columns:
-                nullCounts[columnNames] = self.dataframe.select(col(columnNames)).filter(col(columnNames).isNull()).count() #count of null value
-                nullCountsPercentage[columnNames] = f'{((nullCounts[columnNames])/recordCounts)*100}%'    #percentage of null values
-                emptyString[columnNames] = self.dataframe.filter(col(columnNames) == "").count()    #count of empty strings
+                column_data_type = self.dataframe.schema[columnNames].dataType
+                if not isinstance(column_data_type,(ArrayType,MapType)):
+                    nullCounts[columnNames] = self.dataframe.select(col(columnNames)).filter(col(columnNames).isNull()).count() #count of null value
+                    nullCountsPercentage[columnNames] = f'{((nullCounts[columnNames])/recordCounts)*100}%'    #percentage of null values
+                    emptyString[columnNames] = self.dataframe.filter(col(columnNames) == "").count()    #count of empty strings
             
             stasticalDescription = {colName: self.dataframe.select(col(colName)).describe().toPandas().set_index('summary').to_dict()[colName] for colName in self.numerical}
+            
 
             distinctValue = {colName: self.dataframe.select(col(colName)).distinct() for colName in self.categorical}
 
@@ -269,7 +311,10 @@ class dataTestAutomation:
         '''
         
         duplicatesCount = {}
-        duplicates = self.dataframe.groupBy(self.dataframe.columns).count().filter(col('count')>1)
+        for columnNames in self.dataframe.columns:
+            column_data_type = self.dataframe.schema[columnNames].dataType
+            if not isinstance(column_data_type,MapType):
+                duplicates = self.dataframe.groupBy(self.dataframe[columnNames]).count().filter(col('count')>1)  
         duplicatesValuesCount = spark.createDataFrame([Row(count=duplicates.count())], schema=['Duplicates Count'])
         if duplicates.count() > 1:
             duplicatesValues = duplicates.drop('count')
@@ -631,9 +676,8 @@ class readSchema:
 
 # COMMAND ----------
 
-filePathSchema = '/dbfs/FileStore/CF_Guided_Project.xlsx'
-sheet_name = 'Target Domain Model'
-schema_reader = readSchema(file_path=filePathSchema,sheet=sheet_name,fieldNameColumn='Field',dataTypeColumn='Type',descriptionColumn='Description',relatedDataTypeColumn='Related')
+filePathSchema = '/dbfs/FileStore/schema.xlsx'
+schema_reader = readSchema(file_path=filePathSchema,fieldNameColumn='Field',dataTypeColumn='Type',descriptionColumn='Description')
 #schema_reader = readSchema(filePathSchema, fieldNameColumn = 'Field',dataTypeColumn='Type')
 schema_reader.readFile()
 loaded_schema = schema_reader.createSchema()
@@ -643,10 +687,10 @@ loaded_schema
 
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
-#file_path = "/FileStore/tables/sample1.json"
-file_path = "/FileStore/data.csv"
+file_path = "/FileStore/New_data.csv"
+#file_path = "/FileStore/data.csv"
 #options = {'header':'true','inferSchema':'false','multiline':'true'}
-options = {'header':'true','inferSchema':'false'}
+options = {'header':'true','inferSchema':'false','quotes':"'",'delimiter':',',"escape": '"'}
 # exp_schema = StructType()\
 #             .add('PassengerId',IntegerType(),True)\
 #             .add('Survived',IntegerType(),True)\
@@ -658,7 +702,7 @@ options = {'header':'true','inferSchema':'false'}
 #             .add('Parch',IntegerType(),True)\
 #             .add('Ticket',StringType(),True)
 
-a = dataTestAutomation(source_type="csv",source_path=file_path, options=options,expected_schema=loaded_schema,changeDataType=False)
+a = dataTestAutomation(source_type="csv",source_path=file_path,expected_schema=loaded_schema,options=options,changeDataType=True)
 # range_validation_format = {
 #     "Age":(20,60)
 # }
@@ -671,27 +715,6 @@ a = dataTestAutomation(source_type="csv",source_path=file_path, options=options,
 #     "Embarked":r'S'
 # }
 # invalid_data = a.validateColumnFormat(column_rules=column_rules)
-
-# COMMAND ----------
-
-exp_schema = StructType()\
-            .add('PassengerId',StringType(),True)\
-            .add('Survived',IntegerType(),True)\
-            .add('Pclass',IntegerType(),True)\
-            .add('Name',StringType(),True)\
-            .add('Sex',StringType(),True)\
-            .add('Age',IntegerType(),True)\
-            .add('SibSp',IntegerType(),True)\
-            .add('Parch',IntegerType(),True)\
-            .add('Ticket',StringType(),True)\
-            .add('Fare',FloatType(),True)\
-            .add('Cabin',StringType(),True)\
-            .add('Embarked',StringType(),True)
-
-file_path = "/FileStore/tables/titanic.csv"
-#options = {'header':'true','inferSchema':'false','multiline':'true'}
-options = {'header':'true','inferSchema':'false'}
-df1 = spark.read.format("csv").options(**options).schema(exp_schema).load(file_path)
 
 # COMMAND ----------
 
