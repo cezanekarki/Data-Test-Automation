@@ -398,7 +398,6 @@ class readSchema:
         """
 
         self.spark_df = None
-        self.dict_list = None
         self.schema = None
         self.sheet = sheet
         self.file_path = file_path
@@ -427,9 +426,11 @@ class readSchema:
             elif file_extension.lower() == 'csv':
                 df = pd.read_csv(self.file_path)
             elif file_extension.lower() == 'xlsx':
-                df = pd.ExcelFile(self.file_path, engine = 'openpyxl')
                 if self.sheet is not None:
+                    df = pd.ExcelFile(self.file_path, engine = 'openpyxl')
                     df = df.parse(self.sheet)
+                else:
+                    df = pd.read_excel(self.file_path)
 
             else:
                 raise ValueError(f"Unsupported file format: {file_extension}")
@@ -458,6 +459,7 @@ class readSchema:
         try:
             data = self.spark_df.select(*self.spark_df.columns).collect()
             self.dict_list = [row.asDict() for row in data]
+            return self.dict_list
         except Exception as e:
             raise Exception(f'Error occurred while converting DataFrame to list of dictionaries: {str(e)}')
 
@@ -478,16 +480,17 @@ class readSchema:
         """
         try:
             for items in self.dict_list:
-                if '{' in items[self.relatedDataTypeColumn] or '}' in items[self.relatedDataTypeColumn]:
-                    if '"' not in items[self.relatedDataTypeColumn]:
-                        string = items[self.relatedDataTypeColumn].strip().replace('\n', '').replace(' ', '')
-                        string = string.strip('{}')
-                        pairs = string.split(',')
-                        result = {}
-                        for pair in pairs:
-                            key, value = pair.split(':')
-                            result[key] = value
-                        items[self.relatedDataTypeColumn] = result
+                if items[self.relatedDataTypeColumn] is not None:
+                    if '{' in items[self.relatedDataTypeColumn] or '}' in items[self.relatedDataTypeColumn]:
+                        if '"' not in items[self.relatedDataTypeColumn]:
+                            string = items[self.relatedDataTypeColumn].strip().replace('\n', '').replace(' ', '')
+                            string = string.strip('{}')
+                            pairs = string.split(',')
+                            result = {}
+                            for pair in pairs:
+                                key, value = pair.split(':')
+                                result[key] = value
+                            items[self.relatedDataTypeColumn] = result
         except Exception as e:
             raise Exception(f'Error occurred while processing related data for item: {str(e)}')
 
@@ -620,6 +623,7 @@ class readSchema:
         """
         self.convertDFtoList()
         if self.relatedDataTypeColumn is not None:
+            print(self.relatedDataTypeColumn)
             self.structureFormat()
         self.schema = self.spark_schema()
         return self.schema
@@ -627,8 +631,10 @@ class readSchema:
 
 # COMMAND ----------
 
-filePathSchema = '/dbfs/FileStore/tables/schema.csv'
-schema_reader = readSchema(filePathSchema, fieldNameColumn = 'Field',dataTypeColumn='Type')
+filePathSchema = '/dbfs/FileStore/CF_Guided_Project.xlsx'
+sheet_name = 'Target Domain Model'
+schema_reader = readSchema(file_path=filePathSchema,sheet=sheet_name,fieldNameColumn='Field',dataTypeColumn='Type',descriptionColumn='Description',relatedDataTypeColumn='Related')
+#schema_reader = readSchema(filePathSchema, fieldNameColumn = 'Field',dataTypeColumn='Type')
 schema_reader.readFile()
 loaded_schema = schema_reader.createSchema()
 loaded_schema
@@ -638,7 +644,7 @@ loaded_schema
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
 #file_path = "/FileStore/tables/sample1.json"
-file_path = "/FileStore/tables/titanic.csv"
+file_path = "/FileStore/data.csv"
 #options = {'header':'true','inferSchema':'false','multiline':'true'}
 options = {'header':'true','inferSchema':'false'}
 # exp_schema = StructType()\
@@ -652,11 +658,14 @@ options = {'header':'true','inferSchema':'false'}
 #             .add('Parch',IntegerType(),True)\
 #             .add('Ticket',StringType(),True)
 
-a = dataTestAutomation(source_type="csv",source_path=file_path, options=options,expected_schema=loaded_schema,changeDataType=True)
+a = dataTestAutomation(source_type="csv",source_path=file_path, options=options,expected_schema=loaded_schema,changeDataType=False)
 # range_validation_format = {
 #     "Age":(20,60)
 # }
-# a.run_range_validations(range_validation_format)
+# range_val = a.run_range_validations(range_validation_format)
+# print('\n\n Range Validations Results: \n\n')
+# print(range_val)
+# print('\n\n')
 # column_rules = {
 #     "Ticket": r'^\d{6}$',
 #     "Embarked":r'S'
