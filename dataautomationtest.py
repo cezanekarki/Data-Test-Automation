@@ -311,14 +311,10 @@ class dataTestAutomation:
         '''
         
         duplicatesCount = {}
-        for columnNames in self.dataframe.columns:
-            column_data_type = self.dataframe.schema[columnNames].dataType
-            if not isinstance(column_data_type,MapType):
-                duplicates = self.dataframe.groupBy(self.dataframe[columnNames]).count().filter(col('count')>1) 
-            duplicates.display()
-        duplicatesValuesCount = spark.createDataFrame([Row(count=duplicates.count())], schema=['Duplicates Count'])
+        duplicate_rows_df = dataframe.groupBy(dataframe.columns).count().where(col("count") > 1)
+        duplicatesValuesCount = spark.createDataFrame([Row(count=duplicate_rows_df.count())], schema=['Duplicates Count'])
         if duplicates.count() > 1:
-            duplicatesValues = duplicates.drop('count')
+            duplicatesValues = duplicate_rows_df.drop('count')
             duplicatesCount = {'values': duplicatesValues, 'count': duplicatesValuesCount}
         else:
             duplicatesCount = {'count': duplicatesValuesCount}
@@ -688,12 +684,88 @@ loaded_schema
 
 # COMMAND ----------
 
+file_path = 'https://healthdata.gov/resource/g62h-syeh.json'
+spark.sparkContext.addFile(file_path)
+
+# COMMAND ----------
+
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col
+import matplotlib.pyplot as plt
+import math
+
+# Create a SparkSession
+spark = SparkSession.builder.getOrCreate()
+
+def plot_trend_analysis(df, date_column, trend_columns):
+    df = df.withColumn(date_column, df[date_column].cast('date'))
+    
+    for column in trend_columns:
+        if not isinstance(df.schema[column].dataType, (int, float)):
+            df = df.withColumn(column,df[column].cast('int'))
+    
+    group_columns = [col(column) for column in df.columns if column != date_column]
+    agg_columns = [col(column).alias(column) for column in trend_columns]
+    grouped_data = df.groupBy(date_column, *group_columns).agg(*agg_columns)
+    selected_columns = [col(column) for column in trend_columns]
+    selected_columns.append(col(date_column))
+    selected_df = df.select(*selected_columns)
+    groupby = selected_df.groupBy(date_column)
+    agg_exprs = [min(column).alias("min_" + column) for column in trend_columns] + \
+                [max(column).alias("max_" + column) for column in trend_columns] + \
+                [avg(column).alias("avg_" + column) for column in trend_columns] + \
+                [stddev(column).alias("stddev_" + column) for column in trend_columns]
+    description_df = groupby.agg(*agg_exprs)
+    ordered_df = description_df.orderBy(date_column)
+    ordered_df.display()
+    
+    pandas_df = grouped_data.toPandas()
+    pandas_df.set_index(date_column, inplace=True)
+    
+    num_trend_columns = len(trend_columns)
+    num_rows = math.ceil(math.sqrt(num_trend_columns))
+    num_cols = math.ceil(num_trend_columns / num_rows)
+    
+    fig, axes = plt.subplots(num_rows, num_cols, figsize=(12, 10))
+    for i, column in enumerate(trend_columns):
+        ax = axes[i // num_cols, i % num_cols]
+        pandas_df[column].plot(ax=ax, legend=True)
+        ax.set_title(column)
+    
+    fig.tight_layout()
+    plt.show()
+    return pandas_df
+
+
+
+from pyspark import SparkFiles
+path = "file://"+SparkFiles.get("g62h-syeh.json")
+options = {'header':'true','inferSchema':'true','multiline':'true'}
+data = spark.read.format('json').options(**options).load(path)  
+
+date_column = 'date'
+trend_columns = ['deaths_covid', 'deaths_covid_coverage', 'hospital_onset_covid', 'hospital_onset_covid_coverage', 'icu_patients_confirmed_influenza']
+
+
+a = plot_trend_analysis(data, date_column, trend_columns)
+a.head()
+
+# COMMAND ----------
+
+from pyspark import SparkFiles
+path = "file://"+SparkFiles.get("g62h-syeh.json")
+options = {'header':'true','inferSchema':'true','multiline':'true'}
+#a = dataTestAutomation(source_type="json",source_path=path,options=options)
+
+# COMMAND ----------
+
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
-file_path = "/FileStore/New_data.csv"
+#file_path = "/FileStore/New_data.csv"
+file_path = 'https://healthdata.gov/resource/g62h-syeh.json'
 #file_path = "/FileStore/data.csv"
-#options = {'header':'true','inferSchema':'false','multiline':'true'}
-options = {'header':'true','inferSchema':'false','quotes':"'",'delimiter':',',"escape": '"'}
+options = {'header':'true','inferSchema':'false','multiline':'true'}
+#options = {'header':'true','inferSchema':'false','quotes':"'",'delimiter':',',"escape": '"'}
 # exp_schema = StructType()\
 #             .add('PassengerId',IntegerType(),True)\
 #             .add('Survived',IntegerType(),True)\
@@ -705,7 +777,7 @@ options = {'header':'true','inferSchema':'false','quotes':"'",'delimiter':',',"e
 #             .add('Parch',IntegerType(),True)\
 #             .add('Ticket',StringType(),True)
 
-a = dataTestAutomation(source_type="csv",source_path=file_path,expected_schema=loaded_schema,options=options,changeDataType=True)
+a = dataTestAutomation(source_type="delta",source_path=file_path,options=options)
 
 
 # COMMAND ----------
@@ -754,6 +826,48 @@ data['date'] = pd.to_datetime(data['date'])
 # COMMAND ----------
 
 data.set_index('date', inplace=True)
+
+# COMMAND ----------
+
+file_path = "/FileStore/New_data.csv"
+options = {'header':'true','inferSchema':'false','quotes':"'",'delimiter':',',"escape": '"'}
+dataframe = spark.read.format('csv').options(**options).load(file_path)
+
+# COMMAND ----------
+
+duplicatesCount = {}
+
+for columnName in dataframe.columns:
+    column_data_type = dataframe.schema[columnName].dataType
+    
+    if not isinstance(column_data_type, MapType):
+        duplicates = dataframe.groupBy(dataframe[columnName]).count().filter(col('count') > 1)
+        
+        if duplicates.count() > 0:
+            duplicates.display()
+        
+        duplicatesValuesCount = duplicates.count()
+        
+        if duplicatesValuesCount > 1:
+            duplicatesValues = duplicates.drop('count')
+            duplicatesCount = {'values': duplicatesValues, 'count': duplicatesValuesCount}
+        else:
+            duplicatesCount = {'count': duplicatesValuesCount}
+
+# COMMAND ----------
+
+duplicate_rows_df = dataframe.groupBy(dataframe.columns).count().where(col("count") > 1)
+duplicate_rows_df.display()
+
+# COMMAND ----------
+
+url = "https://healthdata.gov/resource/g62h-syeh.json"
+df = spark.read.format("json").options(header="true", inferSchema="true").load(url)
+
+# COMMAND ----------
+
+url = "https://healthdata.gov/resource/g62h-syeh.json"
+df = spark.read.format("delta").load(url)
 
 # COMMAND ----------
 
