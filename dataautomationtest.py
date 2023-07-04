@@ -314,7 +314,8 @@ class dataTestAutomation:
         for columnNames in self.dataframe.columns:
             column_data_type = self.dataframe.schema[columnNames].dataType
             if not isinstance(column_data_type,MapType):
-                duplicates = self.dataframe.groupBy(self.dataframe[columnNames]).count().filter(col('count')>1)  
+                duplicates = self.dataframe.groupBy(self.dataframe[columnNames]).count().filter(col('count')>1) 
+            duplicates.display()
         duplicatesValuesCount = spark.createDataFrame([Row(count=duplicates.count())], schema=['Duplicates Count'])
         if duplicates.count() > 1:
             duplicatesValues = duplicates.drop('count')
@@ -453,7 +454,7 @@ class readSchema:
 
 
 
-    def readFile(self):
+    def readFile(self, skip_rows = None, start_column = None, usecols = None):
       
         """
         Read the file and create a Spark DataFrame.
@@ -472,10 +473,12 @@ class readSchema:
                 df = pd.read_csv(self.file_path)
             elif file_extension.lower() == 'xlsx':
                 if self.sheet is not None:
-                    df = pd.ExcelFile(self.file_path, engine = 'openpyxl')
+                    df = pd.ExcelFile(self.file_path, engine = 'openpyxl',skiprows = skip_rows,index_col = start_column, usecols = usecols)
                     df = df.parse(self.sheet)
                 else:
-                    df = pd.read_excel(self.file_path)
+                    df = pd.read_excel(self.file_path,skiprows = skip_rows,index_col = start_column, usecols = usecols)
+
+
 
             else:
                 raise ValueError(f"Unsupported file format: {file_extension}")
@@ -679,7 +682,7 @@ class readSchema:
 filePathSchema = '/dbfs/FileStore/schema.xlsx'
 schema_reader = readSchema(file_path=filePathSchema,fieldNameColumn='Field',dataTypeColumn='Type',descriptionColumn='Description')
 #schema_reader = readSchema(filePathSchema, fieldNameColumn = 'Field',dataTypeColumn='Type')
-schema_reader.readFile()
+schema_reader.readFile(skip_rows=4, usecols="C:E")
 loaded_schema = schema_reader.createSchema()
 loaded_schema
 
@@ -703,18 +706,21 @@ options = {'header':'true','inferSchema':'false','quotes':"'",'delimiter':',',"e
 #             .add('Ticket',StringType(),True)
 
 a = dataTestAutomation(source_type="csv",source_path=file_path,expected_schema=loaded_schema,options=options,changeDataType=True)
-# range_validation_format = {
-#     "Age":(20,60)
-# }
-# range_val = a.run_range_validations(range_validation_format)
-# print('\n\n Range Validations Results: \n\n')
-# print(range_val)
-# print('\n\n')
-# column_rules = {
-#     "Ticket": r'^\d{6}$',
-#     "Embarked":r'S'
-# }
-# invalid_data = a.validateColumnFormat(column_rules=column_rules)
+
+
+# COMMAND ----------
+
+range_validation_format = {
+    "deceased_age":(20,60)
+}
+range_val = a.run_range_validations(range_validation_format)
+print('\n\n Range Validations Results: \n\n')
+print(range_val)
+print('\n\n')
+column_rules = {
+    "first_name": r'[A-Za-z]'
+}
+invalid_data = a.validateColumnFormat(column_rules=column_rules)
 
 # COMMAND ----------
 
@@ -731,6 +737,23 @@ options = {
 
 #df2 = spark.read.format("snowflake").options(**options).load()
 a = dataTestAutomation(source_type="snowflake", options=options)
+
+# COMMAND ----------
+
+data = pd.read_json('https://healthdata.gov/resource/g62h-syeh.json')
+data.head()
+
+# COMMAND ----------
+
+data.columns[1]
+
+# COMMAND ----------
+
+data['date'] = pd.to_datetime(data['date'])
+
+# COMMAND ----------
+
+data.set_index('date', inplace=True)
 
 # COMMAND ----------
 
