@@ -4,6 +4,8 @@ try:
     from pyspark.sql.types import *
     from pyspark.sql.types import NumericType
     import re
+    import matplotlib.pyplot as plt
+    import math
 except Exception as e:
     raise Exception(f'Error while importing libraries, error {e}')
 
@@ -694,10 +696,8 @@ from pyspark.sql.functions import col
 import matplotlib.pyplot as plt
 import math
 
-# Create a SparkSession
-spark = SparkSession.builder.getOrCreate()
 
-def plot_trend_analysis(df, date_column, trend_columns):
+def trendAnalysis(df, date_column, trend_columns):
     df = df.withColumn(date_column, df[date_column].cast('date'))
     
     for column in trend_columns:
@@ -717,9 +717,10 @@ def plot_trend_analysis(df, date_column, trend_columns):
                 [stddev(column).alias("stddev_" + column) for column in trend_columns]
     description_df = groupby.agg(*agg_exprs)
     ordered_df = description_df.orderBy(date_column)
-    ordered_df.display()
+    return grouped_data, ordered_df
     
-    pandas_df = grouped_data.toPandas()
+def plotTrendAnalysis(dataframe,trend_columns):
+    pandas_df = dataframe.toPandas()
     pandas_df.set_index(date_column, inplace=True)
     
     num_trend_columns = len(trend_columns)
@@ -734,7 +735,7 @@ def plot_trend_analysis(df, date_column, trend_columns):
     
     fig.tight_layout()
     plt.show()
-    return pandas_df
+
 
 
 
@@ -747,8 +748,15 @@ date_column = 'date'
 trend_columns = ['deaths_covid', 'deaths_covid_coverage', 'hospital_onset_covid', 'hospital_onset_covid_coverage', 'icu_patients_confirmed_influenza']
 
 
-a = plot_trend_analysis(data, date_column, trend_columns)
-a.head()
+groupedData,  trendDF= trendAnalysis(data, date_column, trend_columns)
+
+# COMMAND ----------
+
+trendDF.display()
+
+# COMMAND ----------
+
+plotTrendAnalysis(groupedData, trend_columns)
 
 # COMMAND ----------
 
