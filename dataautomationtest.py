@@ -286,21 +286,30 @@ class dataTestAutomation:
             df = self.dataframe.withColumn("validation_result", regexp_extract(col(column), rule, 0))
             invalid_records = df.filter(col("validation_result") == "")
             invalid_count = invalid_records.count()
-            
+
+            schema = StructType([StructField(f'Invalid Data Count - {column}', IntegerType(), nullable=False)])
+            invalid_count_DF = spark.createDataFrame([(invalid_count,)],schema=schema)
+
             if invalid_count > 0:
-                schema = StructType([StructField(f'Invalid Data Count - {column}', IntegerType(), nullable=False)])
-                invalid_count_DF = spark.createDataFrame([(invalid_count,)],schema=schema)
+                
                 invalid_record_data = invalid_records
                 if showData == True:
                     print(f'Invalid count for {column}')
                     invalid_count_DF.display(display_rows)
                     print(f'Invalid data for {column}')
-                    invalid_record_data.display(display_rows)
+                    display(invalid_record_data.limit(display_rows))
+                    columnValidationFormat[column] = {invalid_count_DF, invalid_record_data}
                 elif showData == False:
                     print(f'Invalid count for {column}')
                     invalid_count_DF.display(display_rows)
+                    columnValidationFormat[column] = {invalid_count_DF}
+            else:
+                print(f'Invalid count for {column}')
+                invalid_count_DF.display(display_rows)
+                columnValidationFormat[column] = {invalid_count_DF}
 
-            columnValidationFormat[column] = {invalid_count_DF, invalid_record_data}
+                
+            
 
         return columnValidationFormat
 
@@ -727,6 +736,15 @@ class readSchema:
 
 # COMMAND ----------
 
+filePathSchema = '/dbfs/FileStore/schema.xlsx'
+schema_reader = readSchema(file_path=filePathSchema,fieldNameColumn='Field',dataTypeColumn='Type',descriptionColumn='Description')
+#schema_reader = readSchema(filePathSchema, fieldNameColumn = 'Field',dataTypeColumn='Type')
+schema_reader.readFile(skip_rows=4, usecols="C:E")
+loaded_schema = schema_reader.createSchema()
+loaded_schema
+
+# COMMAND ----------
+
 file_path = 'https://healthdata.gov/resource/g62h-syeh.json'
 spark.sparkContext.addFile(file_path)
 path = "file://"+SparkFiles.get("g62h-syeh.json")
@@ -737,16 +755,18 @@ datatest = dataTestAutomation(source_type="json",source_path=path,options=option
 # COMMAND ----------
 
 range_validation_format = {
-    "deaths_covid":(0,3)
+    "deaths_covid":(0,None),
+    "deaths_covid_coverage":(0,1000)
 }
 range_val = datatest.run_range_validations(range_validation_format)
 print('\n\n Range Validations Results: \n\n')
-print(range_val)
+for key, value in range_val.items():
+    print(f'{key}  :  {value}')
 print('\n\n')
 column_rules = {
-    "date": r'\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}'
+    "date": r'\d{4}-\d{2}-\d{2}'
 }
-invalid_data = datatest.validateColumnFormat(column_rules=column_rules)
+invalid_data = datatest.validateColumnFormat(column_rules=column_rules, showData=True)
 
 # COMMAND ----------
 
@@ -757,10 +777,6 @@ grouped_data, trendDF = datatest.trendAnalysis(date_col,trend_columns)
 # COMMAND ----------
 
 trendDF.display()
-
-# COMMAND ----------
-
-grouped_data.display()
 
 # COMMAND ----------
 
