@@ -1,4 +1,3 @@
-# Databricks notebook source
 try:
     from pyspark.sql.functions import *
     from pyspark.sql.types import *
