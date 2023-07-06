@@ -133,6 +133,22 @@ class dataTestAutomation:
             raise Exception(f"Error occurred while changing the data type: {str(e)}")
 
     def convert_array_type(self,dataframe, column_name, actual_field, expected_field):
+        """
+            Converts the data type of an array column in a DataFrame.
+
+            Args:
+                self (object): The instance of the class.
+                dataframe (DataFrame): The DataFrame containing the data.
+                column_name (str): The name of the array column.
+                actual_field (DataType): The actual data type of the array column.
+                expected_field (DataType): The desired data type for the array column.
+
+            Returns:
+                DataFrame: The DataFrame with the converted array column.
+
+            Raises:
+                Exception: If the actual data type of the column is not supported.
+        """
         if isinstance(actual_field.dataType, StringType):
             dataframe = dataframe.withColumn(column_name, from_json(col(column_name), expected_field))
         elif isinstance(actual_field.dataType, ArrayType) and isinstance(actual_field.elementType, StructType):
@@ -142,6 +158,22 @@ class dataTestAutomation:
         return dataframe
 
     def convert_map_type(self,dataframe, column_name, actual_field, expected_field):
+        """
+            Converts the data type of a map column in a DataFrame.
+
+            Args:
+                self (object): The instance of the class.
+                dataframe (DataFrame): The DataFrame containing the data.
+                column_name (str): The name of the map column.
+                actual_field (DataType): The actual data type of the map column.
+                expected_field (DataType): The desired data type for the map column.
+
+            Returns:
+                DataFrame: The DataFrame with the converted map column.
+
+            Raises:
+                Exception: If the actual data type of the column is not supported.
+        """
         if isinstance(actual_field.dataType, StringType):
             dataframe = dataframe.withColumn(column_name, from_json(col(column_name), expected_field))
         elif isinstance(actual_field.dataType, MapType) and isinstance(actual_field.valueType, StructType):
@@ -151,6 +183,22 @@ class dataTestAutomation:
         return dataframe
 
     def convert_struct_type(self,dataframe, column_name, actual_field, expected_field):
+        """
+        Converts the data type of a struct column in a DataFrame.
+
+        Args:
+            self (object): The instance of the class.
+            dataframe (DataFrame): The DataFrame containing the data.
+            column_name (str): The name of the struct column.
+            actual_field (StructType): The actual data type of the struct column.
+            expected_field (StructType): The desired data type for the struct column.
+
+        Returns:
+            DataFrame: The DataFrame with the converted struct column.
+
+        Raises:
+            Exception: If the actual data type of the column is not supported.
+        """
         for field in expected_field.fields:
             if field.name in actual_field.fieldNames():
                 actual_nested_field = actual_field[field.name]
@@ -408,6 +456,20 @@ class dataTestAutomation:
             raise Exception(f"Error occured while generating report, error: {str(e)}")
 
     def trendAnalysis(self, date_column, trend_columns):
+
+        """
+        Performs trend analysis on a DataFrame.
+
+        Args:
+            self (object): The instance of the class containing the DataFrame.
+            date_column (str): The name of the column containing the date values.
+            trend_columns (list): A list of column names to perform trend analysis on.
+
+        Returns:
+            tuple: A tuple containing two DataFrames:
+                - grouped_data: DataFrame with aggregated data grouped by date and other columns.
+                - ordered_df: DataFrame with descriptive statistics of trend_columns ordered by date.
+        """
         self.date_column = date_column
         df = self.dataframe.withColumn(self.date_column, f.to_date(f.col(self.date_column), 'yyyy-MM-dd'))
         
@@ -431,6 +493,17 @@ class dataTestAutomation:
         return grouped_data, ordered_df
     
     def plotTrendAnalysis(self,dataframe,trend_columns):
+        """
+            Plots trend analysis for specified columns in a DataFrame.
+
+            Args:
+                self (object): The instance of the class.
+                dataframe (DataFrame): The DataFrame containing the data.
+                trend_columns (list): A list of column names to plot the trend analysis for.
+
+            Returns:
+                None
+        """
         pandas_df = dataframe.toPandas()
         pandas_df.set_index(self.date_column, inplace=True)
         
@@ -749,7 +822,6 @@ file_path = 'https://healthdata.gov/resource/g62h-syeh.json'
 spark.sparkContext.addFile(file_path)
 path = "file://"+SparkFiles.get("g62h-syeh.json")
 options = {'header':'true','inferSchema':'true','multiline':'true'}
-
 datatest = dataTestAutomation(source_type="json",source_path=path,options=options)
 
 # COMMAND ----------
@@ -764,9 +836,9 @@ for key, value in range_val.items():
     print(f'{key}  :  {value}')
 print('\n\n')
 column_rules = {
-    "date": r'\d{4}-\d{2}-\d{2}'
+    "date": r'\d{4}-\d{2}-\d{2} \d{2}-\d{2}-\d{2}'
 }
-invalid_data = datatest.validateColumnFormat(column_rules=column_rules, showData=True)
+invalid_data = datatest.validateColumnFormat(column_rules=column_rules, showData=False)
 
 # COMMAND ----------
 
@@ -781,417 +853,3 @@ trendDF.display()
 # COMMAND ----------
 
 datatest.plotTrendAnalysis(grouped_data,trend_columns)
-
-# COMMAND ----------
-
-filePathSchema = '/dbfs/FileStore/schema.xlsx'
-schema_reader = readSchema(file_path=filePathSchema,fieldNameColumn='Field',dataTypeColumn='Type',descriptionColumn='Description')
-#schema_reader = readSchema(filePathSchema, fieldNameColumn = 'Field',dataTypeColumn='Type')
-schema_reader.readFile(skip_rows=4, usecols="C:E")
-loaded_schema = schema_reader.createSchema()
-loaded_schema
-
-# COMMAND ----------
-
-
-
-# COMMAND ----------
-
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import col
-import matplotlib.pyplot as plt
-import math
-from pyspark.sql import functions as F
-
-
-def trendAnalysis(df, date_column, trend_columns):
-    df = df.withColumn(date_column, f.to_date(f.col(date_column), 'yyyy-MM-dd'))
-    
-    for column in trend_columns:
-        if not isinstance(df.schema[column].dataType, (int, float)):
-            df = df.withColumn(column,df[column].cast('int'))
-    
-    group_columns = [f.col(column) for column in df.columns if column != date_column]
-    agg_columns = [f.col(column).alias(column) for column in trend_columns]
-    grouped_data = df.groupBy(date_column, *group_columns).agg(*agg_columns)
-    selected_columns = [f.col(column) for column in trend_columns]
-    selected_columns.append(f.col(date_column))
-    selected_df = df.select(*selected_columns)
-    groupby = selected_df.groupBy(date_column)
-    agg_exprs = [f.min(column).alias("min_" + column) for column in trend_columns] + \
-                [f.max(column).alias("max_" + column) for column in trend_columns] + \
-                [f.avg(column).alias("avg_" + column) for column in trend_columns] + \
-                [f.stddev(column).alias("stddev_" + column) for column in trend_columns]
-    description_df = groupby.agg(*agg_exprs)
-    ordered_df = description_df.orderBy(date_column)
-    return grouped_data, ordered_df
-    
-def plotTrendAnalysis(dataframe,trend_columns):
-    pandas_df = dataframe.toPandas()
-    pandas_df.set_index(date_column, inplace=True)
-    
-    num_trend_columns = len(trend_columns)
-    num_rows = math.ceil(math.sqrt(num_trend_columns))
-    num_cols = math.ceil(num_trend_columns / num_rows)
-    
-    fig, axes = plt.subplots(num_rows, num_cols, figsize=(12, 10))
-    for i, column in enumerate(trend_columns):
-        ax = axes[i // num_cols, i % num_cols]
-        pandas_df[column].plot(ax=ax, legend=True)
-        ax.set_title(column)
-        ax.set_ylabel('Count')
-    
-    fig.tight_layout()
-    plt.xticks(rotation=90)
-    plt.show()
-
-def categorical_trend_analysis(df, date_column, categorical_columns):
-    for col in categorical_columns:
-        # Group the data by date and categorical column and count occurrences
-        grouped_data = df.groupBy(date_column, col).count()
-
-        # Pivot the grouped data to have dates as rows and categorical values as columns
-        pivoted_data = grouped_data.groupBy(date_column).pivot(col).sum("count")
-
-        # Convert the pivoted data to Pandas DataFrame for plotting
-        pandas_data = pivoted_data.toPandas()
-
-        # Plot the trend analysis
-        pandas_data.plot(x=date_column, kind='bar', figsize=(12, 6))
-        plt.xlabel(date_column)
-        plt.ylabel('Count')
-        plt.title(f'Categorical Trend Analysis for {col}')
-        plt.legend()
-        plt.show()
-
-def pair_trend_analysis(df, date_column, column_pairs):
-    # Convert the date column to datetime type
-    df = df.withColumn(date_column, F.to_date(F.col(date_column)))
-    
-    # Plot the trend analysis for each column pair
-    for pair in column_pairs:
-        column1, column2 = pair
-        # Select the date and numerical columns
-        data = df.select(date_column, column1, column2).toPandas()
-        
-        # Plot the trend analysis
-        plt.figure(figsize=(12, 6))
-        plt.plot(data[date_column], data[column1], label=column1)
-        plt.plot(data[date_column], data[column2], label=column2)
-        plt.xlabel(date_column)
-        plt.ylabel('Value')
-        plt.title(f'Trend Analysis: {column1} vs {column2}')
-        plt.legend()
-        plt.show()
-
-
-
-file_path = 'https://healthdata.gov/resource/rxn6-qnx8.json'
-from pyspark import SparkFiles
-path = "file://"+SparkFiles.get("g62h-syeh.json")
-options = {'header':'true','inferSchema':'true','multiline':'true'}
-data = spark.read.format('json').options(**options).load(path)  
-
-date_column = 'date'
-categorical_column = ['state']
-trend_columns = ['deaths_covid', 'deaths_covid_coverage', 'hospital_onset_covid', 'hospital_onset_covid_coverage', 'icu_patients_confirmed_influenza']
-
-pair_column = ['deaths_covid', 'deaths_covid']
-groupedData,  trendDF= trendAnalysis(data, date_column, trend_columns)
-
-# COMMAND ----------
-
-plotTrendAnalysis(groupedData, trend_columns)
-
-# COMMAND ----------
-
-# file_path = "/FileStore/New_data.csv"
-# options = {'header':'true','inferSchema':'true','quotes':"'",'delimiter':',',"escape": '"'}
-# dataframe = spark.read.format('csv').options(**options).load(file_path)
-
-
-# COMMAND ----------
-
-groupedData,  trendDF= a.trendAnalysis('date_of_birth', ['subscriber_id'])
-
-# COMMAND ----------
-
-a=dataTestAutomation(source_type="csv",source_path=file_path,options=options,expected_schema=loaded_schema)
-
-# COMMAND ----------
-
-
-
-# COMMAND ----------
-
-from pyspark import SparkFiles
-path = "file://"+SparkFiles.get("rxn6-qnx8.json")
-options = {'header':'true','inferSchema':'false','multiline':'true'}
-#a = dataTestAutomation(source_type="json",source_path=path,options=options)
-data = spark.read.format('json').options(**options).load(path)
-
-# COMMAND ----------
-
-display(data.limit(5))
-
-# COMMAND ----------
-
-from pyspark.sql import functions as f
-
-# COMMAND ----------
-
-data = data.withColumn('last_report_date', f.to_date(f.col('last_report_date'), 'yyyy-MM-dd'))
-
-# COMMAND ----------
-
-display(data.limit(5))
-
-# COMMAND ----------
-
-#Using snowflakes 
-options = {
-  "sfUrl": "zu11856.central-india.azure.snowflakecomputing.com",
-  "sfUser": "AIRBYTE_USER",
-  "sfPassword": "password",
-  "sfDatabase": "AIRBYTE_DATABASE",
-  "sfSchema": "AIRBYTE_SCHEMA",
-  "sfWarehouse": "COMPUTE_WH",
-  "dbtable":"AIR_QUALITY_DATA___2015_2020_"
-}
-
-#df2 = spark.read.format("snowflake").options(**options).load()
-a = dataTestAutomation(source_type="snowflake", options=options)
-
-# COMMAND ----------
-
-data = pd.read_json('https://healthdata.gov/resource/g62h-syeh.json')
-data.dtypes
-
-# COMMAND ----------
-
-data.columns[1]
-
-# COMMAND ----------
-
-data['date'] = pd.to_datetime(data['date'])
-
-# COMMAND ----------
-
-data.set_index('date', inplace=True)
-
-# COMMAND ----------
-
-file_path = "/FileStore/New_data.csv"
-options = {'header':'true','inferSchema':'false','quotes':"'",'delimiter':',',"escape": '"'}
-dataframe = spark.read.format('csv').options(**options).load(file_path)
-
-# COMMAND ----------
-
-duplicatesCount = {}
-
-for columnName in dataframe.columns:
-    column_data_type = dataframe.schema[columnName].dataType
-    
-    if not isinstance(column_data_type, MapType):
-        duplicates = dataframe.groupBy(dataframe[columnName]).count().filter(col('count') > 1)
-        
-        if duplicates.count() > 0:
-            duplicates.display()
-        
-        duplicatesValuesCount = duplicates.count()
-        
-        if duplicatesValuesCount > 1:
-            duplicatesValues = duplicates.drop('count')
-            duplicatesCount = {'values': duplicatesValues, 'count': duplicatesValuesCount}
-        else:
-            duplicatesCount = {'count': duplicatesValuesCount}
-
-# COMMAND ----------
-
-# from pyspark.sql import SparkSession
-# from pyspark.sql.functions import col
-# import matplotlib.pyplot as plt
-# import math
-
-
-# def trendAnalysis(df, date_column, trend_columns, categorical_columns):
-#     df = df.withColumn(date_column, df[date_column].cast('date'))
-    
-#     for column in trend_columns:
-#         if not isinstance(df.schema[column].dataType, (int, float)):
-#             df = df.withColumn(column, df[column].cast('int'))
-    
-#     group_columns = [col(column) for column in df.columns if column != date_column and column not in categorical_columns]
-#     agg_columns = [col(column).alias(column) for column in trend_columns]
-#     grouped_data = df.groupBy(date_column, *group_columns).agg(*agg_columns)
-#     selected_columns = [col(column) for column in trend_columns] + [col(column) for column in categorical_columns]
-#     selected_columns.append(col(date_column))
-#     selected_df = df.select(*selected_columns)
-#     groupby = selected_df.groupBy(date_column, *categorical_columns)
-#     agg_exprs = [count(column).alias("count_" + column) for column in categorical_columns]
-#     description_df = groupby.agg(*agg_exprs)
-#     ordered_df = description_df.orderBy(date_column)
-#     return grouped_data, ordered_df
-    
-# # def plotTrendAnalysis(dataframe, trend_columns):
-# #     pandas_df = dataframe.toPandas()
-# #     pandas_df.set_index(date_column, inplace=True)
-    
-# #     num_trend_columns = len(trend_columns)
-# #     num_rows = math.ceil(math.sqrt(num_trend_columns))
-# #     num_cols = math.ceil(num_trend_columns / num_rows)
-    
-# #     fig, axes = plt.subplots(num_rows, num_cols, figsize=(12, 10))
-# #     for i, column in enumerate(trend_columns):
-# #         ax = axes[i // num_cols, i % num_cols]
-# #         pandas_df[column].plot(ax=ax, legend=True)
-# #         ax.set_title(column)
-    
-# #     fig.tight_layout()
-# #     plt.show()
-# def plotTrendAnalysis(dataframe, trend_columns, categorical_columns):
-#     pandas_df = dataframe.toPandas()
-#     pandas_df.set_index(date_column, inplace=True)
-    
-#     num_trend_columns = len(trend_columns)
-#     num_categorical_columns = len(categorical_columns)
-#     num_plots = num_trend_columns + num_categorical_columns
-    
-#     num_rows = math.ceil(math.sqrt(num_plots))
-#     num_cols = math.ceil(num_plots / num_rows)
-    
-#     fig, axes = plt.subplots(num_rows, num_cols, figsize=(12, 10))
-    
-#     plot_counter = 0
-    
-#     for column in trend_columns:
-#         ax = axes[plot_counter // num_cols, plot_counter % num_cols]
-#         pandas_df[column].plot(ax=ax, legend=True)
-#         ax.set_title(column)
-        
-#         plot_counter += 1
-    
-#     for column in categorical_columns:
-#         ax = axes[plot_counter // num_cols, plot_counter % num_cols]
-        
-#         category_counts = pandas_df[column].value_counts()
-#         categories = category_counts.index
-#         counts = category_counts.values
-        
-#         bar_width = 0.8
-#         bar_positions = np.arange(len(categories))
-        
-#         ax.bar(bar_positions, counts, width=bar_width)
-#         ax.set_xticks(bar_positions)
-#         ax.set_xticklabels(categories)
-#         ax.set_title(column)
-        
-#         plot_counter += 1
-    
-#     fig.tight_layout()
-#     plt.show()
-
-
-# # Example usage
-# spark = SparkSession.builder.getOrCreate()
-
-# # Load data into DataFrame
-# path = "file://"+SparkFiles.get("g62h-syeh.json")
-# options = {'header':'true', 'inferSchema':'true', 'multiline':'true'}
-# data = spark.read.format('json').options(**options).load(path)
-
-# date_column = 'date'
-# trend_columns = ['deaths_covid', 'deaths_covid_coverage', 'hospital_onset_covid', 'hospital_onset_covid_coverage', 'icu_patients_confirmed_influenza']
-# categorical_columns = ['state']
-
-# grouped_data, trendDF = trendAnalysis(data, date_column, trend_columns, categorical_columns)
-
-# plotTrendAnalysis(grouped_data, trend_columns,categorical_columns)
-
-
-# COMMAND ----------
-
-from pyspark.sql.functions import col
-from pyspark.ml.feature import VectorAssembler
-from pyspark.ml.regression import LinearRegression
-from pyspark.ml.evaluation import RegressionEvaluator
-import matplotlib.pyplot as plt
-
-class DataAnalyzer:
-    def _init_(self, data):
-        self.data = data
-
-    def trendAnalysis(self, date_column, value_column):
-        # Extract year and month from the date column
-        df = self.data.withColumn("year", year(col(date_column)))
-        df = df.withColumn("month", month(col(date_column)))
-
-        # Group by year and month, calculate average of the value column
-        df = df.groupBy("year", "month").avg(value_column)
-
-        # Sort by year and month
-        df = df.orderBy("year", "month")
-
-        return df
-
-    def trainLinearRegression(self, features_column, label_column):
-        # Prepare the data for training
-        assembler = VectorAssembler(inputCols=features_column, outputCol="features")
-        data = assembler.transform(self.data)
-        data = data.select(col(label_column).alias("label"), "features")
-
-        # Split the data into training and test sets
-        train_data, test_data = data.randomSplit([0.7, 0.3], seed=42)
-
-        # Train the linear regression model
-        lr = LinearRegression(featuresCol="features", labelCol="label")
-        model = lr.fit(train_data)
-
-        # Make predictions on the test data
-        predictions = model.transform(test_data)
-
-        # Evaluate the model
-        evaluator = RegressionEvaluator(labelCol="label", predictionCol="prediction", metricName="rmse")
-        rmse = evaluator.evaluate(predictions)
-        r2 = evaluator.evaluate(predictions, {evaluator.metricName: "r2"})
-
-        # Print the evaluation results
-        print("Root Mean Squared Error (RMSE):", rmse)
-        print("R-squared (R2):", r2)
-
-        # Plot the actual vs. predicted values
-        actual_values = predictions.select("label").collect()
-        predicted_values = predictions.select("prediction").collect()
-        plt.scatter(actual_values, predicted_values)
-        plt.xlabel("Actual Values")
-        plt.ylabel("Predicted Values")
-        plt.title("Actual vs. Predicted Values")
-        plt.show()
-
-# COMMAND ----------
-
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import year, month
-import matplotlib.pyplot as plt
-
-# Create a SparkSession
-spark = SparkSession.builder.getOrCreate()
-
-# Read the data into a DataFrame
-data = spark.read.csv("/FileStore/tables/COVID_19_Reported_Patient_Impact_and_Hospital_Capacity_by_State-4.csv", header=True)
-
-# Create an instance of DataAnalyzer
-analyzer = DataAnalyzer()
-
-# Perform trend analysis
-trend_df = analyzer.trendAnalysis("week", "operational_schools")
-trend_df.show()
-
-# # Train a linear regression model
-# features = ["student_count", "operational_schools"]
-# label = "hospital_onset_covid"
-# analyzer.trainLinearRegression(features, label)
-
-# COMMAND ----------
-
-
