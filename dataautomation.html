@@ -1,0 +1,733 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>dataautomation API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>dataautomation</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python"># Databricks notebook source
+class dataTestAutomation:
+
+    def __init__(self, source_type,  source_path = None, options=None, expected_schema = None, changeDataType = False):
+
+        &#39;&#39;&#39;
+        Args:
+            source_type (str): Type of the data source (e.g., &#39;delta&#39;, &#39;parquet&#39;, &#39;csv&#39;, &#39;jdbc&#39;, &#39;mongo&#39;, etc.).
+            source_path (str): Path or connection URL of the data source. Default is None.
+            expected_schema: Expected schema for data validation. Default is None.
+            options (dict, optional): Additional options specific to the data source. Default is None.
+            changeDataType: Change the datatype of actual schema of dataframe to expected schema. Default is False.
+        &#39;&#39;&#39;
+        self.source_type = source_type
+        self.source_path = source_path
+        self.options = options
+        self.expected_schema = expected_schema
+        self.changeDataType = changeDataType
+
+
+        self.dataframe = self.readData()
+        #print(self.dataframe)
+        #print(self.dataframe.schema)
+        if self.expected_schema is not None:
+            self.schemaResult = self.validateSchema()
+            #print(self.schemaResult)
+
+            if self.changeDataType is True:
+                self.dataframe = self.changeSchema()
+                #print(self.dataframe.schema)
+
+        
+        
+        self.dataprofiling = self.dataProfiling()
+        #print(self.dataprofiling)
+
+
+    def readData(self):
+
+        &#34;&#34;&#34;
+        Read data from different sources with configurable parameters.
+        
+        Returns:
+            pyspark.sql.DataFrame: DataFrame containing the data from the specified source.
+        &#34;&#34;&#34;    
+        # Read data based on the source type
+        reader = spark.read.format(self.source_type)
+        if self.options is not None:
+            reader = reader.options(**self.options)
+        if self.source_path is not None:
+            reader = reader.load(self.source_path)
+
+        df = reader
+        return df
+    
+    def validateSchema(self):
+
+        &#34;&#34;&#34;
+        Validate the actual schema of a DataFrame against the expected schema.
+        Identify mismatched datatypes, missing columns, or extra columns.
+            
+        Returns:
+            dict: Validation result with details of mismatched datatypes, missing columns, and extra columns.
+        &#34;&#34;&#34;
+        validation_result = {&#34;datatype_mismatch&#34;: [], &#34;missing_columns&#34;: [], &#34;extra_columns&#34;: []}
+        actual_schema = self.dataframe.schema
+        for field in self.expected_schema.fields:
+            if field.name in actual_schema.fieldNames():
+                actual_field = actual_schema[field.name]
+                if actual_field.dataType != field.dataType:
+                    validation_result[&#34;datatype_mismatch&#34;].append(field.name)
+            else:
+                validation_result[&#34;missing_columns&#34;].append(field.name)
+
+        # Check for extra columns
+        for field_name in actual_schema.fieldNames():
+            if field_name not in [field.name for field in self.expected_schema.fields]:
+                validation_result[&#34;extra_columns&#34;].append(field_name)
+
+        return validation_result
+    
+    def changeSchema(self):
+
+        &#34;&#34;&#34;
+        Change the current schema to the expected schema provided.
+        
+        Returns:
+            pyspark.sql.DataFrame: DataFrame containing the datatype of the expected schema.
+
+        &#34;&#34;&#34;
+        actual_schema = self.dataframe.schema
+        schemaValidatedDF = self.dataframe
+        for field in self.expected_schema.fields:
+            if field.name in actual_schema.fieldNames():
+                schemaValidatedDF = schemaValidatedDF.withColumn(field.name,col(field.name).cast(field.dataType))
+        return schemaValidatedDF 
+            
+
+    def dataProfiling(self):
+
+        &#39;&#39;&#39;
+            Checks the null counts, empty strings, stastical description and counts of the number of rows.
+
+            Returns:
+                dict: Data profiling results including total row count, null counts, null count percentage,
+                  empty string counts, and statistical descriptions for each column.
+
+        &#39;&#39;&#39;
+        
+        recordCounts  = self.dataframe.count()
+        nullCountsPercentage = {}
+        nullCounts = {}
+        emptyString = {}
+        stasticalDescription = {}
+        for columnNames in self.dataframe.columns:
+            nullCounts[columnNames] = self.dataframe.select(col(columnNames)).filter(col(columnNames).isNull()).count()
+            nullCountsPercentage[columnNames] = f&#39;{((nullCounts[columnNames])/recordCounts)*100}%&#39;
+            emptyString[columnNames] = self.dataframe.filter(col(columnNames) == &#34;&#34;).count()
+            column_data_type = self.dataframe.schema[columnNames].dataType
+            if isinstance(column_data_type, (IntegerType, DoubleType, FloatType, LongType)):
+                statistics = self.dataframe.select(col(columnNames)).describe().toPandas().set_index(&#39;summary&#39;).to_dict()[columnNames]
+                stasticalDescription[columnNames] = statistics
+
+        resultOutcome = {&#39;Total Number of rows&#39;:recordCounts,&#39;nullCounts&#39;:nullCounts,&#39;null count percentage&#39;:nullCountsPercentage,&#39;empty_string&#39;:emptyString,&#39;stats&#39;:stasticalDescription}
+
+        return resultOutcome
+    
+
+    def run_range_validations(self, range_validations):
+
+        &#39;&#39;&#39;
+        range_validations(dict): Validation rules passed in dictionary.
+        Format for the parameter range_validation = {
+            &#39;col1&#39;:(min_value,max_value),
+            &#39;col2&#39;:(None,max_value),
+            &#39;col3&#39;:(min_value,None),
+            &#39;col4&#39;:(None,None)
+        }
+        Returns:
+            dict: Validation results indicating if the range validations passed or failed for each column.
+        &#39;&#39;&#39;
+        validation_results = {}
+
+        for column, (min_value, max_value) in range_validations.items():
+            if min_value is None and max_value is None:
+                validation_results[column] = True
+            elif min_value is None:
+                validation_result = self.dataframe.filter(col(column) &lt;= max_value).count() == self.dataframe.count()
+                validation_results[column] = validation_result
+            elif max_value is None:
+                validation_result = self.dataframe.filter(col(column) &gt;= min_value).count() == self.dataframe.count()
+                validation_results[column] = validation_result
+            else:
+                validation_result = self.dataframe.filter((col(column) &gt;= min_value) &amp; (col(column) &lt;= max_value)).count() == self.dataframe.count()
+                validation_results[column] = validation_result
+        print(validation_results)
+        return validation_results
+
+
+    def generateReport(self):
+
+        &#34;&#34;&#34;
+        Generate a report summarizing the data validation results.
+
+        Returns:
+            str: Report containing information about the total row count, null counts, null count percentage,
+                 empty string counts, and statistical descriptions for each column.
+
+        &#34;&#34;&#34;
+
+        report = f&#34;Data Report:\n\n&#34;
+        report += f&#34;Total Number of Rows: {self.dataprofiling[&#39;Total Number of rows&#39;]}\n\n&#34;
+        report += f&#34;Null Counts:\n&#34;
+        for column, count in self.dataprofiling[&#39;nullCounts&#39;].items():
+            report += f&#34;  - {column}: {count}\n&#34;
+        report += &#34;\n&#34;
+        report += f&#34;Null Count Percentage:\n&#34;
+        for column, percentage in self.dataprofiling[&#39;null count percentage&#39;].items():
+            report += f&#34;  - {column}: {percentage}\n&#34;
+        report += &#34;\n&#34;
+        report += f&#34;Empty String Counts:\n&#34;
+        for column, count in self.dataprofiling[&#39;empty_string&#39;].items():
+            report += f&#34;  - {column}: {count}\n&#34;
+        report += &#34;\n&#34;
+        report += f&#34;Statistics:\n&#34;
+        for column, stats in self.dataprofiling[&#39;stats&#39;].items():
+            report += f&#34;  - {column}:\n&#34;
+            for stat, value in stats.items():
+                report += f&#34;    - {stat}: {value}\n&#34;
+        
+        return report
+    
+
+    </code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="dataautomation.dataTestAutomation"><code class="flex name class">
+<span>class <span class="ident">dataTestAutomation</span></span>
+<span>(</span><span>source_type, source_path=None, options=None, expected_schema=None, changeDataType=False)</span>
+</code></dt>
+<dd>
+<div class="desc"><h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>source_type</code></strong> :&ensp;<code>str</code></dt>
+<dd>Type of the data source (e.g., 'delta', 'parquet', 'csv', 'jdbc', 'mongo', etc.).</dd>
+<dt><strong><code>source_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Path or connection URL of the data source. Default is None.</dd>
+<dt><strong><code>expected_schema</code></strong></dt>
+<dd>Expected schema for data validation. Default is None.</dd>
+<dt><strong><code>options</code></strong> :&ensp;<code>dict</code>, optional</dt>
+<dd>Additional options specific to the data source. Default is None.</dd>
+<dt><strong><code>changeDataType</code></strong></dt>
+<dd>Change the datatype of actual schema of dataframe to expected schema. Default is False.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class dataTestAutomation:
+
+    def __init__(self, source_type,  source_path = None, options=None, expected_schema = None, changeDataType = False):
+
+        &#39;&#39;&#39;
+        Args:
+            source_type (str): Type of the data source (e.g., &#39;delta&#39;, &#39;parquet&#39;, &#39;csv&#39;, &#39;jdbc&#39;, &#39;mongo&#39;, etc.).
+            source_path (str): Path or connection URL of the data source. Default is None.
+            expected_schema: Expected schema for data validation. Default is None.
+            options (dict, optional): Additional options specific to the data source. Default is None.
+            changeDataType: Change the datatype of actual schema of dataframe to expected schema. Default is False.
+        &#39;&#39;&#39;
+        self.source_type = source_type
+        self.source_path = source_path
+        self.options = options
+        self.expected_schema = expected_schema
+        self.changeDataType = changeDataType
+
+
+        self.dataframe = self.readData()
+        #print(self.dataframe)
+        #print(self.dataframe.schema)
+        if self.expected_schema is not None:
+            self.schemaResult = self.validateSchema()
+            #print(self.schemaResult)
+
+            if self.changeDataType is True:
+                self.dataframe = self.changeSchema()
+                #print(self.dataframe.schema)
+
+        
+        
+        self.dataprofiling = self.dataProfiling()
+        #print(self.dataprofiling)
+
+
+    def readData(self):
+
+        &#34;&#34;&#34;
+        Read data from different sources with configurable parameters.
+        
+        Returns:
+            pyspark.sql.DataFrame: DataFrame containing the data from the specified source.
+        &#34;&#34;&#34;    
+        # Read data based on the source type
+        reader = spark.read.format(self.source_type)
+        if self.options is not None:
+            reader = reader.options(**self.options)
+        if self.source_path is not None:
+            reader = reader.load(self.source_path)
+
+        df = reader
+        return df
+    
+    def validateSchema(self):
+
+        &#34;&#34;&#34;
+        Validate the actual schema of a DataFrame against the expected schema.
+        Identify mismatched datatypes, missing columns, or extra columns.
+            
+        Returns:
+            dict: Validation result with details of mismatched datatypes, missing columns, and extra columns.
+        &#34;&#34;&#34;
+        validation_result = {&#34;datatype_mismatch&#34;: [], &#34;missing_columns&#34;: [], &#34;extra_columns&#34;: []}
+        actual_schema = self.dataframe.schema
+        for field in self.expected_schema.fields:
+            if field.name in actual_schema.fieldNames():
+                actual_field = actual_schema[field.name]
+                if actual_field.dataType != field.dataType:
+                    validation_result[&#34;datatype_mismatch&#34;].append(field.name)
+            else:
+                validation_result[&#34;missing_columns&#34;].append(field.name)
+
+        # Check for extra columns
+        for field_name in actual_schema.fieldNames():
+            if field_name not in [field.name for field in self.expected_schema.fields]:
+                validation_result[&#34;extra_columns&#34;].append(field_name)
+
+        return validation_result
+    
+    def changeSchema(self):
+
+        &#34;&#34;&#34;
+        Change the current schema to the expected schema provided.
+        
+        Returns:
+            pyspark.sql.DataFrame: DataFrame containing the datatype of the expected schema.
+
+        &#34;&#34;&#34;
+        actual_schema = self.dataframe.schema
+        schemaValidatedDF = self.dataframe
+        for field in self.expected_schema.fields:
+            if field.name in actual_schema.fieldNames():
+                schemaValidatedDF = schemaValidatedDF.withColumn(field.name,col(field.name).cast(field.dataType))
+        return schemaValidatedDF 
+            
+
+    def dataProfiling(self):
+
+        &#39;&#39;&#39;
+            Checks the null counts, empty strings, stastical description and counts of the number of rows.
+
+            Returns:
+                dict: Data profiling results including total row count, null counts, null count percentage,
+                  empty string counts, and statistical descriptions for each column.
+
+        &#39;&#39;&#39;
+        
+        recordCounts  = self.dataframe.count()
+        nullCountsPercentage = {}
+        nullCounts = {}
+        emptyString = {}
+        stasticalDescription = {}
+        for columnNames in self.dataframe.columns:
+            nullCounts[columnNames] = self.dataframe.select(col(columnNames)).filter(col(columnNames).isNull()).count()
+            nullCountsPercentage[columnNames] = f&#39;{((nullCounts[columnNames])/recordCounts)*100}%&#39;
+            emptyString[columnNames] = self.dataframe.filter(col(columnNames) == &#34;&#34;).count()
+            column_data_type = self.dataframe.schema[columnNames].dataType
+            if isinstance(column_data_type, (IntegerType, DoubleType, FloatType, LongType)):
+                statistics = self.dataframe.select(col(columnNames)).describe().toPandas().set_index(&#39;summary&#39;).to_dict()[columnNames]
+                stasticalDescription[columnNames] = statistics
+
+        resultOutcome = {&#39;Total Number of rows&#39;:recordCounts,&#39;nullCounts&#39;:nullCounts,&#39;null count percentage&#39;:nullCountsPercentage,&#39;empty_string&#39;:emptyString,&#39;stats&#39;:stasticalDescription}
+
+        return resultOutcome
+    
+
+    def run_range_validations(self, range_validations):
+
+        &#39;&#39;&#39;
+        range_validations(dict): Validation rules passed in dictionary.
+        Format for the parameter range_validation = {
+            &#39;col1&#39;:(min_value,max_value),
+            &#39;col2&#39;:(None,max_value),
+            &#39;col3&#39;:(min_value,None),
+            &#39;col4&#39;:(None,None)
+        }
+        Returns:
+            dict: Validation results indicating if the range validations passed or failed for each column.
+        &#39;&#39;&#39;
+        validation_results = {}
+
+        for column, (min_value, max_value) in range_validations.items():
+            if min_value is None and max_value is None:
+                validation_results[column] = True
+            elif min_value is None:
+                validation_result = self.dataframe.filter(col(column) &lt;= max_value).count() == self.dataframe.count()
+                validation_results[column] = validation_result
+            elif max_value is None:
+                validation_result = self.dataframe.filter(col(column) &gt;= min_value).count() == self.dataframe.count()
+                validation_results[column] = validation_result
+            else:
+                validation_result = self.dataframe.filter((col(column) &gt;= min_value) &amp; (col(column) &lt;= max_value)).count() == self.dataframe.count()
+                validation_results[column] = validation_result
+        print(validation_results)
+        return validation_results
+
+
+    def generateReport(self):
+
+        &#34;&#34;&#34;
+        Generate a report summarizing the data validation results.
+
+        Returns:
+            str: Report containing information about the total row count, null counts, null count percentage,
+                 empty string counts, and statistical descriptions for each column.
+
+        &#34;&#34;&#34;
+
+        report = f&#34;Data Report:\n\n&#34;
+        report += f&#34;Total Number of Rows: {self.dataprofiling[&#39;Total Number of rows&#39;]}\n\n&#34;
+        report += f&#34;Null Counts:\n&#34;
+        for column, count in self.dataprofiling[&#39;nullCounts&#39;].items():
+            report += f&#34;  - {column}: {count}\n&#34;
+        report += &#34;\n&#34;
+        report += f&#34;Null Count Percentage:\n&#34;
+        for column, percentage in self.dataprofiling[&#39;null count percentage&#39;].items():
+            report += f&#34;  - {column}: {percentage}\n&#34;
+        report += &#34;\n&#34;
+        report += f&#34;Empty String Counts:\n&#34;
+        for column, count in self.dataprofiling[&#39;empty_string&#39;].items():
+            report += f&#34;  - {column}: {count}\n&#34;
+        report += &#34;\n&#34;
+        report += f&#34;Statistics:\n&#34;
+        for column, stats in self.dataprofiling[&#39;stats&#39;].items():
+            report += f&#34;  - {column}:\n&#34;
+            for stat, value in stats.items():
+                report += f&#34;    - {stat}: {value}\n&#34;
+        
+        return report</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="dataautomation.dataTestAutomation.changeSchema"><code class="name flex">
+<span>def <span class="ident">changeSchema</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Change the current schema to the expected schema provided.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>pyspark.sql.DataFrame</code></dt>
+<dd>DataFrame containing the datatype of the expected schema.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def changeSchema(self):
+
+    &#34;&#34;&#34;
+    Change the current schema to the expected schema provided.
+    
+    Returns:
+        pyspark.sql.DataFrame: DataFrame containing the datatype of the expected schema.
+
+    &#34;&#34;&#34;
+    actual_schema = self.dataframe.schema
+    schemaValidatedDF = self.dataframe
+    for field in self.expected_schema.fields:
+        if field.name in actual_schema.fieldNames():
+            schemaValidatedDF = schemaValidatedDF.withColumn(field.name,col(field.name).cast(field.dataType))
+    return schemaValidatedDF </code></pre>
+</details>
+</dd>
+<dt id="dataautomation.dataTestAutomation.dataProfiling"><code class="name flex">
+<span>def <span class="ident">dataProfiling</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Checks the null counts, empty strings, stastical description and counts of the number of rows.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>dict</code></dt>
+<dd>Data profiling results including total row count, null counts, null count percentage,
+empty string counts, and statistical descriptions for each column.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dataProfiling(self):
+
+    &#39;&#39;&#39;
+        Checks the null counts, empty strings, stastical description and counts of the number of rows.
+
+        Returns:
+            dict: Data profiling results including total row count, null counts, null count percentage,
+              empty string counts, and statistical descriptions for each column.
+
+    &#39;&#39;&#39;
+    
+    recordCounts  = self.dataframe.count()
+    nullCountsPercentage = {}
+    nullCounts = {}
+    emptyString = {}
+    stasticalDescription = {}
+    for columnNames in self.dataframe.columns:
+        nullCounts[columnNames] = self.dataframe.select(col(columnNames)).filter(col(columnNames).isNull()).count()
+        nullCountsPercentage[columnNames] = f&#39;{((nullCounts[columnNames])/recordCounts)*100}%&#39;
+        emptyString[columnNames] = self.dataframe.filter(col(columnNames) == &#34;&#34;).count()
+        column_data_type = self.dataframe.schema[columnNames].dataType
+        if isinstance(column_data_type, (IntegerType, DoubleType, FloatType, LongType)):
+            statistics = self.dataframe.select(col(columnNames)).describe().toPandas().set_index(&#39;summary&#39;).to_dict()[columnNames]
+            stasticalDescription[columnNames] = statistics
+
+    resultOutcome = {&#39;Total Number of rows&#39;:recordCounts,&#39;nullCounts&#39;:nullCounts,&#39;null count percentage&#39;:nullCountsPercentage,&#39;empty_string&#39;:emptyString,&#39;stats&#39;:stasticalDescription}
+
+    return resultOutcome</code></pre>
+</details>
+</dd>
+<dt id="dataautomation.dataTestAutomation.generateReport"><code class="name flex">
+<span>def <span class="ident">generateReport</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generate a report summarizing the data validation results.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>Report containing information about the total row count, null counts, null count percentage,
+empty string counts, and statistical descriptions for each column.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generateReport(self):
+
+    &#34;&#34;&#34;
+    Generate a report summarizing the data validation results.
+
+    Returns:
+        str: Report containing information about the total row count, null counts, null count percentage,
+             empty string counts, and statistical descriptions for each column.
+
+    &#34;&#34;&#34;
+
+    report = f&#34;Data Report:\n\n&#34;
+    report += f&#34;Total Number of Rows: {self.dataprofiling[&#39;Total Number of rows&#39;]}\n\n&#34;
+    report += f&#34;Null Counts:\n&#34;
+    for column, count in self.dataprofiling[&#39;nullCounts&#39;].items():
+        report += f&#34;  - {column}: {count}\n&#34;
+    report += &#34;\n&#34;
+    report += f&#34;Null Count Percentage:\n&#34;
+    for column, percentage in self.dataprofiling[&#39;null count percentage&#39;].items():
+        report += f&#34;  - {column}: {percentage}\n&#34;
+    report += &#34;\n&#34;
+    report += f&#34;Empty String Counts:\n&#34;
+    for column, count in self.dataprofiling[&#39;empty_string&#39;].items():
+        report += f&#34;  - {column}: {count}\n&#34;
+    report += &#34;\n&#34;
+    report += f&#34;Statistics:\n&#34;
+    for column, stats in self.dataprofiling[&#39;stats&#39;].items():
+        report += f&#34;  - {column}:\n&#34;
+        for stat, value in stats.items():
+            report += f&#34;    - {stat}: {value}\n&#34;
+    
+    return report</code></pre>
+</details>
+</dd>
+<dt id="dataautomation.dataTestAutomation.readData"><code class="name flex">
+<span>def <span class="ident">readData</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Read data from different sources with configurable parameters.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>pyspark.sql.DataFrame</code></dt>
+<dd>DataFrame containing the data from the specified source.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def readData(self):
+
+    &#34;&#34;&#34;
+    Read data from different sources with configurable parameters.
+    
+    Returns:
+        pyspark.sql.DataFrame: DataFrame containing the data from the specified source.
+    &#34;&#34;&#34;    
+    # Read data based on the source type
+    reader = spark.read.format(self.source_type)
+    if self.options is not None:
+        reader = reader.options(**self.options)
+    if self.source_path is not None:
+        reader = reader.load(self.source_path)
+
+    df = reader
+    return df</code></pre>
+</details>
+</dd>
+<dt id="dataautomation.dataTestAutomation.run_range_validations"><code class="name flex">
+<span>def <span class="ident">run_range_validations</span></span>(<span>self, range_validations)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>range_validations(dict): Validation rules passed in dictionary.
+Format for the parameter range_validation = {
+'col1':(min_value,max_value),
+'col2':(None,max_value),
+'col3':(min_value,None),
+'col4':(None,None)
+}</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>dict</code></dt>
+<dd>Validation results indicating if the range validations passed or failed for each column.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def run_range_validations(self, range_validations):
+
+    &#39;&#39;&#39;
+    range_validations(dict): Validation rules passed in dictionary.
+    Format for the parameter range_validation = {
+        &#39;col1&#39;:(min_value,max_value),
+        &#39;col2&#39;:(None,max_value),
+        &#39;col3&#39;:(min_value,None),
+        &#39;col4&#39;:(None,None)
+    }
+    Returns:
+        dict: Validation results indicating if the range validations passed or failed for each column.
+    &#39;&#39;&#39;
+    validation_results = {}
+
+    for column, (min_value, max_value) in range_validations.items():
+        if min_value is None and max_value is None:
+            validation_results[column] = True
+        elif min_value is None:
+            validation_result = self.dataframe.filter(col(column) &lt;= max_value).count() == self.dataframe.count()
+            validation_results[column] = validation_result
+        elif max_value is None:
+            validation_result = self.dataframe.filter(col(column) &gt;= min_value).count() == self.dataframe.count()
+            validation_results[column] = validation_result
+        else:
+            validation_result = self.dataframe.filter((col(column) &gt;= min_value) &amp; (col(column) &lt;= max_value)).count() == self.dataframe.count()
+            validation_results[column] = validation_result
+    print(validation_results)
+    return validation_results</code></pre>
+</details>
+</dd>
+<dt id="dataautomation.dataTestAutomation.validateSchema"><code class="name flex">
+<span>def <span class="ident">validateSchema</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Validate the actual schema of a DataFrame against the expected schema.
+Identify mismatched datatypes, missing columns, or extra columns.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>dict</code></dt>
+<dd>Validation result with details of mismatched datatypes, missing columns, and extra columns.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def validateSchema(self):
+
+    &#34;&#34;&#34;
+    Validate the actual schema of a DataFrame against the expected schema.
+    Identify mismatched datatypes, missing columns, or extra columns.
+        
+    Returns:
+        dict: Validation result with details of mismatched datatypes, missing columns, and extra columns.
+    &#34;&#34;&#34;
+    validation_result = {&#34;datatype_mismatch&#34;: [], &#34;missing_columns&#34;: [], &#34;extra_columns&#34;: []}
+    actual_schema = self.dataframe.schema
+    for field in self.expected_schema.fields:
+        if field.name in actual_schema.fieldNames():
+            actual_field = actual_schema[field.name]
+            if actual_field.dataType != field.dataType:
+                validation_result[&#34;datatype_mismatch&#34;].append(field.name)
+        else:
+            validation_result[&#34;missing_columns&#34;].append(field.name)
+
+    # Check for extra columns
+    for field_name in actual_schema.fieldNames():
+        if field_name not in [field.name for field in self.expected_schema.fields]:
+            validation_result[&#34;extra_columns&#34;].append(field_name)
+
+    return validation_result</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="dataautomation.dataTestAutomation" href="#dataautomation.dataTestAutomation">dataTestAutomation</a></code></h4>
+<ul class="">
+<li><code><a title="dataautomation.dataTestAutomation.changeSchema" href="#dataautomation.dataTestAutomation.changeSchema">changeSchema</a></code></li>
+<li><code><a title="dataautomation.dataTestAutomation.dataProfiling" href="#dataautomation.dataTestAutomation.dataProfiling">dataProfiling</a></code></li>
+<li><code><a title="dataautomation.dataTestAutomation.generateReport" href="#dataautomation.dataTestAutomation.generateReport">generateReport</a></code></li>
+<li><code><a title="dataautomation.dataTestAutomation.readData" href="#dataautomation.dataTestAutomation.readData">readData</a></code></li>
+<li><code><a title="dataautomation.dataTestAutomation.run_range_validations" href="#dataautomation.dataTestAutomation.run_range_validations">run_range_validations</a></code></li>
+<li><code><a title="dataautomation.dataTestAutomation.validateSchema" href="#dataautomation.dataTestAutomation.validateSchema">validateSchema</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>
