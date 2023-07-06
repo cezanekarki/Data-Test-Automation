@@ -1,0 +1,2900 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>dataautomation API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>dataautomation</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">try:
+    from pyspark.sql.functions import *
+    from pyspark.sql.types import *
+    from pyspark.sql.types import NumericType
+    import re
+    import matplotlib.pyplot as plt
+    import math
+    from pyspark.sql import functions as F
+except Exception as e:
+    raise Exception(f&#39;Error while importing libraries, error {e}&#39;)
+
+
+class dataTestAutomation:
+
+    def __init__(self, source_type,  source_path = None, options=None, expected_schema = None, changeDataType = False):
+
+        &#39;&#39;&#39;
+        Args:
+            source_type (str): Type of the data source (e.g., &#39;delta&#39;, &#39;parquet&#39;, &#39;csv&#39;, &#39;jdbc&#39;, &#39;mongo&#39;, etc.).
+            source_path (str): Path or connection URL of the data source. Default is None.
+            expected_schema: Expected schema for data validation. Default is None.
+            options (dict, optional): Additional options specific to the data source. Default is None.
+            changeDataType: Change the datatype of actual schema of dataframe to expected schema. Default is False.
+        &#39;&#39;&#39;
+        self.source_type = source_type
+        self.source_path = source_path
+        self.options = options
+        self.expected_schema = expected_schema
+        self.changeDataType = changeDataType
+        self.main()
+
+    def readData(self):
+
+        &#39;&#39;&#39;
+        Read data from different sources with configurable parameters.
+        
+        Returns:
+            pyspark.sql.DataFrame: DataFrame containing the data from the specified source.
+        &#39;&#39;&#39; 
+        try:
+            # Read data based on the source type
+            reader = spark.read.format(self.source_type)
+            if self.options is not None:
+                reader = reader.options(**self.options)
+            else:
+                reader = reader.options()
+            if self.source_path is not None:
+                reader = reader.load(self.source_path)
+            else:
+                reader = reader.load()
+
+            df = reader
+            
+            return df
+        except Exception as e:
+            raise Exception(f&#34;Error occured while loading the file, error: {str(e)}&#34;)
+
+    def handleInvalidColumns(self):
+
+        &#39;&#39;&#39;
+        Validate the column names by removing &#34;&#34;,&#39;.&#39; and invalid characters from the columns.
+
+        Returns:
+            pyspark.sql.DataFrame: Dataframe containing the validated column names.
+        &#39;&#39;&#39;
+
+        validName = self.dataframe
+        for column in self.dataframe.columns:
+            if not re.match(r&#39;^[A-Za-z0-9_]+$&#39;, column):
+                valid_column_name = re.sub(r&#39;[^A-Za-z0-9_]+&#39;, &#39;_&#39;, column)
+                validName = validName.withColumnRenamed(column, valid_column_name)
+
+        return validName
+    
+
+    def validateSchema(self):
+
+        &#34;&#34;&#34;
+        Validate the actual schema of a DataFrame against the expected schema.
+        Identify mismatched datatypes, missing columns, or extra columns.
+            
+        Returns:
+            dict: Validation result with details of mismatched datatypes, missing columns, and extra columns.
+        &#34;&#34;&#34;
+
+        try:
+            validation_result = {&#34;DataType Mismatched&#34;: [], &#34;Missing Columns&#34;: [], &#34;Extra Columns&#34;: []}
+            actual_schema = self.dataframe.schema
+            for field in self.expected_schema.fields:
+                actual_schema_fields = [data.lower() for data in actual_schema.fieldNames()]
+                if field.name.lower() in actual_schema_fields:
+                    actual_field = actual_schema[field.name]
+                    if actual_field.dataType != field.dataType:     #Check for mismatch datatype
+                        validation_result[&#34;DataType Mismatched&#34;].append(field.name)     
+                else:
+                    validation_result[&#34;Missing Columns&#34;].append(field.name)     #check for missing columns
+
+            # Check for extra columns
+            for field_name in actual_schema.fieldNames():
+                if field_name not in [field.name for field in self.expected_schema.fields]:
+                    validation_result[&#34;Extra Columns&#34;].append(field_name)
+
+            return validation_result
+        
+        except Exception as e:
+            raise Exception(f&#34;Error occured while validating schema, error: {str(e)}&#34;)
+
+    
+
+    def changeSchema(self):
+        &#34;&#34;&#34;
+        Change the current schema to the expected schema provided.
+        
+        Returns:
+            pyspark.sql.DataFrame: DataFrame containing the datatype of the expected schema.
+        &#34;&#34;&#34;
+        try:
+            actual_schema = self.dataframe.schema
+            schema_validated_df = self.dataframe
+            for field in self.expected_schema.fields:
+                if field.name in actual_schema.fieldNames():
+                    actual_field = actual_schema[field.name]
+                    expected_field = field.dataType
+                    if isinstance(expected_field, ArrayType):
+                        schema_validated_df = self.convert_array_type(schema_validated_df, field.name, actual_field, expected_field)
+                    elif isinstance(expected_field, MapType):
+                        schema_validated_df = self.convert_map_type(schema_validated_df, field.name, actual_field, expected_field)
+                    else:
+                        schema_validated_df = schema_validated_df.withColumn(field.name, col(field.name).cast(expected_field))
+            return schema_validated_df
+        except Exception as e:
+            raise Exception(f&#34;Error occurred while changing the data type: {str(e)}&#34;)
+
+    def convert_array_type(self,dataframe, column_name, actual_field, expected_field):
+        &#34;&#34;&#34;
+            Converts the data type of an array column in a DataFrame.
+
+            Args:
+                self (object): The instance of the class.
+                dataframe (DataFrame): The DataFrame containing the data.
+                column_name (str): The name of the array column.
+                actual_field (DataType): The actual data type of the array column.
+                expected_field (DataType): The desired data type for the array column.
+
+            Returns:
+                DataFrame: The DataFrame with the converted array column.
+
+            Raises:
+                Exception: If the actual data type of the column is not supported.
+        &#34;&#34;&#34;
+        if isinstance(actual_field.dataType, StringType):
+            dataframe = dataframe.withColumn(column_name, from_json(col(column_name), expected_field))
+        elif isinstance(actual_field.dataType, ArrayType) and isinstance(actual_field.elementType, StructType):
+            dataframe = self.convert_struct_type(dataframe, column_name, actual_field.elementType, expected_field.elementType)
+        else:
+            raise Exception(f&#34;Invalid data type for column {column_name}&#34;)
+        return dataframe
+
+    def convert_map_type(self,dataframe, column_name, actual_field, expected_field):
+        &#34;&#34;&#34;
+            Converts the data type of a map column in a DataFrame.
+
+            Args:
+                self (object): The instance of the class.
+                dataframe (DataFrame): The DataFrame containing the data.
+                column_name (str): The name of the map column.
+                actual_field (DataType): The actual data type of the map column.
+                expected_field (DataType): The desired data type for the map column.
+
+            Returns:
+                DataFrame: The DataFrame with the converted map column.
+
+            Raises:
+                Exception: If the actual data type of the column is not supported.
+        &#34;&#34;&#34;
+        if isinstance(actual_field.dataType, StringType):
+            dataframe = dataframe.withColumn(column_name, from_json(col(column_name), expected_field))
+        elif isinstance(actual_field.dataType, MapType) and isinstance(actual_field.valueType, StructType):
+            dataframe = self.convert_struct_type(dataframe, column_name, actual_field.valueType, expected_field.valueType)
+        else:
+            raise Exception(f&#34;Invalid data type for column {column_name}&#34;)
+        return dataframe
+
+    def convert_struct_type(self,dataframe, column_name, actual_field, expected_field):
+        &#34;&#34;&#34;
+        Converts the data type of a struct column in a DataFrame.
+
+        Args:
+            self (object): The instance of the class.
+            dataframe (DataFrame): The DataFrame containing the data.
+            column_name (str): The name of the struct column.
+            actual_field (StructType): The actual data type of the struct column.
+            expected_field (StructType): The desired data type for the struct column.
+
+        Returns:
+            DataFrame: The DataFrame with the converted struct column.
+
+        Raises:
+            Exception: If the actual data type of the column is not supported.
+        &#34;&#34;&#34;
+        for field in expected_field.fields:
+            if field.name in actual_field.fieldNames():
+                actual_nested_field = actual_field[field.name]
+                expected_nested_field = field.dataType
+                if isinstance(expected_nested_field, ArrayType):
+                    dataframe = convert_array_type(dataframe, f&#34;{column_name}.{field.name}&#34;, actual_nested_field, expected_nested_field)
+                elif isinstance(expected_nested_field, MapType):
+                    dataframe = convert_map_type(dataframe, f&#34;{column_name}.{field.name}&#34;, actual_nested_field, expected_nested_field)
+                else:
+                    dataframe = dataframe.withColumn(f&#34;{column_name}.{field.name}&#34;, col(f&#34;{column_name}.{field.name}&#34;).cast(expected_nested_field))
+        return dataframe
+
+
+    
+    def getCategoricalNumerical(self):
+
+        &#39;&#39;&#39;
+        Distinguish the categorical and numerical column, saves the column names in the list.
+        Returns:
+            List: Two different list containing the names of column classified into numerical and categorical columns
+        &#39;&#39;&#39;
+
+        categorical = []
+        numerical_datatype = []
+
+
+        for i in self.dataframe.columns:
+            column_data_type = self.dataframe.schema[i].dataType
+            if isinstance(column_data_type, (IntegerType, DoubleType, FloatType, LongType, DecimalType, NumericType, ShortType,ByteType)):
+                numerical_datatype.append(i)
+            elif isinstance(column_data_type,StringType):
+                distinct_values = self.dataframe.agg(countDistinct(i)).collect()[0][0]
+                if distinct_values &lt; 12:
+                    categorical.append(i)
+        
+
+        
+        return categorical, numerical_datatype
+
+
+    def dataProfiling(self):
+
+        &#39;&#39;&#39;
+            Checks the null counts, empty strings, stastical description and counts of the number of rows.
+
+            Returns:
+                dict: Data profiling results including total row count, null counts, null count percentage,
+                  empty string counts, and statistical descriptions for each column.
+
+        &#39;&#39;&#39;
+        try:
+            recordCounts  = self.dataframe.count()
+            nullCountsPercentage = {}
+            nullCounts = {}
+            emptyString = {}
+            stasticalDescription = {}
+            distinctValue = {}
+            for columnNames in self.dataframe.columns:
+                column_data_type = self.dataframe.schema[columnNames].dataType
+                if not isinstance(column_data_type,(ArrayType,MapType,StructType)):
+                    nullCounts[columnNames] = self.dataframe.select(col(columnNames)).filter(col(columnNames).isNull()).count() #count of null value
+                    nullCountsPercentage[columnNames] = f&#39;{((nullCounts[columnNames])/recordCounts)*100}%&#39;    #percentage of null values
+                    emptyString[columnNames] = self.dataframe.filter(col(columnNames) == &#34;&#34;).count()    #count of empty strings
+            
+            stasticalDescription = {colName: self.dataframe.select(col(colName)).describe().toPandas().set_index(&#39;summary&#39;).to_dict()[colName] for colName in self.numerical}
+            
+
+            distinctValue = {colName: self.dataframe.select(col(colName)).distinct() for colName in self.categorical}
+
+
+            resultOutcome = {&#39;Total Number of rows&#39;:recordCounts,&#39;nullCounts&#39;:nullCounts,&#39;null count percentage&#39;:nullCountsPercentage,&#39;empty_string&#39;:emptyString,&#39;stats&#39;:stasticalDescription, &#39;Distinct Values&#39;:distinctValue}
+            return resultOutcome
+        
+        except Exception as e:
+            raise Exception(f&#34;Error occured while doing data profiling, error: {str(e)}&#34;)
+            
+    
+
+    def run_range_validations(self, range_validations):
+
+        &#39;&#39;&#39;
+        range_validations(dict): Validation rules passed in dictionary.
+        Format for the parameter range_validation = {
+            &#39;col1&#39;:(min_value,max_value),
+            &#39;col2&#39;:(None,max_value),
+            &#39;col3&#39;:(min_value,None),
+            &#39;col4&#39;:(None,None)
+        }
+        Returns:
+            dict: Validation results indicating if the range validations passed or failed for each column.
+        &#39;&#39;&#39;
+
+        try:
+            validation_results = {}
+
+            for column, (min_value, max_value) in range_validations.items():
+                if min_value is None and max_value is None:
+                    validation_results[column] = True
+                elif min_value is None:
+                    validation_result = self.dataframe.filter(col(column) &lt;= max_value).count() == self.dataframe.count()
+                    validation_results[column] = validation_result
+                elif max_value is None:
+                    validation_result = self.dataframe.filter(col(column) &gt;= min_value).count() == self.dataframe.count()
+                    validation_results[column] = validation_result
+                else:
+                    validation_result = self.dataframe.filter((col(column) &gt;= min_value) &amp; (col(column) &lt;= max_value)).count() == self.dataframe.count()
+                    validation_results[column] = validation_result
+            return validation_results
+        
+        except Exception as e:
+            raise Exception(f&#34;Error occured while validating range, error: {str(e)}&#34;)
+    
+
+    def validateColumnFormat(self, column_rules, display_rows = 20, showData = False):
+
+        &#39;&#39;&#39;
+        args:
+            column_rules(dict): Dictionary with column name and format as regex for the validation.
+            eg : {
+                &#34;Ticket&#34;: r&#39;^\d{6}$&#39;,
+                &#34;Embarked&#34;:r&#39;S&#39;
+            }
+            Ticket and Embarked, the two keys are the column names, other two, values are the regular expression validation rules.
+            display_rows(int): Limit for number of invalid rows to be displayed. Default value is 20.
+        
+        Returns:
+            The two dataframes are printed as well.
+            Dictionary containing the dataframe for invalid count and invalid record of specific column.
+        &#39;&#39;&#39;
+
+        columnValidationFormat = {}
+        for column, rule in column_rules.items():
+            df = self.dataframe.withColumn(&#34;validation_result&#34;, regexp_extract(col(column), rule, 0))
+            invalid_records = df.filter(col(&#34;validation_result&#34;) == &#34;&#34;)
+            invalid_count = invalid_records.count()
+
+            schema = StructType([StructField(f&#39;Invalid Data Count - {column}&#39;, IntegerType(), nullable=False)])
+            invalid_count_DF = spark.createDataFrame([(invalid_count,)],schema=schema)
+
+            if invalid_count &gt; 0:
+                
+                invalid_record_data = invalid_records
+                if showData == True:
+                    print(f&#39;Invalid count for {column}&#39;)
+                    invalid_count_DF.display(display_rows)
+                    print(f&#39;Invalid data for {column}&#39;)
+                    display(invalid_record_data.limit(display_rows))
+                    columnValidationFormat[column] = {invalid_count_DF, invalid_record_data}
+                elif showData == False:
+                    print(f&#39;Invalid count for {column}&#39;)
+                    invalid_count_DF.display(display_rows)
+                    columnValidationFormat[column] = {invalid_count_DF}
+            else:
+                print(f&#39;Invalid count for {column}&#39;)
+                invalid_count_DF.display(display_rows)
+                columnValidationFormat[column] = {invalid_count_DF}
+
+                
+            
+
+        return columnValidationFormat
+
+    def duplicateValues(self):
+
+        &#39;&#39;&#39;
+        Counts the number of duplicate values in the dataframe.
+
+        Returns:
+            Dict: Dictionary containing the dataframes for the duplicate values and duplicate values count.
+        &#39;&#39;&#39;
+        
+        duplicatesCount = {}
+        duplicate_rows_df = self.dataframe.groupBy(self.dataframe.columns).count().where(col(&#34;count&#34;) &gt; 1)
+        duplicatesValuesCount = spark.createDataFrame([Row(count=duplicate_rows_df.count())], schema=[&#39;Duplicates Count&#39;])
+        if duplicate_rows_df.count() &gt; 1:
+            duplicatesValues = duplicate_rows_df.drop(&#39;count&#39;)
+            duplicatesCount = {&#39;values&#39;: duplicatesValues, &#39;count&#39;: duplicatesValuesCount}
+        else:
+            duplicatesCount = {&#39;count&#39;: duplicatesValuesCount}
+
+        return duplicatesCount
+    
+       
+    
+    def tabularReport(self):
+
+        &#34;&#34;&#34;
+        Generate a report summarizing the data validation results.
+
+        Returns:
+            str: Report containing information about overall evaluation of data.
+
+        &#34;&#34;&#34;
+
+        try:  
+            print(&#34;Raw Data:\n\n&#34;)
+            display(self.dataframe.limit(5))
+            print(&#34;\n\n Total Number of Records\n\n&#34;)
+            row = Row(&#39;Total Number of rows&#39;)(self.dataprofiling[&#39;Total Number of rows&#39;])
+            self.totalCount = spark.createDataFrame([row])
+            self.totalCount.display()
+
+            if self.expected_schema is None:
+                    pass
+            else:
+                print(&#34;\n\n Schema Validation:\n\n&#34;)
+                schemaValidationData = [(key,value) for key,value in self.schemaResult.items()]
+                self.schemaValidationReport = spark.createDataFrame(schemaValidationData,[&#39;Validation Name&#39;,&#39;Result&#39;])
+                self.schemaValidationReport.display()
+            print(&#34;\n\n Null Counts and Percentage:\n\n&#34;)
+            nullCountsData = [(column, count )for column, count in self.dataprofiling[&#39;nullCounts&#39;].items()]
+            self.nullCounts = spark.createDataFrame(nullCountsData,schema=[&#39;Column&#39;,&#39;Count&#39;])
+            #self.nullCounts.display()
+            # print(&#34;\n\n Null Counts Percentage:\n\n&#34;)
+            nullCountsPercentageData = [(column, count )for column, count in self.dataprofiling[&#39;null count percentage&#39;].items()]
+            self.nullCountsPercentage = spark.createDataFrame(nullCountsPercentageData,schema=[&#39;Column&#39;,&#39;Percentage&#39;])
+            #self.nullCountsPercentage.display()
+            self.nullCountJoin = self.nullCounts.join(self.nullCountsPercentage,&#39;Column&#39;,&#39;inner&#39;)
+            self.nullCountJoin.display()
+            print(&#34;\n\n Empty String:\n\n&#34;)
+            emptyStringData = [(column, count) for column, count in self.dataprofiling[&#39;empty_string&#39;].items()]
+            self.emptyStringData = spark.createDataFrame(emptyStringData,schema=[&#39;Column&#39;,&#39;Count&#39;])
+            self.emptyStringData.display()
+
+            print(&#34;\n\n Statistics:\n\n&#34;)
+            data = [(k, v[&#39;count&#39;], v[&#39;mean&#39;], v[&#39;stddev&#39;], v[&#39;min&#39;], v[&#39;max&#39;]) for k, v in self.dataprofiling[&#39;stats&#39;].items()]
+            schema = StructType([
+                StructField(&#34;column&#34;, StringType(), nullable=False),
+                StructField(&#34;count&#34;, StringType(), nullable=False),
+                StructField(&#34;mean&#34;, StringType(), nullable=False),
+                StructField(&#34;stddev&#34;, StringType(), nullable=False),
+                StructField(&#34;min&#34;, StringType(), nullable=False),
+                StructField(&#34;max&#34;, StringType(), nullable=False)
+            ])
+            self.statistics = spark.createDataFrame(data,schema)
+            self.statistics.display()
+
+            print(&#34;\n\n Distinct Values:\n\n&#34;)
+            self.distinctValueData = [data.display() for column, data in self.dataprofiling[&#39;Distinct Values&#39;].items()]
+
+            print(&#34;\n\n Duplicates:\n\n&#34;)
+            duplicates = self.duplicates
+            self.duplicateValues = []
+            for key, value in duplicates.items():
+                self.duplicateValues.append(value)
+                value.display()
+            
+            if self.expected_schema is None:
+                self.dfList = [self.totalCount, self.statistics,self.emptyStringData,self.nullCounts,self.nullCountsPercentage,self.distinctValueData]
+            else:
+                self.dfList = [self.totalCount, self.schemaValidationReport, self.statistics,self.emptyStringData,self.nullCounts,self.nullCountsPercentage,self.distinctValueData]
+
+        
+        except Exception as e:
+            raise Exception(f&#34;Error occured while generating report, error: {str(e)}&#34;)
+
+    def trendAnalysis(self, date_column, trend_columns):
+
+        &#34;&#34;&#34;
+        Performs trend analysis on a DataFrame.
+
+        Args:
+            self (object): The instance of the class containing the DataFrame.
+            date_column (str): The name of the column containing the date values.
+            trend_columns (list): A list of column names to perform trend analysis on.
+
+        Returns:
+            tuple: A tuple containing two DataFrames:
+                - grouped_data: DataFrame with aggregated data grouped by date and other columns.
+                - ordered_df: DataFrame with descriptive statistics of trend_columns ordered by date.
+        &#34;&#34;&#34;
+        self.date_column = date_column
+        df = self.dataframe.withColumn(self.date_column, f.to_date(f.col(self.date_column), &#39;yyyy-MM-dd&#39;))
+        
+        for column in trend_columns:
+            if not isinstance(df.schema[column].dataType, (int, float)):
+                df = df.withColumn(column,df[column].cast(&#39;int&#39;))
+        
+        group_columns = [f.col(column) for column in df.columns if column != self.date_column]
+        agg_columns = [f.col(column).alias(column) for column in trend_columns]
+        grouped_data = df.groupBy(self.date_column, *group_columns).agg(*agg_columns)
+        selected_columns = [f.col(column) for column in trend_columns]
+        selected_columns.append(f.col(self.date_column))
+        selected_df = df.select(*selected_columns)
+        groupby = selected_df.groupBy(self.date_column)
+        agg_exprs = [f.min(column).alias(&#34;min_&#34; + column) for column in trend_columns] + \
+                    [f.max(column).alias(&#34;max_&#34; + column) for column in trend_columns] + \
+                    [f.avg(column).alias(&#34;avg_&#34; + column) for column in trend_columns] + \
+                    [f.stddev(column).alias(&#34;stddev_&#34; + column) for column in trend_columns]
+        description_df = groupby.agg(*agg_exprs)
+        ordered_df = description_df.orderBy(self.date_column)
+        return grouped_data, ordered_df
+    
+    def plotTrendAnalysis(self,dataframe,trend_columns):
+        &#34;&#34;&#34;
+            Plots trend analysis for specified columns in a DataFrame.
+
+            Args:
+                self (object): The instance of the class.
+                dataframe (DataFrame): The DataFrame containing the data.
+                trend_columns (list): A list of column names to plot the trend analysis for.
+
+            Returns:
+                None
+        &#34;&#34;&#34;
+        pandas_df = dataframe.toPandas()
+        pandas_df.set_index(self.date_column, inplace=True)
+        
+        num_trend_columns = len(trend_columns)
+        num_rows = math.ceil(math.sqrt(num_trend_columns))
+        num_cols = math.ceil(num_trend_columns / num_rows)
+        
+        fig, axes = plt.subplots(num_rows, num_cols, figsize=(12, 10))
+        for i, column in enumerate(trend_columns):
+            if num_rows == 1 and num_cols == 1:
+                ax = axes
+            elif num_rows == 1 or num_cols == 1:
+                ax = axes[i]
+            else:
+                ax = axes[i // num_cols, i % num_cols]
+
+            pandas_df[column].plot(ax=ax, legend = False)
+            ax.set_title(column)
+            ax.set_ylabel(&#39;Count&#39;)
+            ax.tick_params(axis=&#39;x&#39;, rotation=90)
+
+        fig.tight_layout()
+        plt.show()
+          
+        
+    def main(self):
+
+        self.dataframe = self.readData()
+        self.dataframe = self.handleInvalidColumns()
+        if self.expected_schema is not None:
+            self.schemaResult = self.validateSchema()
+            if self.changeDataType is True:
+                self.dataframe = self.changeSchema()
+        self.categorical, self.numerical = self.getCategoricalNumerical() 
+        self.dataprofiling = self.dataProfiling()
+        self.duplicates = self.duplicateValues()
+        self.report = self.tabularReport()
+
+
+   
+
+
+
+
+try:
+    import pandas as pd
+    from pandas import ExcelFile
+    from pyspark.sql import SparkSession
+    from pyspark.sql.types import *
+except Exception as e:
+    raise Exception(f&#39;Error import libraries, error {str(e)}&#39;)
+
+class readSchema:
+
+    def __init__(self,file_path,fieldNameColumn, dataTypeColumn,sheet = None, relatedDataTypeColumn = None ,descriptionColumn = None):
+      
+        &#34;&#34;&#34;
+        Initialize the class instance.
+
+        Args:
+            file_path (str): The path to the file.
+            sheet (str, optional): The name of the sheet (if using an Excel file). Defaults to None.
+            fieldNameColumn (str, optional): The column name for the field names.
+            dataTypeColumn (str, optional): The column name for the data types. 
+            relatedDataTypeColumn (str, optional): The column name for the related data types. Defaults to None.
+            descriptionColumn (str, optional): The column name for the descriptions. Defaults to None.
+        &#34;&#34;&#34;
+
+        self.spark_df = None
+        self.schema = None
+        self.sheet = sheet
+        self.file_path = file_path
+        self.fieldNameColumn = fieldNameColumn
+        self.dataTypeColumn = dataTypeColumn
+        self.relatedDataTypeColumn = relatedDataTypeColumn
+        self.descriptionColumn = descriptionColumn
+
+
+
+    def readFile(self, skip_rows = None, start_column = None, usecols = None):
+      
+        &#34;&#34;&#34;
+        Read the file and create a Spark DataFrame.
+
+        Raises:
+            ValueError: If the file format is unsupported.
+        &#34;&#34;&#34;
+        try:
+            file_extension = self.file_path.split(&#39;.&#39;)[-1].lower()
+            if file_extension.lower() == &#39;json&#39;:
+        
+                    df = pd.read_json(self.file_path)
+
+
+            elif file_extension.lower() == &#39;csv&#39;:
+                df = pd.read_csv(self.file_path)
+            elif file_extension.lower() == &#39;xlsx&#39;:
+                if self.sheet is not None:
+                    df = pd.ExcelFile(self.file_path, engine = &#39;openpyxl&#39;,skiprows = skip_rows,index_col = start_column, usecols = usecols)
+                    df = df.parse(self.sheet)
+                else:
+                    df = pd.read_excel(self.file_path,skiprows = skip_rows,index_col = start_column, usecols = usecols)
+
+
+
+            else:
+                raise ValueError(f&#34;Unsupported file format: {file_extension}&#34;)
+        
+        except Exception as e:
+            raise Exception(f&#39;Error loading {file_extension} file, error {str(e)}&#39;)
+        
+        try:
+            self.spark_df = spark.createDataFrame(df)
+        except Exception as e:
+            raise Exception(f&#39;Error creating Spark Dataframe, error {str(e)}&#39;)
+
+    def convertDFtoList(self):
+    
+        &#34;&#34;&#34;
+        Convert the Spark DataFrame to a list of dictionaries.
+
+        This method collects the data from the Spark DataFrame and converts each row into a dictionary.
+
+        Note:
+            This method assumes that the `spark_df` attribute is already set with a valid Spark DataFrame.
+
+        Returns:
+            None
+        &#34;&#34;&#34;
+        try:
+            data = self.spark_df.select(*self.spark_df.columns).collect()
+            self.dict_list = [row.asDict() for row in data]
+            return self.dict_list
+        except Exception as e:
+            raise Exception(f&#39;Error occurred while converting DataFrame to list of dictionaries: {str(e)}&#39;)
+
+
+    def structureFormat(self):
+    
+        &#34;&#34;&#34;
+        Modify the structure format of related data types in the dictionary list.
+
+        This method checks for specific characters and formats the related data types accordingly.
+
+        Note:
+            This method assumes that the `dict_list` attribute is already set with a list of dictionaries. The dict_list is created by convertDFtoList() method.
+            It also assumes that the `relatedDataTypeColumn` attribute is set with the column name for related data types which is defined by the user during the initialization of the class.
+
+        Raises:
+            Exception: If an error occurs during the modification process.
+        &#34;&#34;&#34;
+        try:
+            for items in self.dict_list:
+                if items[self.relatedDataTypeColumn] is not None:
+                    if &#39;{&#39; in items[self.relatedDataTypeColumn] or &#39;}&#39; in items[self.relatedDataTypeColumn]:
+                        if &#39;&#34;&#39; not in items[self.relatedDataTypeColumn]:
+                            string = items[self.relatedDataTypeColumn].strip().replace(&#39;\n&#39;, &#39;&#39;).replace(&#39; &#39;, &#39;&#39;)
+                            string = string.strip(&#39;{}&#39;)
+                            pairs = string.split(&#39;,&#39;)
+                            result = {}
+                            for pair in pairs:
+                                key, value = pair.split(&#39;:&#39;)
+                                result[key] = value
+                            items[self.relatedDataTypeColumn] = result
+        except Exception as e:
+            raise Exception(f&#39;Error occurred while processing related data for item: {str(e)}&#39;)
+
+    def get_data_type(self,type_string):
+        &#34;&#34;&#34;
+        Get the corresponding Spark data type based on the input type string.
+
+        This method uses a mapping dictionary to associate the input type string with the appropriate Spark data type.
+
+        Args:
+            type_string (str): The input type string.
+
+        Returns:
+            DataType: The corresponding Spark data type.
+
+
+        &#34;&#34;&#34;
+        try:
+            self.type_mapping = {
+                &#39;string&#39;: StringType(),
+                &#39;str&#39;:StringType(),
+                &#39;boolean&#39;: BooleanType(),
+                &#39;integer&#39;: IntegerType(),
+                &#39;int&#39;: IntegerType(),
+                &#39;long&#39;: LongType(),
+                &#39;float&#39;: FloatType(),
+                &#39;double&#39;: DoubleType(),
+                &#39;timestamp&#39;: TimestampType(),
+                &#39;date&#39;: DateType()
+            }
+            return self.type_mapping.get(type_string, StringType())
+        except Exception as e:
+            raise Exception(f&#39;Error occurred while getting data type for {type_string}: {str(e)}&#39;)
+
+    def get_field_data_type(self):
+        &#34;&#34;&#34;
+        Get the field data types based on the provided column information.
+
+        This method iterates over the `dict_list` attribute and retrieves the field name, field type, and related data type (if applicable) for each column. It uses the `get_data_type` method to get the corresponding Spark data type.
+
+        Returns:
+            list: A list of StructField objects representing the fields with their data types.
+
+        Note:
+            This method assumes that the necessary attributes (`dict_list`, `fieldNameColumn`, `dataTypeColumn`, `descriptionColumn`, and `relatedDataTypeColumn`) are properly set.
+
+        &#34;&#34;&#34;
+        fields = []
+        try:
+            for item in self.dict_list:
+                field_name = item[self.fieldNameColumn]
+                field_type = item[self.dataTypeColumn]
+                if self.descriptionColumn is not None:
+                    field_description = item[self.descriptionColumn]
+
+                if field_type in [&#39;array&#39;, &#39;object&#39;]:
+                    if self.relatedDataTypeColumn is not None:
+                        related_data = item[self.relatedDataTypeColumn]
+                        if isinstance(related_data, dict):
+                            array_fields = []
+                            for subfield_name, subfield_type in related_data.items():
+                                subfield_data_type = self.get_data_type(subfield_type.lower())
+                                array_fields.append(StructField(subfield_name, subfield_data_type, True))
+                            field_data_type = ArrayType(StructType(array_fields))
+                        else:
+                            field_data_type = StringType()
+                    else:
+                        field_data_type = StringType()
+                elif field_type in [&#39;map&#39;]:
+                    if self.relatedDataTypeColumn is not None:
+                        related_data = item[self.relatedDataTypeColumn]
+                        if isinstance(related_data, dict):
+                            array_fields = []
+                            for subfield_name, subfield_type in related_data.items():
+                                subfield_data_type = self.get_data_type(subfield_type.lower)
+                                array_fields.append(StructField(subfield_name, subfield_data_type, True))
+                            field_data_type = MapType(StructType(array_fields))
+                        else:
+                            field_data_type = MapType(StringType(),StringType())
+                    else:
+                        field_data_type = MapType(StringType(),StringType())
+
+                else:
+                    field_data_type = self.get_data_type(field_type.lower())
+                if self.descriptionColumn is not None:
+                    field = StructField(field_name, field_data_type, nullable=True, metadata={&#39;description&#39;: field_description})
+                else:
+                    field = StructField(field_name, field_data_type, nullable=True, metadata={&#39;description&#39;: &#39;&#39;})
+
+                fields.append(field)
+        except Exception as e:
+            raise Exception(f&#39;Error occurred while getting field data types: {str(e)}&#39;)
+        
+        return fields
+
+
+    def spark_schema(self):
+        &#34;&#34;&#34;
+        Generate the Spark schema based on the field data types.
+
+        This method calls the `get_field_data_type` method to retrieve the field data types and constructs the Spark schema using the `StructType` class.
+
+        Returns:
+            StructType: The Spark schema generated from the field data types.
+
+        Note:
+            This method assumes that the `get_field_data_type` method has been properly implemented.
+
+        &#34;&#34;&#34;
+        fields = self.get_field_data_type()
+        self.schema = StructType(fields)
+        return self.schema
+
+    def createSchema(self):
+        &#34;&#34;&#34;
+        Create the schema for the Spark DataFrame.
+
+        This method performs the following steps:
+        1. Converts the Spark DataFrame to a list of dictionaries using the `convertDFtoList` method.
+        2. If the `relatedDataTypeColumn` is provided, it formats the related data types using the `strctureFormat` method.
+        3. Generates the Spark schema using the `spark_schema` method.
+        4. Returns the generated schema.
+
+        Returns:
+            StructType: The schema generated for the Spark DataFrame.
+
+        Note:
+            This method assumes that the `convertDFtoList` and `spark_schema` methods have been properly implemented.
+
+        &#34;&#34;&#34;
+        self.convertDFtoList()
+        if self.relatedDataTypeColumn is not None:
+            print(self.relatedDataTypeColumn)
+            self.structureFormat()
+        self.schema = self.spark_schema()
+        return self.schema</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="dataautomation.dataTestAutomation"><code class="flex name class">
+<span>class <span class="ident">dataTestAutomation</span></span>
+<span>(</span><span>source_type, source_path=None, options=None, expected_schema=None, changeDataType=False)</span>
+</code></dt>
+<dd>
+<div class="desc"><h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>source_type</code></strong> :&ensp;<code>str</code></dt>
+<dd>Type of the data source (e.g., 'delta', 'parquet', 'csv', 'jdbc', 'mongo', etc.).</dd>
+<dt><strong><code>source_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Path or connection URL of the data source. Default is None.</dd>
+<dt><strong><code>expected_schema</code></strong></dt>
+<dd>Expected schema for data validation. Default is None.</dd>
+<dt><strong><code>options</code></strong> :&ensp;<code>dict</code>, optional</dt>
+<dd>Additional options specific to the data source. Default is None.</dd>
+<dt><strong><code>changeDataType</code></strong></dt>
+<dd>Change the datatype of actual schema of dataframe to expected schema. Default is False.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class dataTestAutomation:
+
+    def __init__(self, source_type,  source_path = None, options=None, expected_schema = None, changeDataType = False):
+
+        &#39;&#39;&#39;
+        Args:
+            source_type (str): Type of the data source (e.g., &#39;delta&#39;, &#39;parquet&#39;, &#39;csv&#39;, &#39;jdbc&#39;, &#39;mongo&#39;, etc.).
+            source_path (str): Path or connection URL of the data source. Default is None.
+            expected_schema: Expected schema for data validation. Default is None.
+            options (dict, optional): Additional options specific to the data source. Default is None.
+            changeDataType: Change the datatype of actual schema of dataframe to expected schema. Default is False.
+        &#39;&#39;&#39;
+        self.source_type = source_type
+        self.source_path = source_path
+        self.options = options
+        self.expected_schema = expected_schema
+        self.changeDataType = changeDataType
+        self.main()
+
+    def readData(self):
+
+        &#39;&#39;&#39;
+        Read data from different sources with configurable parameters.
+        
+        Returns:
+            pyspark.sql.DataFrame: DataFrame containing the data from the specified source.
+        &#39;&#39;&#39; 
+        try:
+            # Read data based on the source type
+            reader = spark.read.format(self.source_type)
+            if self.options is not None:
+                reader = reader.options(**self.options)
+            else:
+                reader = reader.options()
+            if self.source_path is not None:
+                reader = reader.load(self.source_path)
+            else:
+                reader = reader.load()
+
+            df = reader
+            
+            return df
+        except Exception as e:
+            raise Exception(f&#34;Error occured while loading the file, error: {str(e)}&#34;)
+
+    def handleInvalidColumns(self):
+
+        &#39;&#39;&#39;
+        Validate the column names by removing &#34;&#34;,&#39;.&#39; and invalid characters from the columns.
+
+        Returns:
+            pyspark.sql.DataFrame: Dataframe containing the validated column names.
+        &#39;&#39;&#39;
+
+        validName = self.dataframe
+        for column in self.dataframe.columns:
+            if not re.match(r&#39;^[A-Za-z0-9_]+$&#39;, column):
+                valid_column_name = re.sub(r&#39;[^A-Za-z0-9_]+&#39;, &#39;_&#39;, column)
+                validName = validName.withColumnRenamed(column, valid_column_name)
+
+        return validName
+    
+
+    def validateSchema(self):
+
+        &#34;&#34;&#34;
+        Validate the actual schema of a DataFrame against the expected schema.
+        Identify mismatched datatypes, missing columns, or extra columns.
+            
+        Returns:
+            dict: Validation result with details of mismatched datatypes, missing columns, and extra columns.
+        &#34;&#34;&#34;
+
+        try:
+            validation_result = {&#34;DataType Mismatched&#34;: [], &#34;Missing Columns&#34;: [], &#34;Extra Columns&#34;: []}
+            actual_schema = self.dataframe.schema
+            for field in self.expected_schema.fields:
+                actual_schema_fields = [data.lower() for data in actual_schema.fieldNames()]
+                if field.name.lower() in actual_schema_fields:
+                    actual_field = actual_schema[field.name]
+                    if actual_field.dataType != field.dataType:     #Check for mismatch datatype
+                        validation_result[&#34;DataType Mismatched&#34;].append(field.name)     
+                else:
+                    validation_result[&#34;Missing Columns&#34;].append(field.name)     #check for missing columns
+
+            # Check for extra columns
+            for field_name in actual_schema.fieldNames():
+                if field_name not in [field.name for field in self.expected_schema.fields]:
+                    validation_result[&#34;Extra Columns&#34;].append(field_name)
+
+            return validation_result
+        
+        except Exception as e:
+            raise Exception(f&#34;Error occured while validating schema, error: {str(e)}&#34;)
+
+    
+
+    def changeSchema(self):
+        &#34;&#34;&#34;
+        Change the current schema to the expected schema provided.
+        
+        Returns:
+            pyspark.sql.DataFrame: DataFrame containing the datatype of the expected schema.
+        &#34;&#34;&#34;
+        try:
+            actual_schema = self.dataframe.schema
+            schema_validated_df = self.dataframe
+            for field in self.expected_schema.fields:
+                if field.name in actual_schema.fieldNames():
+                    actual_field = actual_schema[field.name]
+                    expected_field = field.dataType
+                    if isinstance(expected_field, ArrayType):
+                        schema_validated_df = self.convert_array_type(schema_validated_df, field.name, actual_field, expected_field)
+                    elif isinstance(expected_field, MapType):
+                        schema_validated_df = self.convert_map_type(schema_validated_df, field.name, actual_field, expected_field)
+                    else:
+                        schema_validated_df = schema_validated_df.withColumn(field.name, col(field.name).cast(expected_field))
+            return schema_validated_df
+        except Exception as e:
+            raise Exception(f&#34;Error occurred while changing the data type: {str(e)}&#34;)
+
+    def convert_array_type(self,dataframe, column_name, actual_field, expected_field):
+        &#34;&#34;&#34;
+            Converts the data type of an array column in a DataFrame.
+
+            Args:
+                self (object): The instance of the class.
+                dataframe (DataFrame): The DataFrame containing the data.
+                column_name (str): The name of the array column.
+                actual_field (DataType): The actual data type of the array column.
+                expected_field (DataType): The desired data type for the array column.
+
+            Returns:
+                DataFrame: The DataFrame with the converted array column.
+
+            Raises:
+                Exception: If the actual data type of the column is not supported.
+        &#34;&#34;&#34;
+        if isinstance(actual_field.dataType, StringType):
+            dataframe = dataframe.withColumn(column_name, from_json(col(column_name), expected_field))
+        elif isinstance(actual_field.dataType, ArrayType) and isinstance(actual_field.elementType, StructType):
+            dataframe = self.convert_struct_type(dataframe, column_name, actual_field.elementType, expected_field.elementType)
+        else:
+            raise Exception(f&#34;Invalid data type for column {column_name}&#34;)
+        return dataframe
+
+    def convert_map_type(self,dataframe, column_name, actual_field, expected_field):
+        &#34;&#34;&#34;
+            Converts the data type of a map column in a DataFrame.
+
+            Args:
+                self (object): The instance of the class.
+                dataframe (DataFrame): The DataFrame containing the data.
+                column_name (str): The name of the map column.
+                actual_field (DataType): The actual data type of the map column.
+                expected_field (DataType): The desired data type for the map column.
+
+            Returns:
+                DataFrame: The DataFrame with the converted map column.
+
+            Raises:
+                Exception: If the actual data type of the column is not supported.
+        &#34;&#34;&#34;
+        if isinstance(actual_field.dataType, StringType):
+            dataframe = dataframe.withColumn(column_name, from_json(col(column_name), expected_field))
+        elif isinstance(actual_field.dataType, MapType) and isinstance(actual_field.valueType, StructType):
+            dataframe = self.convert_struct_type(dataframe, column_name, actual_field.valueType, expected_field.valueType)
+        else:
+            raise Exception(f&#34;Invalid data type for column {column_name}&#34;)
+        return dataframe
+
+    def convert_struct_type(self,dataframe, column_name, actual_field, expected_field):
+        &#34;&#34;&#34;
+        Converts the data type of a struct column in a DataFrame.
+
+        Args:
+            self (object): The instance of the class.
+            dataframe (DataFrame): The DataFrame containing the data.
+            column_name (str): The name of the struct column.
+            actual_field (StructType): The actual data type of the struct column.
+            expected_field (StructType): The desired data type for the struct column.
+
+        Returns:
+            DataFrame: The DataFrame with the converted struct column.
+
+        Raises:
+            Exception: If the actual data type of the column is not supported.
+        &#34;&#34;&#34;
+        for field in expected_field.fields:
+            if field.name in actual_field.fieldNames():
+                actual_nested_field = actual_field[field.name]
+                expected_nested_field = field.dataType
+                if isinstance(expected_nested_field, ArrayType):
+                    dataframe = convert_array_type(dataframe, f&#34;{column_name}.{field.name}&#34;, actual_nested_field, expected_nested_field)
+                elif isinstance(expected_nested_field, MapType):
+                    dataframe = convert_map_type(dataframe, f&#34;{column_name}.{field.name}&#34;, actual_nested_field, expected_nested_field)
+                else:
+                    dataframe = dataframe.withColumn(f&#34;{column_name}.{field.name}&#34;, col(f&#34;{column_name}.{field.name}&#34;).cast(expected_nested_field))
+        return dataframe
+
+
+    
+    def getCategoricalNumerical(self):
+
+        &#39;&#39;&#39;
+        Distinguish the categorical and numerical column, saves the column names in the list.
+        Returns:
+            List: Two different list containing the names of column classified into numerical and categorical columns
+        &#39;&#39;&#39;
+
+        categorical = []
+        numerical_datatype = []
+
+
+        for i in self.dataframe.columns:
+            column_data_type = self.dataframe.schema[i].dataType
+            if isinstance(column_data_type, (IntegerType, DoubleType, FloatType, LongType, DecimalType, NumericType, ShortType,ByteType)):
+                numerical_datatype.append(i)
+            elif isinstance(column_data_type,StringType):
+                distinct_values = self.dataframe.agg(countDistinct(i)).collect()[0][0]
+                if distinct_values &lt; 12:
+                    categorical.append(i)
+        
+
+        
+        return categorical, numerical_datatype
+
+
+    def dataProfiling(self):
+
+        &#39;&#39;&#39;
+            Checks the null counts, empty strings, stastical description and counts of the number of rows.
+
+            Returns:
+                dict: Data profiling results including total row count, null counts, null count percentage,
+                  empty string counts, and statistical descriptions for each column.
+
+        &#39;&#39;&#39;
+        try:
+            recordCounts  = self.dataframe.count()
+            nullCountsPercentage = {}
+            nullCounts = {}
+            emptyString = {}
+            stasticalDescription = {}
+            distinctValue = {}
+            for columnNames in self.dataframe.columns:
+                column_data_type = self.dataframe.schema[columnNames].dataType
+                if not isinstance(column_data_type,(ArrayType,MapType,StructType)):
+                    nullCounts[columnNames] = self.dataframe.select(col(columnNames)).filter(col(columnNames).isNull()).count() #count of null value
+                    nullCountsPercentage[columnNames] = f&#39;{((nullCounts[columnNames])/recordCounts)*100}%&#39;    #percentage of null values
+                    emptyString[columnNames] = self.dataframe.filter(col(columnNames) == &#34;&#34;).count()    #count of empty strings
+            
+            stasticalDescription = {colName: self.dataframe.select(col(colName)).describe().toPandas().set_index(&#39;summary&#39;).to_dict()[colName] for colName in self.numerical}
+            
+
+            distinctValue = {colName: self.dataframe.select(col(colName)).distinct() for colName in self.categorical}
+
+
+            resultOutcome = {&#39;Total Number of rows&#39;:recordCounts,&#39;nullCounts&#39;:nullCounts,&#39;null count percentage&#39;:nullCountsPercentage,&#39;empty_string&#39;:emptyString,&#39;stats&#39;:stasticalDescription, &#39;Distinct Values&#39;:distinctValue}
+            return resultOutcome
+        
+        except Exception as e:
+            raise Exception(f&#34;Error occured while doing data profiling, error: {str(e)}&#34;)
+            
+    
+
+    def run_range_validations(self, range_validations):
+
+        &#39;&#39;&#39;
+        range_validations(dict): Validation rules passed in dictionary.
+        Format for the parameter range_validation = {
+            &#39;col1&#39;:(min_value,max_value),
+            &#39;col2&#39;:(None,max_value),
+            &#39;col3&#39;:(min_value,None),
+            &#39;col4&#39;:(None,None)
+        }
+        Returns:
+            dict: Validation results indicating if the range validations passed or failed for each column.
+        &#39;&#39;&#39;
+
+        try:
+            validation_results = {}
+
+            for column, (min_value, max_value) in range_validations.items():
+                if min_value is None and max_value is None:
+                    validation_results[column] = True
+                elif min_value is None:
+                    validation_result = self.dataframe.filter(col(column) &lt;= max_value).count() == self.dataframe.count()
+                    validation_results[column] = validation_result
+                elif max_value is None:
+                    validation_result = self.dataframe.filter(col(column) &gt;= min_value).count() == self.dataframe.count()
+                    validation_results[column] = validation_result
+                else:
+                    validation_result = self.dataframe.filter((col(column) &gt;= min_value) &amp; (col(column) &lt;= max_value)).count() == self.dataframe.count()
+                    validation_results[column] = validation_result
+            return validation_results
+        
+        except Exception as e:
+            raise Exception(f&#34;Error occured while validating range, error: {str(e)}&#34;)
+    
+
+    def validateColumnFormat(self, column_rules, display_rows = 20, showData = False):
+
+        &#39;&#39;&#39;
+        args:
+            column_rules(dict): Dictionary with column name and format as regex for the validation.
+            eg : {
+                &#34;Ticket&#34;: r&#39;^\d{6}$&#39;,
+                &#34;Embarked&#34;:r&#39;S&#39;
+            }
+            Ticket and Embarked, the two keys are the column names, other two, values are the regular expression validation rules.
+            display_rows(int): Limit for number of invalid rows to be displayed. Default value is 20.
+        
+        Returns:
+            The two dataframes are printed as well.
+            Dictionary containing the dataframe for invalid count and invalid record of specific column.
+        &#39;&#39;&#39;
+
+        columnValidationFormat = {}
+        for column, rule in column_rules.items():
+            df = self.dataframe.withColumn(&#34;validation_result&#34;, regexp_extract(col(column), rule, 0))
+            invalid_records = df.filter(col(&#34;validation_result&#34;) == &#34;&#34;)
+            invalid_count = invalid_records.count()
+
+            schema = StructType([StructField(f&#39;Invalid Data Count - {column}&#39;, IntegerType(), nullable=False)])
+            invalid_count_DF = spark.createDataFrame([(invalid_count,)],schema=schema)
+
+            if invalid_count &gt; 0:
+                
+                invalid_record_data = invalid_records
+                if showData == True:
+                    print(f&#39;Invalid count for {column}&#39;)
+                    invalid_count_DF.display(display_rows)
+                    print(f&#39;Invalid data for {column}&#39;)
+                    display(invalid_record_data.limit(display_rows))
+                    columnValidationFormat[column] = {invalid_count_DF, invalid_record_data}
+                elif showData == False:
+                    print(f&#39;Invalid count for {column}&#39;)
+                    invalid_count_DF.display(display_rows)
+                    columnValidationFormat[column] = {invalid_count_DF}
+            else:
+                print(f&#39;Invalid count for {column}&#39;)
+                invalid_count_DF.display(display_rows)
+                columnValidationFormat[column] = {invalid_count_DF}
+
+                
+            
+
+        return columnValidationFormat
+
+    def duplicateValues(self):
+
+        &#39;&#39;&#39;
+        Counts the number of duplicate values in the dataframe.
+
+        Returns:
+            Dict: Dictionary containing the dataframes for the duplicate values and duplicate values count.
+        &#39;&#39;&#39;
+        
+        duplicatesCount = {}
+        duplicate_rows_df = self.dataframe.groupBy(self.dataframe.columns).count().where(col(&#34;count&#34;) &gt; 1)
+        duplicatesValuesCount = spark.createDataFrame([Row(count=duplicate_rows_df.count())], schema=[&#39;Duplicates Count&#39;])
+        if duplicate_rows_df.count() &gt; 1:
+            duplicatesValues = duplicate_rows_df.drop(&#39;count&#39;)
+            duplicatesCount = {&#39;values&#39;: duplicatesValues, &#39;count&#39;: duplicatesValuesCount}
+        else:
+            duplicatesCount = {&#39;count&#39;: duplicatesValuesCount}
+
+        return duplicatesCount
+    
+       
+    
+    def tabularReport(self):
+
+        &#34;&#34;&#34;
+        Generate a report summarizing the data validation results.
+
+        Returns:
+            str: Report containing information about overall evaluation of data.
+
+        &#34;&#34;&#34;
+
+        try:  
+            print(&#34;Raw Data:\n\n&#34;)
+            display(self.dataframe.limit(5))
+            print(&#34;\n\n Total Number of Records\n\n&#34;)
+            row = Row(&#39;Total Number of rows&#39;)(self.dataprofiling[&#39;Total Number of rows&#39;])
+            self.totalCount = spark.createDataFrame([row])
+            self.totalCount.display()
+
+            if self.expected_schema is None:
+                    pass
+            else:
+                print(&#34;\n\n Schema Validation:\n\n&#34;)
+                schemaValidationData = [(key,value) for key,value in self.schemaResult.items()]
+                self.schemaValidationReport = spark.createDataFrame(schemaValidationData,[&#39;Validation Name&#39;,&#39;Result&#39;])
+                self.schemaValidationReport.display()
+            print(&#34;\n\n Null Counts and Percentage:\n\n&#34;)
+            nullCountsData = [(column, count )for column, count in self.dataprofiling[&#39;nullCounts&#39;].items()]
+            self.nullCounts = spark.createDataFrame(nullCountsData,schema=[&#39;Column&#39;,&#39;Count&#39;])
+            #self.nullCounts.display()
+            # print(&#34;\n\n Null Counts Percentage:\n\n&#34;)
+            nullCountsPercentageData = [(column, count )for column, count in self.dataprofiling[&#39;null count percentage&#39;].items()]
+            self.nullCountsPercentage = spark.createDataFrame(nullCountsPercentageData,schema=[&#39;Column&#39;,&#39;Percentage&#39;])
+            #self.nullCountsPercentage.display()
+            self.nullCountJoin = self.nullCounts.join(self.nullCountsPercentage,&#39;Column&#39;,&#39;inner&#39;)
+            self.nullCountJoin.display()
+            print(&#34;\n\n Empty String:\n\n&#34;)
+            emptyStringData = [(column, count) for column, count in self.dataprofiling[&#39;empty_string&#39;].items()]
+            self.emptyStringData = spark.createDataFrame(emptyStringData,schema=[&#39;Column&#39;,&#39;Count&#39;])
+            self.emptyStringData.display()
+
+            print(&#34;\n\n Statistics:\n\n&#34;)
+            data = [(k, v[&#39;count&#39;], v[&#39;mean&#39;], v[&#39;stddev&#39;], v[&#39;min&#39;], v[&#39;max&#39;]) for k, v in self.dataprofiling[&#39;stats&#39;].items()]
+            schema = StructType([
+                StructField(&#34;column&#34;, StringType(), nullable=False),
+                StructField(&#34;count&#34;, StringType(), nullable=False),
+                StructField(&#34;mean&#34;, StringType(), nullable=False),
+                StructField(&#34;stddev&#34;, StringType(), nullable=False),
+                StructField(&#34;min&#34;, StringType(), nullable=False),
+                StructField(&#34;max&#34;, StringType(), nullable=False)
+            ])
+            self.statistics = spark.createDataFrame(data,schema)
+            self.statistics.display()
+
+            print(&#34;\n\n Distinct Values:\n\n&#34;)
+            self.distinctValueData = [data.display() for column, data in self.dataprofiling[&#39;Distinct Values&#39;].items()]
+
+            print(&#34;\n\n Duplicates:\n\n&#34;)
+            duplicates = self.duplicates
+            self.duplicateValues = []
+            for key, value in duplicates.items():
+                self.duplicateValues.append(value)
+                value.display()
+            
+            if self.expected_schema is None:
+                self.dfList = [self.totalCount, self.statistics,self.emptyStringData,self.nullCounts,self.nullCountsPercentage,self.distinctValueData]
+            else:
+                self.dfList = [self.totalCount, self.schemaValidationReport, self.statistics,self.emptyStringData,self.nullCounts,self.nullCountsPercentage,self.distinctValueData]
+
+        
+        except Exception as e:
+            raise Exception(f&#34;Error occured while generating report, error: {str(e)}&#34;)
+
+    def trendAnalysis(self, date_column, trend_columns):
+
+        &#34;&#34;&#34;
+        Performs trend analysis on a DataFrame.
+
+        Args:
+            self (object): The instance of the class containing the DataFrame.
+            date_column (str): The name of the column containing the date values.
+            trend_columns (list): A list of column names to perform trend analysis on.
+
+        Returns:
+            tuple: A tuple containing two DataFrames:
+                - grouped_data: DataFrame with aggregated data grouped by date and other columns.
+                - ordered_df: DataFrame with descriptive statistics of trend_columns ordered by date.
+        &#34;&#34;&#34;
+        self.date_column = date_column
+        df = self.dataframe.withColumn(self.date_column, f.to_date(f.col(self.date_column), &#39;yyyy-MM-dd&#39;))
+        
+        for column in trend_columns:
+            if not isinstance(df.schema[column].dataType, (int, float)):
+                df = df.withColumn(column,df[column].cast(&#39;int&#39;))
+        
+        group_columns = [f.col(column) for column in df.columns if column != self.date_column]
+        agg_columns = [f.col(column).alias(column) for column in trend_columns]
+        grouped_data = df.groupBy(self.date_column, *group_columns).agg(*agg_columns)
+        selected_columns = [f.col(column) for column in trend_columns]
+        selected_columns.append(f.col(self.date_column))
+        selected_df = df.select(*selected_columns)
+        groupby = selected_df.groupBy(self.date_column)
+        agg_exprs = [f.min(column).alias(&#34;min_&#34; + column) for column in trend_columns] + \
+                    [f.max(column).alias(&#34;max_&#34; + column) for column in trend_columns] + \
+                    [f.avg(column).alias(&#34;avg_&#34; + column) for column in trend_columns] + \
+                    [f.stddev(column).alias(&#34;stddev_&#34; + column) for column in trend_columns]
+        description_df = groupby.agg(*agg_exprs)
+        ordered_df = description_df.orderBy(self.date_column)
+        return grouped_data, ordered_df
+    
+    def plotTrendAnalysis(self,dataframe,trend_columns):
+        &#34;&#34;&#34;
+            Plots trend analysis for specified columns in a DataFrame.
+
+            Args:
+                self (object): The instance of the class.
+                dataframe (DataFrame): The DataFrame containing the data.
+                trend_columns (list): A list of column names to plot the trend analysis for.
+
+            Returns:
+                None
+        &#34;&#34;&#34;
+        pandas_df = dataframe.toPandas()
+        pandas_df.set_index(self.date_column, inplace=True)
+        
+        num_trend_columns = len(trend_columns)
+        num_rows = math.ceil(math.sqrt(num_trend_columns))
+        num_cols = math.ceil(num_trend_columns / num_rows)
+        
+        fig, axes = plt.subplots(num_rows, num_cols, figsize=(12, 10))
+        for i, column in enumerate(trend_columns):
+            if num_rows == 1 and num_cols == 1:
+                ax = axes
+            elif num_rows == 1 or num_cols == 1:
+                ax = axes[i]
+            else:
+                ax = axes[i // num_cols, i % num_cols]
+
+            pandas_df[column].plot(ax=ax, legend = False)
+            ax.set_title(column)
+            ax.set_ylabel(&#39;Count&#39;)
+            ax.tick_params(axis=&#39;x&#39;, rotation=90)
+
+        fig.tight_layout()
+        plt.show()
+          
+        
+    def main(self):
+
+        self.dataframe = self.readData()
+        self.dataframe = self.handleInvalidColumns()
+        if self.expected_schema is not None:
+            self.schemaResult = self.validateSchema()
+            if self.changeDataType is True:
+                self.dataframe = self.changeSchema()
+        self.categorical, self.numerical = self.getCategoricalNumerical() 
+        self.dataprofiling = self.dataProfiling()
+        self.duplicates = self.duplicateValues()
+        self.report = self.tabularReport()</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="dataautomation.dataTestAutomation.changeSchema"><code class="name flex">
+<span>def <span class="ident">changeSchema</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Change the current schema to the expected schema provided.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>pyspark.sql.DataFrame</code></dt>
+<dd>DataFrame containing the datatype of the expected schema.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def changeSchema(self):
+    &#34;&#34;&#34;
+    Change the current schema to the expected schema provided.
+    
+    Returns:
+        pyspark.sql.DataFrame: DataFrame containing the datatype of the expected schema.
+    &#34;&#34;&#34;
+    try:
+        actual_schema = self.dataframe.schema
+        schema_validated_df = self.dataframe
+        for field in self.expected_schema.fields:
+            if field.name in actual_schema.fieldNames():
+                actual_field = actual_schema[field.name]
+                expected_field = field.dataType
+                if isinstance(expected_field, ArrayType):
+                    schema_validated_df = self.convert_array_type(schema_validated_df, field.name, actual_field, expected_field)
+                elif isinstance(expected_field, MapType):
+                    schema_validated_df = self.convert_map_type(schema_validated_df, field.name, actual_field, expected_field)
+                else:
+                    schema_validated_df = schema_validated_df.withColumn(field.name, col(field.name).cast(expected_field))
+        return schema_validated_df
+    except Exception as e:
+        raise Exception(f&#34;Error occurred while changing the data type: {str(e)}&#34;)</code></pre>
+</details>
+</dd>
+<dt id="dataautomation.dataTestAutomation.convert_array_type"><code class="name flex">
+<span>def <span class="ident">convert_array_type</span></span>(<span>self, dataframe, column_name, actual_field, expected_field)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Converts the data type of an array column in a DataFrame.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>self</code></strong> :&ensp;<code>object</code></dt>
+<dd>The instance of the class.</dd>
+<dt><strong><code>dataframe</code></strong> :&ensp;<code>DataFrame</code></dt>
+<dd>The DataFrame containing the data.</dd>
+<dt><strong><code>column_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the array column.</dd>
+<dt><strong><code>actual_field</code></strong> :&ensp;<code>DataType</code></dt>
+<dd>The actual data type of the array column.</dd>
+<dt><strong><code>expected_field</code></strong> :&ensp;<code>DataType</code></dt>
+<dd>The desired data type for the array column.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>DataFrame</code></dt>
+<dd>The DataFrame with the converted array column.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>Exception</code></dt>
+<dd>If the actual data type of the column is not supported.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def convert_array_type(self,dataframe, column_name, actual_field, expected_field):
+    &#34;&#34;&#34;
+        Converts the data type of an array column in a DataFrame.
+
+        Args:
+            self (object): The instance of the class.
+            dataframe (DataFrame): The DataFrame containing the data.
+            column_name (str): The name of the array column.
+            actual_field (DataType): The actual data type of the array column.
+            expected_field (DataType): The desired data type for the array column.
+
+        Returns:
+            DataFrame: The DataFrame with the converted array column.
+
+        Raises:
+            Exception: If the actual data type of the column is not supported.
+    &#34;&#34;&#34;
+    if isinstance(actual_field.dataType, StringType):
+        dataframe = dataframe.withColumn(column_name, from_json(col(column_name), expected_field))
+    elif isinstance(actual_field.dataType, ArrayType) and isinstance(actual_field.elementType, StructType):
+        dataframe = self.convert_struct_type(dataframe, column_name, actual_field.elementType, expected_field.elementType)
+    else:
+        raise Exception(f&#34;Invalid data type for column {column_name}&#34;)
+    return dataframe</code></pre>
+</details>
+</dd>
+<dt id="dataautomation.dataTestAutomation.convert_map_type"><code class="name flex">
+<span>def <span class="ident">convert_map_type</span></span>(<span>self, dataframe, column_name, actual_field, expected_field)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Converts the data type of a map column in a DataFrame.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>self</code></strong> :&ensp;<code>object</code></dt>
+<dd>The instance of the class.</dd>
+<dt><strong><code>dataframe</code></strong> :&ensp;<code>DataFrame</code></dt>
+<dd>The DataFrame containing the data.</dd>
+<dt><strong><code>column_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the map column.</dd>
+<dt><strong><code>actual_field</code></strong> :&ensp;<code>DataType</code></dt>
+<dd>The actual data type of the map column.</dd>
+<dt><strong><code>expected_field</code></strong> :&ensp;<code>DataType</code></dt>
+<dd>The desired data type for the map column.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>DataFrame</code></dt>
+<dd>The DataFrame with the converted map column.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>Exception</code></dt>
+<dd>If the actual data type of the column is not supported.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def convert_map_type(self,dataframe, column_name, actual_field, expected_field):
+    &#34;&#34;&#34;
+        Converts the data type of a map column in a DataFrame.
+
+        Args:
+            self (object): The instance of the class.
+            dataframe (DataFrame): The DataFrame containing the data.
+            column_name (str): The name of the map column.
+            actual_field (DataType): The actual data type of the map column.
+            expected_field (DataType): The desired data type for the map column.
+
+        Returns:
+            DataFrame: The DataFrame with the converted map column.
+
+        Raises:
+            Exception: If the actual data type of the column is not supported.
+    &#34;&#34;&#34;
+    if isinstance(actual_field.dataType, StringType):
+        dataframe = dataframe.withColumn(column_name, from_json(col(column_name), expected_field))
+    elif isinstance(actual_field.dataType, MapType) and isinstance(actual_field.valueType, StructType):
+        dataframe = self.convert_struct_type(dataframe, column_name, actual_field.valueType, expected_field.valueType)
+    else:
+        raise Exception(f&#34;Invalid data type for column {column_name}&#34;)
+    return dataframe</code></pre>
+</details>
+</dd>
+<dt id="dataautomation.dataTestAutomation.convert_struct_type"><code class="name flex">
+<span>def <span class="ident">convert_struct_type</span></span>(<span>self, dataframe, column_name, actual_field, expected_field)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Converts the data type of a struct column in a DataFrame.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>self</code></strong> :&ensp;<code>object</code></dt>
+<dd>The instance of the class.</dd>
+<dt><strong><code>dataframe</code></strong> :&ensp;<code>DataFrame</code></dt>
+<dd>The DataFrame containing the data.</dd>
+<dt><strong><code>column_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the struct column.</dd>
+<dt><strong><code>actual_field</code></strong> :&ensp;<code>StructType</code></dt>
+<dd>The actual data type of the struct column.</dd>
+<dt><strong><code>expected_field</code></strong> :&ensp;<code>StructType</code></dt>
+<dd>The desired data type for the struct column.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>DataFrame</code></dt>
+<dd>The DataFrame with the converted struct column.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>Exception</code></dt>
+<dd>If the actual data type of the column is not supported.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def convert_struct_type(self,dataframe, column_name, actual_field, expected_field):
+    &#34;&#34;&#34;
+    Converts the data type of a struct column in a DataFrame.
+
+    Args:
+        self (object): The instance of the class.
+        dataframe (DataFrame): The DataFrame containing the data.
+        column_name (str): The name of the struct column.
+        actual_field (StructType): The actual data type of the struct column.
+        expected_field (StructType): The desired data type for the struct column.
+
+    Returns:
+        DataFrame: The DataFrame with the converted struct column.
+
+    Raises:
+        Exception: If the actual data type of the column is not supported.
+    &#34;&#34;&#34;
+    for field in expected_field.fields:
+        if field.name in actual_field.fieldNames():
+            actual_nested_field = actual_field[field.name]
+            expected_nested_field = field.dataType
+            if isinstance(expected_nested_field, ArrayType):
+                dataframe = convert_array_type(dataframe, f&#34;{column_name}.{field.name}&#34;, actual_nested_field, expected_nested_field)
+            elif isinstance(expected_nested_field, MapType):
+                dataframe = convert_map_type(dataframe, f&#34;{column_name}.{field.name}&#34;, actual_nested_field, expected_nested_field)
+            else:
+                dataframe = dataframe.withColumn(f&#34;{column_name}.{field.name}&#34;, col(f&#34;{column_name}.{field.name}&#34;).cast(expected_nested_field))
+    return dataframe</code></pre>
+</details>
+</dd>
+<dt id="dataautomation.dataTestAutomation.dataProfiling"><code class="name flex">
+<span>def <span class="ident">dataProfiling</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Checks the null counts, empty strings, stastical description and counts of the number of rows.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>dict</code></dt>
+<dd>Data profiling results including total row count, null counts, null count percentage,
+empty string counts, and statistical descriptions for each column.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dataProfiling(self):
+
+    &#39;&#39;&#39;
+        Checks the null counts, empty strings, stastical description and counts of the number of rows.
+
+        Returns:
+            dict: Data profiling results including total row count, null counts, null count percentage,
+              empty string counts, and statistical descriptions for each column.
+
+    &#39;&#39;&#39;
+    try:
+        recordCounts  = self.dataframe.count()
+        nullCountsPercentage = {}
+        nullCounts = {}
+        emptyString = {}
+        stasticalDescription = {}
+        distinctValue = {}
+        for columnNames in self.dataframe.columns:
+            column_data_type = self.dataframe.schema[columnNames].dataType
+            if not isinstance(column_data_type,(ArrayType,MapType,StructType)):
+                nullCounts[columnNames] = self.dataframe.select(col(columnNames)).filter(col(columnNames).isNull()).count() #count of null value
+                nullCountsPercentage[columnNames] = f&#39;{((nullCounts[columnNames])/recordCounts)*100}%&#39;    #percentage of null values
+                emptyString[columnNames] = self.dataframe.filter(col(columnNames) == &#34;&#34;).count()    #count of empty strings
+        
+        stasticalDescription = {colName: self.dataframe.select(col(colName)).describe().toPandas().set_index(&#39;summary&#39;).to_dict()[colName] for colName in self.numerical}
+        
+
+        distinctValue = {colName: self.dataframe.select(col(colName)).distinct() for colName in self.categorical}
+
+
+        resultOutcome = {&#39;Total Number of rows&#39;:recordCounts,&#39;nullCounts&#39;:nullCounts,&#39;null count percentage&#39;:nullCountsPercentage,&#39;empty_string&#39;:emptyString,&#39;stats&#39;:stasticalDescription, &#39;Distinct Values&#39;:distinctValue}
+        return resultOutcome
+    
+    except Exception as e:
+        raise Exception(f&#34;Error occured while doing data profiling, error: {str(e)}&#34;)</code></pre>
+</details>
+</dd>
+<dt id="dataautomation.dataTestAutomation.duplicateValues"><code class="name flex">
+<span>def <span class="ident">duplicateValues</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Counts the number of duplicate values in the dataframe.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Dict</code></dt>
+<dd>Dictionary containing the dataframes for the duplicate values and duplicate values count.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def duplicateValues(self):
+
+    &#39;&#39;&#39;
+    Counts the number of duplicate values in the dataframe.
+
+    Returns:
+        Dict: Dictionary containing the dataframes for the duplicate values and duplicate values count.
+    &#39;&#39;&#39;
+    
+    duplicatesCount = {}
+    duplicate_rows_df = self.dataframe.groupBy(self.dataframe.columns).count().where(col(&#34;count&#34;) &gt; 1)
+    duplicatesValuesCount = spark.createDataFrame([Row(count=duplicate_rows_df.count())], schema=[&#39;Duplicates Count&#39;])
+    if duplicate_rows_df.count() &gt; 1:
+        duplicatesValues = duplicate_rows_df.drop(&#39;count&#39;)
+        duplicatesCount = {&#39;values&#39;: duplicatesValues, &#39;count&#39;: duplicatesValuesCount}
+    else:
+        duplicatesCount = {&#39;count&#39;: duplicatesValuesCount}
+
+    return duplicatesCount</code></pre>
+</details>
+</dd>
+<dt id="dataautomation.dataTestAutomation.getCategoricalNumerical"><code class="name flex">
+<span>def <span class="ident">getCategoricalNumerical</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Distinguish the categorical and numerical column, saves the column names in the list.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>List</code></dt>
+<dd>Two different list containing the names of column classified into numerical and categorical columns</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getCategoricalNumerical(self):
+
+    &#39;&#39;&#39;
+    Distinguish the categorical and numerical column, saves the column names in the list.
+    Returns:
+        List: Two different list containing the names of column classified into numerical and categorical columns
+    &#39;&#39;&#39;
+
+    categorical = []
+    numerical_datatype = []
+
+
+    for i in self.dataframe.columns:
+        column_data_type = self.dataframe.schema[i].dataType
+        if isinstance(column_data_type, (IntegerType, DoubleType, FloatType, LongType, DecimalType, NumericType, ShortType,ByteType)):
+            numerical_datatype.append(i)
+        elif isinstance(column_data_type,StringType):
+            distinct_values = self.dataframe.agg(countDistinct(i)).collect()[0][0]
+            if distinct_values &lt; 12:
+                categorical.append(i)
+    
+
+    
+    return categorical, numerical_datatype</code></pre>
+</details>
+</dd>
+<dt id="dataautomation.dataTestAutomation.handleInvalidColumns"><code class="name flex">
+<span>def <span class="ident">handleInvalidColumns</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Validate the column names by removing "",'.' and invalid characters from the columns.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>pyspark.sql.DataFrame</code></dt>
+<dd>Dataframe containing the validated column names.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def handleInvalidColumns(self):
+
+    &#39;&#39;&#39;
+    Validate the column names by removing &#34;&#34;,&#39;.&#39; and invalid characters from the columns.
+
+    Returns:
+        pyspark.sql.DataFrame: Dataframe containing the validated column names.
+    &#39;&#39;&#39;
+
+    validName = self.dataframe
+    for column in self.dataframe.columns:
+        if not re.match(r&#39;^[A-Za-z0-9_]+$&#39;, column):
+            valid_column_name = re.sub(r&#39;[^A-Za-z0-9_]+&#39;, &#39;_&#39;, column)
+            validName = validName.withColumnRenamed(column, valid_column_name)
+
+    return validName</code></pre>
+</details>
+</dd>
+<dt id="dataautomation.dataTestAutomation.main"><code class="name flex">
+<span>def <span class="ident">main</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def main(self):
+
+    self.dataframe = self.readData()
+    self.dataframe = self.handleInvalidColumns()
+    if self.expected_schema is not None:
+        self.schemaResult = self.validateSchema()
+        if self.changeDataType is True:
+            self.dataframe = self.changeSchema()
+    self.categorical, self.numerical = self.getCategoricalNumerical() 
+    self.dataprofiling = self.dataProfiling()
+    self.duplicates = self.duplicateValues()
+    self.report = self.tabularReport()</code></pre>
+</details>
+</dd>
+<dt id="dataautomation.dataTestAutomation.plotTrendAnalysis"><code class="name flex">
+<span>def <span class="ident">plotTrendAnalysis</span></span>(<span>self, dataframe, trend_columns)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Plots trend analysis for specified columns in a DataFrame.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>self</code></strong> :&ensp;<code>object</code></dt>
+<dd>The instance of the class.</dd>
+<dt><strong><code>dataframe</code></strong> :&ensp;<code>DataFrame</code></dt>
+<dd>The DataFrame containing the data.</dd>
+<dt><strong><code>trend_columns</code></strong> :&ensp;<code>list</code></dt>
+<dd>A list of column names to plot the trend analysis for.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>None</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def plotTrendAnalysis(self,dataframe,trend_columns):
+    &#34;&#34;&#34;
+        Plots trend analysis for specified columns in a DataFrame.
+
+        Args:
+            self (object): The instance of the class.
+            dataframe (DataFrame): The DataFrame containing the data.
+            trend_columns (list): A list of column names to plot the trend analysis for.
+
+        Returns:
+            None
+    &#34;&#34;&#34;
+    pandas_df = dataframe.toPandas()
+    pandas_df.set_index(self.date_column, inplace=True)
+    
+    num_trend_columns = len(trend_columns)
+    num_rows = math.ceil(math.sqrt(num_trend_columns))
+    num_cols = math.ceil(num_trend_columns / num_rows)
+    
+    fig, axes = plt.subplots(num_rows, num_cols, figsize=(12, 10))
+    for i, column in enumerate(trend_columns):
+        if num_rows == 1 and num_cols == 1:
+            ax = axes
+        elif num_rows == 1 or num_cols == 1:
+            ax = axes[i]
+        else:
+            ax = axes[i // num_cols, i % num_cols]
+
+        pandas_df[column].plot(ax=ax, legend = False)
+        ax.set_title(column)
+        ax.set_ylabel(&#39;Count&#39;)
+        ax.tick_params(axis=&#39;x&#39;, rotation=90)
+
+    fig.tight_layout()
+    plt.show()</code></pre>
+</details>
+</dd>
+<dt id="dataautomation.dataTestAutomation.readData"><code class="name flex">
+<span>def <span class="ident">readData</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Read data from different sources with configurable parameters.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>pyspark.sql.DataFrame</code></dt>
+<dd>DataFrame containing the data from the specified source.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def readData(self):
+
+    &#39;&#39;&#39;
+    Read data from different sources with configurable parameters.
+    
+    Returns:
+        pyspark.sql.DataFrame: DataFrame containing the data from the specified source.
+    &#39;&#39;&#39; 
+    try:
+        # Read data based on the source type
+        reader = spark.read.format(self.source_type)
+        if self.options is not None:
+            reader = reader.options(**self.options)
+        else:
+            reader = reader.options()
+        if self.source_path is not None:
+            reader = reader.load(self.source_path)
+        else:
+            reader = reader.load()
+
+        df = reader
+        
+        return df
+    except Exception as e:
+        raise Exception(f&#34;Error occured while loading the file, error: {str(e)}&#34;)</code></pre>
+</details>
+</dd>
+<dt id="dataautomation.dataTestAutomation.run_range_validations"><code class="name flex">
+<span>def <span class="ident">run_range_validations</span></span>(<span>self, range_validations)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>range_validations(dict): Validation rules passed in dictionary.
+Format for the parameter range_validation = {
+'col1':(min_value,max_value),
+'col2':(None,max_value),
+'col3':(min_value,None),
+'col4':(None,None)
+}</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>dict</code></dt>
+<dd>Validation results indicating if the range validations passed or failed for each column.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def run_range_validations(self, range_validations):
+
+    &#39;&#39;&#39;
+    range_validations(dict): Validation rules passed in dictionary.
+    Format for the parameter range_validation = {
+        &#39;col1&#39;:(min_value,max_value),
+        &#39;col2&#39;:(None,max_value),
+        &#39;col3&#39;:(min_value,None),
+        &#39;col4&#39;:(None,None)
+    }
+    Returns:
+        dict: Validation results indicating if the range validations passed or failed for each column.
+    &#39;&#39;&#39;
+
+    try:
+        validation_results = {}
+
+        for column, (min_value, max_value) in range_validations.items():
+            if min_value is None and max_value is None:
+                validation_results[column] = True
+            elif min_value is None:
+                validation_result = self.dataframe.filter(col(column) &lt;= max_value).count() == self.dataframe.count()
+                validation_results[column] = validation_result
+            elif max_value is None:
+                validation_result = self.dataframe.filter(col(column) &gt;= min_value).count() == self.dataframe.count()
+                validation_results[column] = validation_result
+            else:
+                validation_result = self.dataframe.filter((col(column) &gt;= min_value) &amp; (col(column) &lt;= max_value)).count() == self.dataframe.count()
+                validation_results[column] = validation_result
+        return validation_results
+    
+    except Exception as e:
+        raise Exception(f&#34;Error occured while validating range, error: {str(e)}&#34;)</code></pre>
+</details>
+</dd>
+<dt id="dataautomation.dataTestAutomation.tabularReport"><code class="name flex">
+<span>def <span class="ident">tabularReport</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generate a report summarizing the data validation results.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>Report containing information about overall evaluation of data.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def tabularReport(self):
+
+    &#34;&#34;&#34;
+    Generate a report summarizing the data validation results.
+
+    Returns:
+        str: Report containing information about overall evaluation of data.
+
+    &#34;&#34;&#34;
+
+    try:  
+        print(&#34;Raw Data:\n\n&#34;)
+        display(self.dataframe.limit(5))
+        print(&#34;\n\n Total Number of Records\n\n&#34;)
+        row = Row(&#39;Total Number of rows&#39;)(self.dataprofiling[&#39;Total Number of rows&#39;])
+        self.totalCount = spark.createDataFrame([row])
+        self.totalCount.display()
+
+        if self.expected_schema is None:
+                pass
+        else:
+            print(&#34;\n\n Schema Validation:\n\n&#34;)
+            schemaValidationData = [(key,value) for key,value in self.schemaResult.items()]
+            self.schemaValidationReport = spark.createDataFrame(schemaValidationData,[&#39;Validation Name&#39;,&#39;Result&#39;])
+            self.schemaValidationReport.display()
+        print(&#34;\n\n Null Counts and Percentage:\n\n&#34;)
+        nullCountsData = [(column, count )for column, count in self.dataprofiling[&#39;nullCounts&#39;].items()]
+        self.nullCounts = spark.createDataFrame(nullCountsData,schema=[&#39;Column&#39;,&#39;Count&#39;])
+        #self.nullCounts.display()
+        # print(&#34;\n\n Null Counts Percentage:\n\n&#34;)
+        nullCountsPercentageData = [(column, count )for column, count in self.dataprofiling[&#39;null count percentage&#39;].items()]
+        self.nullCountsPercentage = spark.createDataFrame(nullCountsPercentageData,schema=[&#39;Column&#39;,&#39;Percentage&#39;])
+        #self.nullCountsPercentage.display()
+        self.nullCountJoin = self.nullCounts.join(self.nullCountsPercentage,&#39;Column&#39;,&#39;inner&#39;)
+        self.nullCountJoin.display()
+        print(&#34;\n\n Empty String:\n\n&#34;)
+        emptyStringData = [(column, count) for column, count in self.dataprofiling[&#39;empty_string&#39;].items()]
+        self.emptyStringData = spark.createDataFrame(emptyStringData,schema=[&#39;Column&#39;,&#39;Count&#39;])
+        self.emptyStringData.display()
+
+        print(&#34;\n\n Statistics:\n\n&#34;)
+        data = [(k, v[&#39;count&#39;], v[&#39;mean&#39;], v[&#39;stddev&#39;], v[&#39;min&#39;], v[&#39;max&#39;]) for k, v in self.dataprofiling[&#39;stats&#39;].items()]
+        schema = StructType([
+            StructField(&#34;column&#34;, StringType(), nullable=False),
+            StructField(&#34;count&#34;, StringType(), nullable=False),
+            StructField(&#34;mean&#34;, StringType(), nullable=False),
+            StructField(&#34;stddev&#34;, StringType(), nullable=False),
+            StructField(&#34;min&#34;, StringType(), nullable=False),
+            StructField(&#34;max&#34;, StringType(), nullable=False)
+        ])
+        self.statistics = spark.createDataFrame(data,schema)
+        self.statistics.display()
+
+        print(&#34;\n\n Distinct Values:\n\n&#34;)
+        self.distinctValueData = [data.display() for column, data in self.dataprofiling[&#39;Distinct Values&#39;].items()]
+
+        print(&#34;\n\n Duplicates:\n\n&#34;)
+        duplicates = self.duplicates
+        self.duplicateValues = []
+        for key, value in duplicates.items():
+            self.duplicateValues.append(value)
+            value.display()
+        
+        if self.expected_schema is None:
+            self.dfList = [self.totalCount, self.statistics,self.emptyStringData,self.nullCounts,self.nullCountsPercentage,self.distinctValueData]
+        else:
+            self.dfList = [self.totalCount, self.schemaValidationReport, self.statistics,self.emptyStringData,self.nullCounts,self.nullCountsPercentage,self.distinctValueData]
+
+    
+    except Exception as e:
+        raise Exception(f&#34;Error occured while generating report, error: {str(e)}&#34;)</code></pre>
+</details>
+</dd>
+<dt id="dataautomation.dataTestAutomation.trendAnalysis"><code class="name flex">
+<span>def <span class="ident">trendAnalysis</span></span>(<span>self, date_column, trend_columns)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Performs trend analysis on a DataFrame.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>self</code></strong> :&ensp;<code>object</code></dt>
+<dd>The instance of the class containing the DataFrame.</dd>
+<dt><strong><code>date_column</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the column containing the date values.</dd>
+<dt><strong><code>trend_columns</code></strong> :&ensp;<code>list</code></dt>
+<dd>A list of column names to perform trend analysis on.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>tuple</code></dt>
+<dd>A tuple containing two DataFrames:
+- grouped_data: DataFrame with aggregated data grouped by date and other columns.
+- ordered_df: DataFrame with descriptive statistics of trend_columns ordered by date.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def trendAnalysis(self, date_column, trend_columns):
+
+    &#34;&#34;&#34;
+    Performs trend analysis on a DataFrame.
+
+    Args:
+        self (object): The instance of the class containing the DataFrame.
+        date_column (str): The name of the column containing the date values.
+        trend_columns (list): A list of column names to perform trend analysis on.
+
+    Returns:
+        tuple: A tuple containing two DataFrames:
+            - grouped_data: DataFrame with aggregated data grouped by date and other columns.
+            - ordered_df: DataFrame with descriptive statistics of trend_columns ordered by date.
+    &#34;&#34;&#34;
+    self.date_column = date_column
+    df = self.dataframe.withColumn(self.date_column, f.to_date(f.col(self.date_column), &#39;yyyy-MM-dd&#39;))
+    
+    for column in trend_columns:
+        if not isinstance(df.schema[column].dataType, (int, float)):
+            df = df.withColumn(column,df[column].cast(&#39;int&#39;))
+    
+    group_columns = [f.col(column) for column in df.columns if column != self.date_column]
+    agg_columns = [f.col(column).alias(column) for column in trend_columns]
+    grouped_data = df.groupBy(self.date_column, *group_columns).agg(*agg_columns)
+    selected_columns = [f.col(column) for column in trend_columns]
+    selected_columns.append(f.col(self.date_column))
+    selected_df = df.select(*selected_columns)
+    groupby = selected_df.groupBy(self.date_column)
+    agg_exprs = [f.min(column).alias(&#34;min_&#34; + column) for column in trend_columns] + \
+                [f.max(column).alias(&#34;max_&#34; + column) for column in trend_columns] + \
+                [f.avg(column).alias(&#34;avg_&#34; + column) for column in trend_columns] + \
+                [f.stddev(column).alias(&#34;stddev_&#34; + column) for column in trend_columns]
+    description_df = groupby.agg(*agg_exprs)
+    ordered_df = description_df.orderBy(self.date_column)
+    return grouped_data, ordered_df</code></pre>
+</details>
+</dd>
+<dt id="dataautomation.dataTestAutomation.validateColumnFormat"><code class="name flex">
+<span>def <span class="ident">validateColumnFormat</span></span>(<span>self, column_rules, display_rows=20, showData=False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>args:
+column_rules(dict): Dictionary with column name and format as regex for the validation.
+eg : {
+"Ticket": r'^\d{6}$',
+"Embarked":r'S'
+}
+Ticket and Embarked, the two keys are the column names, other two, values are the regular expression validation rules.
+display_rows(int): Limit for number of invalid rows to be displayed. Default value is 20.</p>
+<h2 id="returns">Returns</h2>
+<p>The two dataframes are printed as well.
+Dictionary containing the dataframe for invalid count and invalid record of specific column.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def validateColumnFormat(self, column_rules, display_rows = 20, showData = False):
+
+    &#39;&#39;&#39;
+    args:
+        column_rules(dict): Dictionary with column name and format as regex for the validation.
+        eg : {
+            &#34;Ticket&#34;: r&#39;^\d{6}$&#39;,
+            &#34;Embarked&#34;:r&#39;S&#39;
+        }
+        Ticket and Embarked, the two keys are the column names, other two, values are the regular expression validation rules.
+        display_rows(int): Limit for number of invalid rows to be displayed. Default value is 20.
+    
+    Returns:
+        The two dataframes are printed as well.
+        Dictionary containing the dataframe for invalid count and invalid record of specific column.
+    &#39;&#39;&#39;
+
+    columnValidationFormat = {}
+    for column, rule in column_rules.items():
+        df = self.dataframe.withColumn(&#34;validation_result&#34;, regexp_extract(col(column), rule, 0))
+        invalid_records = df.filter(col(&#34;validation_result&#34;) == &#34;&#34;)
+        invalid_count = invalid_records.count()
+
+        schema = StructType([StructField(f&#39;Invalid Data Count - {column}&#39;, IntegerType(), nullable=False)])
+        invalid_count_DF = spark.createDataFrame([(invalid_count,)],schema=schema)
+
+        if invalid_count &gt; 0:
+            
+            invalid_record_data = invalid_records
+            if showData == True:
+                print(f&#39;Invalid count for {column}&#39;)
+                invalid_count_DF.display(display_rows)
+                print(f&#39;Invalid data for {column}&#39;)
+                display(invalid_record_data.limit(display_rows))
+                columnValidationFormat[column] = {invalid_count_DF, invalid_record_data}
+            elif showData == False:
+                print(f&#39;Invalid count for {column}&#39;)
+                invalid_count_DF.display(display_rows)
+                columnValidationFormat[column] = {invalid_count_DF}
+        else:
+            print(f&#39;Invalid count for {column}&#39;)
+            invalid_count_DF.display(display_rows)
+            columnValidationFormat[column] = {invalid_count_DF}
+
+            
+        
+
+    return columnValidationFormat</code></pre>
+</details>
+</dd>
+<dt id="dataautomation.dataTestAutomation.validateSchema"><code class="name flex">
+<span>def <span class="ident">validateSchema</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Validate the actual schema of a DataFrame against the expected schema.
+Identify mismatched datatypes, missing columns, or extra columns.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>dict</code></dt>
+<dd>Validation result with details of mismatched datatypes, missing columns, and extra columns.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def validateSchema(self):
+
+    &#34;&#34;&#34;
+    Validate the actual schema of a DataFrame against the expected schema.
+    Identify mismatched datatypes, missing columns, or extra columns.
+        
+    Returns:
+        dict: Validation result with details of mismatched datatypes, missing columns, and extra columns.
+    &#34;&#34;&#34;
+
+    try:
+        validation_result = {&#34;DataType Mismatched&#34;: [], &#34;Missing Columns&#34;: [], &#34;Extra Columns&#34;: []}
+        actual_schema = self.dataframe.schema
+        for field in self.expected_schema.fields:
+            actual_schema_fields = [data.lower() for data in actual_schema.fieldNames()]
+            if field.name.lower() in actual_schema_fields:
+                actual_field = actual_schema[field.name]
+                if actual_field.dataType != field.dataType:     #Check for mismatch datatype
+                    validation_result[&#34;DataType Mismatched&#34;].append(field.name)     
+            else:
+                validation_result[&#34;Missing Columns&#34;].append(field.name)     #check for missing columns
+
+        # Check for extra columns
+        for field_name in actual_schema.fieldNames():
+            if field_name not in [field.name for field in self.expected_schema.fields]:
+                validation_result[&#34;Extra Columns&#34;].append(field_name)
+
+        return validation_result
+    
+    except Exception as e:
+        raise Exception(f&#34;Error occured while validating schema, error: {str(e)}&#34;)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="dataautomation.readSchema"><code class="flex name class">
+<span>class <span class="ident">readSchema</span></span>
+<span>(</span><span>file_path, fieldNameColumn, dataTypeColumn, sheet=None, relatedDataTypeColumn=None, descriptionColumn=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Initialize the class instance.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>file_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>The path to the file.</dd>
+<dt><strong><code>sheet</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The name of the sheet (if using an Excel file). Defaults to None.</dd>
+<dt><strong><code>fieldNameColumn</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The column name for the field names.</dd>
+<dt><strong><code>dataTypeColumn</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The column name for the data types. </dd>
+<dt><strong><code>relatedDataTypeColumn</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The column name for the related data types. Defaults to None.</dd>
+<dt><strong><code>descriptionColumn</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The column name for the descriptions. Defaults to None.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class readSchema:
+
+    def __init__(self,file_path,fieldNameColumn, dataTypeColumn,sheet = None, relatedDataTypeColumn = None ,descriptionColumn = None):
+      
+        &#34;&#34;&#34;
+        Initialize the class instance.
+
+        Args:
+            file_path (str): The path to the file.
+            sheet (str, optional): The name of the sheet (if using an Excel file). Defaults to None.
+            fieldNameColumn (str, optional): The column name for the field names.
+            dataTypeColumn (str, optional): The column name for the data types. 
+            relatedDataTypeColumn (str, optional): The column name for the related data types. Defaults to None.
+            descriptionColumn (str, optional): The column name for the descriptions. Defaults to None.
+        &#34;&#34;&#34;
+
+        self.spark_df = None
+        self.schema = None
+        self.sheet = sheet
+        self.file_path = file_path
+        self.fieldNameColumn = fieldNameColumn
+        self.dataTypeColumn = dataTypeColumn
+        self.relatedDataTypeColumn = relatedDataTypeColumn
+        self.descriptionColumn = descriptionColumn
+
+
+
+    def readFile(self, skip_rows = None, start_column = None, usecols = None):
+      
+        &#34;&#34;&#34;
+        Read the file and create a Spark DataFrame.
+
+        Raises:
+            ValueError: If the file format is unsupported.
+        &#34;&#34;&#34;
+        try:
+            file_extension = self.file_path.split(&#39;.&#39;)[-1].lower()
+            if file_extension.lower() == &#39;json&#39;:
+        
+                    df = pd.read_json(self.file_path)
+
+
+            elif file_extension.lower() == &#39;csv&#39;:
+                df = pd.read_csv(self.file_path)
+            elif file_extension.lower() == &#39;xlsx&#39;:
+                if self.sheet is not None:
+                    df = pd.ExcelFile(self.file_path, engine = &#39;openpyxl&#39;,skiprows = skip_rows,index_col = start_column, usecols = usecols)
+                    df = df.parse(self.sheet)
+                else:
+                    df = pd.read_excel(self.file_path,skiprows = skip_rows,index_col = start_column, usecols = usecols)
+
+
+
+            else:
+                raise ValueError(f&#34;Unsupported file format: {file_extension}&#34;)
+        
+        except Exception as e:
+            raise Exception(f&#39;Error loading {file_extension} file, error {str(e)}&#39;)
+        
+        try:
+            self.spark_df = spark.createDataFrame(df)
+        except Exception as e:
+            raise Exception(f&#39;Error creating Spark Dataframe, error {str(e)}&#39;)
+
+    def convertDFtoList(self):
+    
+        &#34;&#34;&#34;
+        Convert the Spark DataFrame to a list of dictionaries.
+
+        This method collects the data from the Spark DataFrame and converts each row into a dictionary.
+
+        Note:
+            This method assumes that the `spark_df` attribute is already set with a valid Spark DataFrame.
+
+        Returns:
+            None
+        &#34;&#34;&#34;
+        try:
+            data = self.spark_df.select(*self.spark_df.columns).collect()
+            self.dict_list = [row.asDict() for row in data]
+            return self.dict_list
+        except Exception as e:
+            raise Exception(f&#39;Error occurred while converting DataFrame to list of dictionaries: {str(e)}&#39;)
+
+
+    def structureFormat(self):
+    
+        &#34;&#34;&#34;
+        Modify the structure format of related data types in the dictionary list.
+
+        This method checks for specific characters and formats the related data types accordingly.
+
+        Note:
+            This method assumes that the `dict_list` attribute is already set with a list of dictionaries. The dict_list is created by convertDFtoList() method.
+            It also assumes that the `relatedDataTypeColumn` attribute is set with the column name for related data types which is defined by the user during the initialization of the class.
+
+        Raises:
+            Exception: If an error occurs during the modification process.
+        &#34;&#34;&#34;
+        try:
+            for items in self.dict_list:
+                if items[self.relatedDataTypeColumn] is not None:
+                    if &#39;{&#39; in items[self.relatedDataTypeColumn] or &#39;}&#39; in items[self.relatedDataTypeColumn]:
+                        if &#39;&#34;&#39; not in items[self.relatedDataTypeColumn]:
+                            string = items[self.relatedDataTypeColumn].strip().replace(&#39;\n&#39;, &#39;&#39;).replace(&#39; &#39;, &#39;&#39;)
+                            string = string.strip(&#39;{}&#39;)
+                            pairs = string.split(&#39;,&#39;)
+                            result = {}
+                            for pair in pairs:
+                                key, value = pair.split(&#39;:&#39;)
+                                result[key] = value
+                            items[self.relatedDataTypeColumn] = result
+        except Exception as e:
+            raise Exception(f&#39;Error occurred while processing related data for item: {str(e)}&#39;)
+
+    def get_data_type(self,type_string):
+        &#34;&#34;&#34;
+        Get the corresponding Spark data type based on the input type string.
+
+        This method uses a mapping dictionary to associate the input type string with the appropriate Spark data type.
+
+        Args:
+            type_string (str): The input type string.
+
+        Returns:
+            DataType: The corresponding Spark data type.
+
+
+        &#34;&#34;&#34;
+        try:
+            self.type_mapping = {
+                &#39;string&#39;: StringType(),
+                &#39;str&#39;:StringType(),
+                &#39;boolean&#39;: BooleanType(),
+                &#39;integer&#39;: IntegerType(),
+                &#39;int&#39;: IntegerType(),
+                &#39;long&#39;: LongType(),
+                &#39;float&#39;: FloatType(),
+                &#39;double&#39;: DoubleType(),
+                &#39;timestamp&#39;: TimestampType(),
+                &#39;date&#39;: DateType()
+            }
+            return self.type_mapping.get(type_string, StringType())
+        except Exception as e:
+            raise Exception(f&#39;Error occurred while getting data type for {type_string}: {str(e)}&#39;)
+
+    def get_field_data_type(self):
+        &#34;&#34;&#34;
+        Get the field data types based on the provided column information.
+
+        This method iterates over the `dict_list` attribute and retrieves the field name, field type, and related data type (if applicable) for each column. It uses the `get_data_type` method to get the corresponding Spark data type.
+
+        Returns:
+            list: A list of StructField objects representing the fields with their data types.
+
+        Note:
+            This method assumes that the necessary attributes (`dict_list`, `fieldNameColumn`, `dataTypeColumn`, `descriptionColumn`, and `relatedDataTypeColumn`) are properly set.
+
+        &#34;&#34;&#34;
+        fields = []
+        try:
+            for item in self.dict_list:
+                field_name = item[self.fieldNameColumn]
+                field_type = item[self.dataTypeColumn]
+                if self.descriptionColumn is not None:
+                    field_description = item[self.descriptionColumn]
+
+                if field_type in [&#39;array&#39;, &#39;object&#39;]:
+                    if self.relatedDataTypeColumn is not None:
+                        related_data = item[self.relatedDataTypeColumn]
+                        if isinstance(related_data, dict):
+                            array_fields = []
+                            for subfield_name, subfield_type in related_data.items():
+                                subfield_data_type = self.get_data_type(subfield_type.lower())
+                                array_fields.append(StructField(subfield_name, subfield_data_type, True))
+                            field_data_type = ArrayType(StructType(array_fields))
+                        else:
+                            field_data_type = StringType()
+                    else:
+                        field_data_type = StringType()
+                elif field_type in [&#39;map&#39;]:
+                    if self.relatedDataTypeColumn is not None:
+                        related_data = item[self.relatedDataTypeColumn]
+                        if isinstance(related_data, dict):
+                            array_fields = []
+                            for subfield_name, subfield_type in related_data.items():
+                                subfield_data_type = self.get_data_type(subfield_type.lower)
+                                array_fields.append(StructField(subfield_name, subfield_data_type, True))
+                            field_data_type = MapType(StructType(array_fields))
+                        else:
+                            field_data_type = MapType(StringType(),StringType())
+                    else:
+                        field_data_type = MapType(StringType(),StringType())
+
+                else:
+                    field_data_type = self.get_data_type(field_type.lower())
+                if self.descriptionColumn is not None:
+                    field = StructField(field_name, field_data_type, nullable=True, metadata={&#39;description&#39;: field_description})
+                else:
+                    field = StructField(field_name, field_data_type, nullable=True, metadata={&#39;description&#39;: &#39;&#39;})
+
+                fields.append(field)
+        except Exception as e:
+            raise Exception(f&#39;Error occurred while getting field data types: {str(e)}&#39;)
+        
+        return fields
+
+
+    def spark_schema(self):
+        &#34;&#34;&#34;
+        Generate the Spark schema based on the field data types.
+
+        This method calls the `get_field_data_type` method to retrieve the field data types and constructs the Spark schema using the `StructType` class.
+
+        Returns:
+            StructType: The Spark schema generated from the field data types.
+
+        Note:
+            This method assumes that the `get_field_data_type` method has been properly implemented.
+
+        &#34;&#34;&#34;
+        fields = self.get_field_data_type()
+        self.schema = StructType(fields)
+        return self.schema
+
+    def createSchema(self):
+        &#34;&#34;&#34;
+        Create the schema for the Spark DataFrame.
+
+        This method performs the following steps:
+        1. Converts the Spark DataFrame to a list of dictionaries using the `convertDFtoList` method.
+        2. If the `relatedDataTypeColumn` is provided, it formats the related data types using the `strctureFormat` method.
+        3. Generates the Spark schema using the `spark_schema` method.
+        4. Returns the generated schema.
+
+        Returns:
+            StructType: The schema generated for the Spark DataFrame.
+
+        Note:
+            This method assumes that the `convertDFtoList` and `spark_schema` methods have been properly implemented.
+
+        &#34;&#34;&#34;
+        self.convertDFtoList()
+        if self.relatedDataTypeColumn is not None:
+            print(self.relatedDataTypeColumn)
+            self.structureFormat()
+        self.schema = self.spark_schema()
+        return self.schema</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="dataautomation.readSchema.convertDFtoList"><code class="name flex">
+<span>def <span class="ident">convertDFtoList</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Convert the Spark DataFrame to a list of dictionaries.</p>
+<p>This method collects the data from the Spark DataFrame and converts each row into a dictionary.</p>
+<h2 id="note">Note</h2>
+<p>This method assumes that the <code>spark_df</code> attribute is already set with a valid Spark DataFrame.</p>
+<h2 id="returns">Returns</h2>
+<p>None</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def convertDFtoList(self):
+
+    &#34;&#34;&#34;
+    Convert the Spark DataFrame to a list of dictionaries.
+
+    This method collects the data from the Spark DataFrame and converts each row into a dictionary.
+
+    Note:
+        This method assumes that the `spark_df` attribute is already set with a valid Spark DataFrame.
+
+    Returns:
+        None
+    &#34;&#34;&#34;
+    try:
+        data = self.spark_df.select(*self.spark_df.columns).collect()
+        self.dict_list = [row.asDict() for row in data]
+        return self.dict_list
+    except Exception as e:
+        raise Exception(f&#39;Error occurred while converting DataFrame to list of dictionaries: {str(e)}&#39;)</code></pre>
+</details>
+</dd>
+<dt id="dataautomation.readSchema.createSchema"><code class="name flex">
+<span>def <span class="ident">createSchema</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Create the schema for the Spark DataFrame.</p>
+<p>This method performs the following steps:
+1. Converts the Spark DataFrame to a list of dictionaries using the <code>convertDFtoList</code> method.
+2. If the <code>relatedDataTypeColumn</code> is provided, it formats the related data types using the <code>strctureFormat</code> method.
+3. Generates the Spark schema using the <code>spark_schema</code> method.
+4. Returns the generated schema.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>StructType</code></dt>
+<dd>The schema generated for the Spark DataFrame.</dd>
+</dl>
+<h2 id="note">Note</h2>
+<p>This method assumes that the <code>convertDFtoList</code> and <code>spark_schema</code> methods have been properly implemented.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def createSchema(self):
+    &#34;&#34;&#34;
+    Create the schema for the Spark DataFrame.
+
+    This method performs the following steps:
+    1. Converts the Spark DataFrame to a list of dictionaries using the `convertDFtoList` method.
+    2. If the `relatedDataTypeColumn` is provided, it formats the related data types using the `strctureFormat` method.
+    3. Generates the Spark schema using the `spark_schema` method.
+    4. Returns the generated schema.
+
+    Returns:
+        StructType: The schema generated for the Spark DataFrame.
+
+    Note:
+        This method assumes that the `convertDFtoList` and `spark_schema` methods have been properly implemented.
+
+    &#34;&#34;&#34;
+    self.convertDFtoList()
+    if self.relatedDataTypeColumn is not None:
+        print(self.relatedDataTypeColumn)
+        self.structureFormat()
+    self.schema = self.spark_schema()
+    return self.schema</code></pre>
+</details>
+</dd>
+<dt id="dataautomation.readSchema.get_data_type"><code class="name flex">
+<span>def <span class="ident">get_data_type</span></span>(<span>self, type_string)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get the corresponding Spark data type based on the input type string.</p>
+<p>This method uses a mapping dictionary to associate the input type string with the appropriate Spark data type.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type_string</code></strong> :&ensp;<code>str</code></dt>
+<dd>The input type string.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>DataType</code></dt>
+<dd>The corresponding Spark data type.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_data_type(self,type_string):
+    &#34;&#34;&#34;
+    Get the corresponding Spark data type based on the input type string.
+
+    This method uses a mapping dictionary to associate the input type string with the appropriate Spark data type.
+
+    Args:
+        type_string (str): The input type string.
+
+    Returns:
+        DataType: The corresponding Spark data type.
+
+
+    &#34;&#34;&#34;
+    try:
+        self.type_mapping = {
+            &#39;string&#39;: StringType(),
+            &#39;str&#39;:StringType(),
+            &#39;boolean&#39;: BooleanType(),
+            &#39;integer&#39;: IntegerType(),
+            &#39;int&#39;: IntegerType(),
+            &#39;long&#39;: LongType(),
+            &#39;float&#39;: FloatType(),
+            &#39;double&#39;: DoubleType(),
+            &#39;timestamp&#39;: TimestampType(),
+            &#39;date&#39;: DateType()
+        }
+        return self.type_mapping.get(type_string, StringType())
+    except Exception as e:
+        raise Exception(f&#39;Error occurred while getting data type for {type_string}: {str(e)}&#39;)</code></pre>
+</details>
+</dd>
+<dt id="dataautomation.readSchema.get_field_data_type"><code class="name flex">
+<span>def <span class="ident">get_field_data_type</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get the field data types based on the provided column information.</p>
+<p>This method iterates over the <code>dict_list</code> attribute and retrieves the field name, field type, and related data type (if applicable) for each column. It uses the <code>get_data_type</code> method to get the corresponding Spark data type.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>list</code></dt>
+<dd>A list of StructField objects representing the fields with their data types.</dd>
+</dl>
+<h2 id="note">Note</h2>
+<p>This method assumes that the necessary attributes (<code>dict_list</code>, <code>fieldNameColumn</code>, <code>dataTypeColumn</code>, <code>descriptionColumn</code>, and <code>relatedDataTypeColumn</code>) are properly set.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_field_data_type(self):
+    &#34;&#34;&#34;
+    Get the field data types based on the provided column information.
+
+    This method iterates over the `dict_list` attribute and retrieves the field name, field type, and related data type (if applicable) for each column. It uses the `get_data_type` method to get the corresponding Spark data type.
+
+    Returns:
+        list: A list of StructField objects representing the fields with their data types.
+
+    Note:
+        This method assumes that the necessary attributes (`dict_list`, `fieldNameColumn`, `dataTypeColumn`, `descriptionColumn`, and `relatedDataTypeColumn`) are properly set.
+
+    &#34;&#34;&#34;
+    fields = []
+    try:
+        for item in self.dict_list:
+            field_name = item[self.fieldNameColumn]
+            field_type = item[self.dataTypeColumn]
+            if self.descriptionColumn is not None:
+                field_description = item[self.descriptionColumn]
+
+            if field_type in [&#39;array&#39;, &#39;object&#39;]:
+                if self.relatedDataTypeColumn is not None:
+                    related_data = item[self.relatedDataTypeColumn]
+                    if isinstance(related_data, dict):
+                        array_fields = []
+                        for subfield_name, subfield_type in related_data.items():
+                            subfield_data_type = self.get_data_type(subfield_type.lower())
+                            array_fields.append(StructField(subfield_name, subfield_data_type, True))
+                        field_data_type = ArrayType(StructType(array_fields))
+                    else:
+                        field_data_type = StringType()
+                else:
+                    field_data_type = StringType()
+            elif field_type in [&#39;map&#39;]:
+                if self.relatedDataTypeColumn is not None:
+                    related_data = item[self.relatedDataTypeColumn]
+                    if isinstance(related_data, dict):
+                        array_fields = []
+                        for subfield_name, subfield_type in related_data.items():
+                            subfield_data_type = self.get_data_type(subfield_type.lower)
+                            array_fields.append(StructField(subfield_name, subfield_data_type, True))
+                        field_data_type = MapType(StructType(array_fields))
+                    else:
+                        field_data_type = MapType(StringType(),StringType())
+                else:
+                    field_data_type = MapType(StringType(),StringType())
+
+            else:
+                field_data_type = self.get_data_type(field_type.lower())
+            if self.descriptionColumn is not None:
+                field = StructField(field_name, field_data_type, nullable=True, metadata={&#39;description&#39;: field_description})
+            else:
+                field = StructField(field_name, field_data_type, nullable=True, metadata={&#39;description&#39;: &#39;&#39;})
+
+            fields.append(field)
+    except Exception as e:
+        raise Exception(f&#39;Error occurred while getting field data types: {str(e)}&#39;)
+    
+    return fields</code></pre>
+</details>
+</dd>
+<dt id="dataautomation.readSchema.readFile"><code class="name flex">
+<span>def <span class="ident">readFile</span></span>(<span>self, skip_rows=None, start_column=None, usecols=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Read the file and create a Spark DataFrame.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError</code></dt>
+<dd>If the file format is unsupported.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def readFile(self, skip_rows = None, start_column = None, usecols = None):
+  
+    &#34;&#34;&#34;
+    Read the file and create a Spark DataFrame.
+
+    Raises:
+        ValueError: If the file format is unsupported.
+    &#34;&#34;&#34;
+    try:
+        file_extension = self.file_path.split(&#39;.&#39;)[-1].lower()
+        if file_extension.lower() == &#39;json&#39;:
+    
+                df = pd.read_json(self.file_path)
+
+
+        elif file_extension.lower() == &#39;csv&#39;:
+            df = pd.read_csv(self.file_path)
+        elif file_extension.lower() == &#39;xlsx&#39;:
+            if self.sheet is not None:
+                df = pd.ExcelFile(self.file_path, engine = &#39;openpyxl&#39;,skiprows = skip_rows,index_col = start_column, usecols = usecols)
+                df = df.parse(self.sheet)
+            else:
+                df = pd.read_excel(self.file_path,skiprows = skip_rows,index_col = start_column, usecols = usecols)
+
+
+
+        else:
+            raise ValueError(f&#34;Unsupported file format: {file_extension}&#34;)
+    
+    except Exception as e:
+        raise Exception(f&#39;Error loading {file_extension} file, error {str(e)}&#39;)
+    
+    try:
+        self.spark_df = spark.createDataFrame(df)
+    except Exception as e:
+        raise Exception(f&#39;Error creating Spark Dataframe, error {str(e)}&#39;)</code></pre>
+</details>
+</dd>
+<dt id="dataautomation.readSchema.spark_schema"><code class="name flex">
+<span>def <span class="ident">spark_schema</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generate the Spark schema based on the field data types.</p>
+<p>This method calls the <code>get_field_data_type</code> method to retrieve the field data types and constructs the Spark schema using the <code>StructType</code> class.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>StructType</code></dt>
+<dd>The Spark schema generated from the field data types.</dd>
+</dl>
+<h2 id="note">Note</h2>
+<p>This method assumes that the <code>get_field_data_type</code> method has been properly implemented.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def spark_schema(self):
+    &#34;&#34;&#34;
+    Generate the Spark schema based on the field data types.
+
+    This method calls the `get_field_data_type` method to retrieve the field data types and constructs the Spark schema using the `StructType` class.
+
+    Returns:
+        StructType: The Spark schema generated from the field data types.
+
+    Note:
+        This method assumes that the `get_field_data_type` method has been properly implemented.
+
+    &#34;&#34;&#34;
+    fields = self.get_field_data_type()
+    self.schema = StructType(fields)
+    return self.schema</code></pre>
+</details>
+</dd>
+<dt id="dataautomation.readSchema.structureFormat"><code class="name flex">
+<span>def <span class="ident">structureFormat</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Modify the structure format of related data types in the dictionary list.</p>
+<p>This method checks for specific characters and formats the related data types accordingly.</p>
+<h2 id="note">Note</h2>
+<p>This method assumes that the <code>dict_list</code> attribute is already set with a list of dictionaries. The dict_list is created by convertDFtoList() method.
+It also assumes that the <code>relatedDataTypeColumn</code> attribute is set with the column name for related data types which is defined by the user during the initialization of the class.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>Exception</code></dt>
+<dd>If an error occurs during the modification process.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def structureFormat(self):
+
+    &#34;&#34;&#34;
+    Modify the structure format of related data types in the dictionary list.
+
+    This method checks for specific characters and formats the related data types accordingly.
+
+    Note:
+        This method assumes that the `dict_list` attribute is already set with a list of dictionaries. The dict_list is created by convertDFtoList() method.
+        It also assumes that the `relatedDataTypeColumn` attribute is set with the column name for related data types which is defined by the user during the initialization of the class.
+
+    Raises:
+        Exception: If an error occurs during the modification process.
+    &#34;&#34;&#34;
+    try:
+        for items in self.dict_list:
+            if items[self.relatedDataTypeColumn] is not None:
+                if &#39;{&#39; in items[self.relatedDataTypeColumn] or &#39;}&#39; in items[self.relatedDataTypeColumn]:
+                    if &#39;&#34;&#39; not in items[self.relatedDataTypeColumn]:
+                        string = items[self.relatedDataTypeColumn].strip().replace(&#39;\n&#39;, &#39;&#39;).replace(&#39; &#39;, &#39;&#39;)
+                        string = string.strip(&#39;{}&#39;)
+                        pairs = string.split(&#39;,&#39;)
+                        result = {}
+                        for pair in pairs:
+                            key, value = pair.split(&#39;:&#39;)
+                            result[key] = value
+                        items[self.relatedDataTypeColumn] = result
+    except Exception as e:
+        raise Exception(f&#39;Error occurred while processing related data for item: {str(e)}&#39;)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="dataautomation.dataTestAutomation" href="#dataautomation.dataTestAutomation">dataTestAutomation</a></code></h4>
+<ul class="">
+<li><code><a title="dataautomation.dataTestAutomation.changeSchema" href="#dataautomation.dataTestAutomation.changeSchema">changeSchema</a></code></li>
+<li><code><a title="dataautomation.dataTestAutomation.convert_array_type" href="#dataautomation.dataTestAutomation.convert_array_type">convert_array_type</a></code></li>
+<li><code><a title="dataautomation.dataTestAutomation.convert_map_type" href="#dataautomation.dataTestAutomation.convert_map_type">convert_map_type</a></code></li>
+<li><code><a title="dataautomation.dataTestAutomation.convert_struct_type" href="#dataautomation.dataTestAutomation.convert_struct_type">convert_struct_type</a></code></li>
+<li><code><a title="dataautomation.dataTestAutomation.dataProfiling" href="#dataautomation.dataTestAutomation.dataProfiling">dataProfiling</a></code></li>
+<li><code><a title="dataautomation.dataTestAutomation.duplicateValues" href="#dataautomation.dataTestAutomation.duplicateValues">duplicateValues</a></code></li>
+<li><code><a title="dataautomation.dataTestAutomation.getCategoricalNumerical" href="#dataautomation.dataTestAutomation.getCategoricalNumerical">getCategoricalNumerical</a></code></li>
+<li><code><a title="dataautomation.dataTestAutomation.handleInvalidColumns" href="#dataautomation.dataTestAutomation.handleInvalidColumns">handleInvalidColumns</a></code></li>
+<li><code><a title="dataautomation.dataTestAutomation.main" href="#dataautomation.dataTestAutomation.main">main</a></code></li>
+<li><code><a title="dataautomation.dataTestAutomation.plotTrendAnalysis" href="#dataautomation.dataTestAutomation.plotTrendAnalysis">plotTrendAnalysis</a></code></li>
+<li><code><a title="dataautomation.dataTestAutomation.readData" href="#dataautomation.dataTestAutomation.readData">readData</a></code></li>
+<li><code><a title="dataautomation.dataTestAutomation.run_range_validations" href="#dataautomation.dataTestAutomation.run_range_validations">run_range_validations</a></code></li>
+<li><code><a title="dataautomation.dataTestAutomation.tabularReport" href="#dataautomation.dataTestAutomation.tabularReport">tabularReport</a></code></li>
+<li><code><a title="dataautomation.dataTestAutomation.trendAnalysis" href="#dataautomation.dataTestAutomation.trendAnalysis">trendAnalysis</a></code></li>
+<li><code><a title="dataautomation.dataTestAutomation.validateColumnFormat" href="#dataautomation.dataTestAutomation.validateColumnFormat">validateColumnFormat</a></code></li>
+<li><code><a title="dataautomation.dataTestAutomation.validateSchema" href="#dataautomation.dataTestAutomation.validateSchema">validateSchema</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="dataautomation.readSchema" href="#dataautomation.readSchema">readSchema</a></code></h4>
+<ul class="two-column">
+<li><code><a title="dataautomation.readSchema.convertDFtoList" href="#dataautomation.readSchema.convertDFtoList">convertDFtoList</a></code></li>
+<li><code><a title="dataautomation.readSchema.createSchema" href="#dataautomation.readSchema.createSchema">createSchema</a></code></li>
+<li><code><a title="dataautomation.readSchema.get_data_type" href="#dataautomation.readSchema.get_data_type">get_data_type</a></code></li>
+<li><code><a title="dataautomation.readSchema.get_field_data_type" href="#dataautomation.readSchema.get_field_data_type">get_field_data_type</a></code></li>
+<li><code><a title="dataautomation.readSchema.readFile" href="#dataautomation.readSchema.readFile">readFile</a></code></li>
+<li><code><a title="dataautomation.readSchema.spark_schema" href="#dataautomation.readSchema.spark_schema">spark_schema</a></code></li>
+<li><code><a title="dataautomation.readSchema.structureFormat" href="#dataautomation.readSchema.structureFormat">structureFormat</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>
